@@ -1,0 +1,8 @@
+2024-12-31 15:23:36.440 +07:00 [WRN] Failed to determine the https port for redirect.
+2024-12-31 15:23:39.707 +07:00 [INF] Processed POST /api/auth/forgot-password. Request Data: ZumZumFood.Application.Models.Request.ForgotPasswordModel. Response Data: No response data provided
+2024-12-31 15:24:07.688 +07:00 [INF] Processed Generated new password for user UEtD9wgJ. Request Data: No request data provided. Response Data: No response data provided
+2024-12-31 15:24:14.811 +07:00 [INF] Processed Password updated successfully cun64646@msssg.com. Request Data: No request data provided. Response Data: No response data provided
+2024-12-31 15:24:21.091 +07:00 [INF] Processed Password reset email sent cun64646@msssg.com. Request Data: No request data provided. Response Data: No response data provided
+2024-12-31 15:24:21.107 +07:00 [INF] HTTP POST /api/v1/auth/forgot-password responded 200 in 44597.5497 ms
+2024-12-31 16:00:36.838 +07:00 [WRN] Failed to determine the https port for redirect.
+2024-12-31 16:00:37.264 +07:00 [INF] HTTP POST /api/v1/auth/user/12/suspended responded 200 in 354.5081 ms

@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.WebAPI", "ZumZumFood.WebAPI\ZumZumFood.WebAPI.csproj", "{202C43AA-D582-49AC-990C-14DFB1160DEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.Domain", "ZumZumFood.Domain\ZumZumFood.Domain.csproj", "{1DDC2583-E0E7-4804-9E69-A760F88C1266}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.Persistence", "ZumZumFood.DataAccess\ZumZumFood.Persistence.csproj", "{834AD38D-8B8A-478E-BCBD-027804B8501F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.Infrastructure", "ZumZumFood.Infrastructure\ZumZumFood.Infrastructure.csproj", "{5629FAE4-1189-4A54-90CD-77672FEADB3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.Application", "ZumZumFood.Application\ZumZumFood.Application.csproj", "{7D547036-E423-4560-AF33-86F68E4EC269}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{202C43AA-D582-49AC-990C-14DFB1160DEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{202C43AA-D582-49AC-990C-14DFB1160DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{202C43AA-D582-49AC-990C-14DFB1160DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{202C43AA-D582-49AC-990C-14DFB1160DEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DDC2583-E0E7-4804-9E69-A760F88C1266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DDC2583-E0E7-4804-9E69-A760F88C1266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DDC2583-E0E7-4804-9E69-A760F88C1266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DDC2583-E0E7-4804-9E69-A760F88C1266}.Release|Any CPU.Build.0 = Release|Any CPU
+		{834AD38D-8B8A-478E-BCBD-027804B8501F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{834AD38D-8B8A-478E-BCBD-027804B8501F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{834AD38D-8B8A-478E-BCBD-027804B8501F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{834AD38D-8B8A-478E-BCBD-027804B8501F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5629FAE4-1189-4A54-90CD-77672FEADB3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5629FAE4-1189-4A54-90CD-77672FEADB3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5629FAE4-1189-4A54-90CD-77672FEADB3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5629FAE4-1189-4A54-90CD-77672FEADB3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D547036-E423-4560-AF33-86F68E4EC269}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D547036-E423-4560-AF33-86F68E4EC269}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D547036-E423-4560-AF33-86F68E4EC269}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D547036-E423-4560-AF33-86F68E4EC269}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

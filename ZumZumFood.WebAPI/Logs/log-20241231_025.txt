@@ -1,0 +1,15 @@
+2024-12-31 14:50:13.675 +07:00 [WRN] Failed to determine the https port for redirect.
+2024-12-31 14:50:14.325 +07:00 [INF] Processed GET /api/user. Request Data: No request data provided. Response Data: 9
+2024-12-31 14:50:14.353 +07:00 [INF] HTTP GET /api/v1/user responded 200 in 522.4753 ms
+2024-12-31 14:50:32.457 +07:00 [INF] Processed GET /api/user. Request Data: No request data provided. Response Data: 9
+2024-12-31 14:50:32.464 +07:00 [INF] HTTP GET /api/v1/user responded 200 in 21.6259 ms
+2024-12-31 14:51:00.288 +07:00 [INF] Processed POST /api/auth/login. Request Data: No request data provided. Response Data: { AccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwiZW1haWwiOiJyZXN0YXVyYW50b3duZXJAZXhhbXBsZS5jb20iLCJyb2xlIjoiUmVzdGF1cmFudE93bmVyIiwibmJmIjoxNzM1NjMxNDYwLCJleHAiOjE3MzU2MzUwNjAsImlhdCI6MTczNTYzMTQ2MCwiaXNzIjoidHVhbmZsdXRlMjc1LnZuIiwiYXVkIjoidHVhbmZsdXRlMjc1In0.sK3I5ubGFF-iVM1DvW8fqnkCE6Lbke57uflblyMVQ8M, RefreshToken = AH1He0iBJqSJHUcUCSrovqT1yDa4WqQjVo30v9yw44pHnMzFtHyR1Yd9x5IFgT+eoS1EKorRisaua5q6Y76btw== }
+2024-12-31 14:51:00.294 +07:00 [INF] HTTP POST /api/v1/auth/login responded 200 in 790.6233 ms
+2024-12-31 14:52:33.373 +07:00 [INF] Processed GET /api/auth/register. Request Data: No request data provided. Response Data: No response data provided
+2024-12-31 14:52:35.810 +07:00 [INF] HTTP POST /api/v1/auth/register responded 200 in 2753.9395 ms
+2024-12-31 14:57:11.567 +07:00 [WRN] Failed to determine the https port for redirect.
+2024-12-31 14:57:29.067 +07:00 [INF] Processed POST /api/user. Request Data: ZumZumFood.Application.Models.RequestModel.UserRequestModel. Response Data: ZumZumFood.Domain.Entities.User
+2024-12-31 14:57:29.083 +07:00 [INF] HTTP POST /api/v1/user responded 200 in 17427.7915 ms
+2024-12-31 14:57:36.647 +07:00 [INF] HTTP GET /favicon.ico responded 404 in 0.0926 ms
+2024-12-31 14:58:22.669 +07:00 [INF] Processed POST /api/user. Request Data: ZumZumFood.Application.Models.RequestModel.UserRequestModel. Response Data: ZumZumFood.Domain.Entities.User
+2024-12-31 14:58:22.675 +07:00 [INF] HTTP PUT /api/v1/user/11 responded 200 in 9366.5618 ms

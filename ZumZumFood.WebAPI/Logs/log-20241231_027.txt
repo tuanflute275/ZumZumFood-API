@@ -1,0 +1,44 @@
+2024-12-31 15:06:46.353 +07:00 [WRN] Failed to determine the https port for redirect.
+2024-12-31 15:06:46.564 +07:00 [ERR] HTTP POST /api/v1/auth/forgot-password responded 500 in 134.5755 ms
+System.NotImplementedException: The method or operation is not implemented.
+   at ZumZumFood.Application.Services.AuthService.ForgotPasswordAsync(ForgotPasswordModel model) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.Application\Services\AuthService.cs:line 350
+   at ZumZumFood.WebAPI.Controllers.AuthController.ForgotPassword(ForgotPasswordModel model) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.WebAPI\Controllers\AuthController.cs:line 39
+   at lambda_method16(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2024-12-31 15:06:46.602 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.NotImplementedException: The method or operation is not implemented.
+   at ZumZumFood.Application.Services.AuthService.ForgotPasswordAsync(ForgotPasswordModel model) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.Application\Services\AuthService.cs:line 350
+   at ZumZumFood.WebAPI.Controllers.AuthController.ForgotPassword(ForgotPasswordModel model) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.WebAPI\Controllers\AuthController.cs:line 39
+   at lambda_method16(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-12-31 15:23:36.440 +07:00 [WRN] Failed to determine the https port for redirect.
+2024-12-31 15:23:39.707 +07:00 [INF] Processed POST /api/auth/forgot-password. Request Data: ZumZumFood.Application.Models.Request.ForgotPasswordModel. Response Data: No response data provided
+2024-12-31 15:24:07.688 +07:00 [INF] Processed Generated new password for user UEtD9wgJ. Request Data: No request data provided. Response Data: No response data provided
+2024-12-31 15:24:14.811 +07:00 [INF] Processed Password updated successfully cun64646@msssg.com. Request Data: No request data provided. Response Data: No response data provided
+2024-12-31 15:24:21.091 +07:00 [INF] Processed Password reset email sent cun64646@msssg.com. Request Data: No request data provided. Response Data: No response data provided
+2024-12-31 15:24:21.107 +07:00 [INF] HTTP POST /api/v1/auth/forgot-password responded 200 in 44597.5497 ms

@@ -1,0 +1,44 @@
+2024-12-31 14:57:11.567 +07:00 [WRN] Failed to determine the https port for redirect.
+2024-12-31 14:57:29.067 +07:00 [INF] Processed POST /api/user. Request Data: ZumZumFood.Application.Models.RequestModel.UserRequestModel. Response Data: ZumZumFood.Domain.Entities.User
+2024-12-31 14:57:29.083 +07:00 [INF] HTTP POST /api/v1/user responded 200 in 17427.7915 ms
+2024-12-31 14:57:36.647 +07:00 [INF] HTTP GET /favicon.ico responded 404 in 0.0926 ms
+2024-12-31 14:58:22.669 +07:00 [INF] Processed POST /api/user. Request Data: ZumZumFood.Application.Models.RequestModel.UserRequestModel. Response Data: ZumZumFood.Domain.Entities.User
+2024-12-31 14:58:22.675 +07:00 [INF] HTTP PUT /api/v1/user/11 responded 200 in 9366.5618 ms
+2024-12-31 15:06:46.353 +07:00 [WRN] Failed to determine the https port for redirect.
+2024-12-31 15:06:46.564 +07:00 [ERR] HTTP POST /api/v1/auth/forgot-password responded 500 in 134.5755 ms
+System.NotImplementedException: The method or operation is not implemented.
+   at ZumZumFood.Application.Services.AuthService.ForgotPasswordAsync(ForgotPasswordModel model) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.Application\Services\AuthService.cs:line 350
+   at ZumZumFood.WebAPI.Controllers.AuthController.ForgotPassword(ForgotPasswordModel model) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.WebAPI\Controllers\AuthController.cs:line 39
+   at lambda_method16(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2024-12-31 15:06:46.602 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.NotImplementedException: The method or operation is not implemented.
+   at ZumZumFood.Application.Services.AuthService.ForgotPasswordAsync(ForgotPasswordModel model) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.Application\Services\AuthService.cs:line 350
+   at ZumZumFood.WebAPI.Controllers.AuthController.ForgotPassword(ForgotPasswordModel model) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.WebAPI\Controllers\AuthController.cs:line 39
+   at lambda_method16(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
