@@ -8,6 +8,23 @@ namespace ZumZumFood.Domain.Abstracts
         IRoleRepository RoleRepository { get; }
         IUserRoleRepository UserRoleRepository { get; }
         ITokenRepository TokenRepository { get; }
+        IParameterRepository ParameterRepository { get; }
+        ILogRepository LogRepository { get; }
+        IBannerRepository BannerRepository { get; }
+        ICategoryRepository CategoryRepository { get; }
+        IRestaurantRepository RestaurantRepository { get; }
+        IProductRepository ProductRepository { get; }
+        IProductDetailRepository ProductDetailRepository { get; }
+        IProductImageRepository ProductImageRepository { get; }
+        IProductCommentRepository ProductCommentRepository { get; }
+        IWishlistRepository WishlistRepository { get; }
+        ICartRepository CartRepository { get; }
+        IOrderRepository OrderRepository { get; }
+        IOrderDetailRepository OrderDetailRepository { get; }
+        ICouponRepository CouponRepository { get; }
+        ICouponConditionRepository CouponConditionRepository { get; }
+        ICouponOrderRepository CouponOrderRepository { get; }
+
         // other repository
 
         Task BeginTransaction();
