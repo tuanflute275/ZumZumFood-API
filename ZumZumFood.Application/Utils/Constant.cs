@@ -11,6 +11,15 @@
         public const string BLOCK = "Block";       // Khóa tài khoản
         public const string SUSPENDED = "Suspended"; // Đình chỉ tài khoản
 
+        // ParaType Parameter
+        public const string PARA_TYPE_INTEGER = "INTEGER";
+        public const string PARA_TYPE_CODE = "CODE";
+        public const string PARA_TYPE_STRING = "STRING";
+        public const string PARA_TYPE_BOOLEAN = "BOOLEAN";
+        public const string PARA_TYPE_LONG_TEXT = "LONG_TEXT";
+        public const string PARA_TYPE_NUMBER = "NUMBER";
+
+
         // STATUS
         public const string PENDING = "Pending";
         public const string COMPLETED = "Completed";
