@@ -1,0 +1,27 @@
+2025-01-01 16:54:09.258 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-01 16:56:41.408 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-01 16:56:43.751 +07:00 [INF] Processed GET /api/category. Request Data: No request data provided. Response Data: 10
+2025-01-01 16:56:43.778 +07:00 [INF] HTTP GET /api/v1/category responded 200 in 2297.6511 ms
+2025-01-01 16:56:57.902 +07:00 [INF] Processed GET /api/user. Request Data: No request data provided. Response Data: 6
+2025-01-01 16:56:57.911 +07:00 [INF] HTTP GET /api/v1/user responded 200 in 113.1264 ms
+2025-01-01 16:57:11.004 +07:00 [INF] Processed GET /api/user/{id}. Request Data: No request data provided. Response Data: ZumZumFood.Application.Models.DTOs.UserDTO
+2025-01-01 16:57:11.008 +07:00 [INF] HTTP GET /api/v1/user/2 responded 200 in 62.7743 ms
+2025-01-01 17:01:50.276 +07:00 [INF] HTTP GET /favicon.ico responded 404 in 0.0992 ms
+2025-01-01 17:01:51.607 +07:00 [INF] Processed POST /api/category. Request Data: ZumZumFood.Application.Models.Request.CategoryRequestModel. Response Data: ZumZumFood.Domain.Entities.Category
+2025-01-01 17:01:51.613 +07:00 [INF] HTTP POST /api/v1/category responded 200 in 47698.5218 ms
+2025-01-01 17:03:42.974 +07:00 [INF] Processed POST /api/category. Request Data: ZumZumFood.Application.Models.Request.CategoryRequestModel. Response Data: ZumZumFood.Domain.Entities.Category
+2025-01-01 17:03:42.977 +07:00 [INF] HTTP PUT /api/v1/category/11 responded 200 in 28859.4345 ms
+2025-01-01 17:04:21.883 +07:00 [INF] Processed POST /api/category/11. Request Data: 11. Response Data: Deleted Flag successfully
+2025-01-01 17:04:21.886 +07:00 [INF] HTTP POST /api/v1/category/soft-delete/11 responded 200 in 27.1728 ms
+2025-01-01 17:04:33.568 +07:00 [INF] Processed GET /api/deleted-data. Request Data: No request data provided. Response Data: Query data deleted successfully
+2025-01-01 17:04:33.576 +07:00 [INF] HTTP GET /api/v1/category/deleted-data responded 200 in 17.5531 ms
+2025-01-01 17:05:10.512 +07:00 [INF] Processed POST /api/category/11/restore. Request Data: 11. Response Data: Category restored successfully
+2025-01-01 17:05:10.517 +07:00 [INF] HTTP POST /api/v1/category/restore/11 responded 200 in 32.1866 ms
+2025-01-01 17:06:03.095 +07:00 [INF] Processed DELETE /api/category/11. Request Data: 11. Response Data: Deleted successfully
+2025-01-01 17:06:03.098 +07:00 [INF] HTTP DELETE /api/v1/category/11 responded 200 in 33.2194 ms
+2025-01-01 17:07:40.209 +07:00 [INF] Processed POST /api/category/10. Request Data: 10. Response Data: Deleted Flag successfully
+2025-01-01 17:07:40.212 +07:00 [INF] HTTP POST /api/v1/category/soft-delete/10 responded 200 in 21.7825 ms
+2025-01-01 17:07:44.025 +07:00 [INF] Processed GET /api/deleted-data. Request Data: No request data provided. Response Data: Query data deleted successfully
+2025-01-01 17:07:44.030 +07:00 [INF] HTTP GET /api/v1/category/deleted-data responded 200 in 13.8806 ms
+2025-01-01 17:08:29.585 +07:00 [INF] Processed GET /api/deleted-data. Request Data: No request data provided. Response Data: Query data deleted successfully
+2025-01-01 17:08:29.592 +07:00 [INF] HTTP GET /api/v1/category/deleted-data responded 200 in 11327.1851 ms

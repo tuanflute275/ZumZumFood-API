@@ -46,7 +46,7 @@ namespace ZumZumFood.WebAPI.Controllers
             return await _userService.DeleteFlagAsync(id);
         }
 
-        [HttpGet("deleted-users")]
+        [HttpGet("deleted-data")]
         public async Task<ResponseObject> GetDeletedUsers()
         {
             return await _userService.GetDeletedListAsync();

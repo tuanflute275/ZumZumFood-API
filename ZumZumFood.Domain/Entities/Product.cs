@@ -45,5 +45,9 @@ namespace ZumZumFood.Domain.Entities
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
+
+        public virtual ICollection<ProductDetail> ProductDetails { get; set; }
+        public virtual ICollection<ProductComment> ProductComments { get; set; }
+        public virtual ICollection<ProductImage> ProductImages { get; set; }
     }
 }

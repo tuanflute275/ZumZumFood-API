@@ -25,9 +25,9 @@ namespace ZumZumFood.Domain.Entities
         public bool? IsActive { get; set; } = true;  // Trạng thái kích hoạt
 
         [Column(TypeName = "nvarchar(max)")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual ICollection<Product> Products { get; set; }
     }
 }

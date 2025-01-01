@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Utils
+﻿using System.Text.RegularExpressions;
+
+namespace ZumZumFood.Application.Utils
 {
     public class Helpers
     {
@@ -69,6 +71,78 @@
             }
 
             return input;
+        }
+
+
+        public static class InputValidator
+        {
+            /// <summary>
+            /// Kiểm tra một chuỗi có chứa ký tự đặc biệt hay không.
+            /// </summary>
+            /// <param name="input">Chuỗi cần kiểm tra.</param>
+            /// <returns>True nếu chứa ký tự đặc biệt, ngược lại là False.</returns>
+            public static bool ContainsSpecialCharacters(string input)
+            {
+                if (string.IsNullOrEmpty(input)) return false;
+                var regex = new Regex(@"[^a-zA-Z0-9\s]");
+                return regex.IsMatch(input);
+            }
+
+            /// <summary>
+            /// Kiểm tra giá trị sắp xếp có hợp lệ hay không (chỉ chấp nhận "asc" hoặc "desc").
+            /// </summary>
+            /// <param name="sort">Chuỗi cần kiểm tra.</param>
+            /// <returns>True nếu hợp lệ, ngược lại là False.</returns>
+            public static bool IsValidSortOption(string sort)
+            {
+                if (string.IsNullOrEmpty(sort)) return true; // Cho phép null hoặc rỗng.
+
+                var sortParts = sort.Split('-');
+                if (sortParts.Length != 2) return false; // Định dạng phải là "Field-Direction".
+
+                string field = sortParts[0];
+                string direction = sortParts[1].ToLower();
+
+                // Kiểm tra trường và thứ tự sắp xếp hợp lệ
+                return (field == "Id" || field == "Name") && (direction == "asc" || direction == "desc");
+            }
+
+            /// <summary>
+            /// Kiểm tra số trang có hợp lệ hay không (phải là số nguyên dương).
+            /// </summary>
+            /// <param name="pageNo">Số trang cần kiểm tra.</param>
+            /// <returns>True nếu hợp lệ, ngược lại là False.</returns>
+            public static bool IsValidNumber(int number)
+            {
+                return number > 0 && number <= int.MaxValue;
+            }
+
+            /// <summary>
+            /// Tổng hợp validate tất cả các tham số.
+            /// </summary>
+            /// <param name="keyword">Từ khóa tìm kiếm.</param>
+            /// <param name="sort">Giá trị sắp xếp.</param>
+            /// <param name="pageNo">Số trang.</param>
+            /// <returns>Thông báo lỗi nếu không hợp lệ, null nếu hợp lệ.</returns>
+            public static string? ValidateInput(string? keyword, string? sort, int pageNo)
+            {
+                if (!string.IsNullOrEmpty(keyword) && ContainsSpecialCharacters(keyword))
+                {
+                    return "Keyword must not contain special characters!";
+                }
+
+                if (!IsValidSortOption(sort))
+                {
+                    return "Invalid sort! The format must be 'Field-Direction' (e.g., 'Id-DESC' or 'Name-ASC').";
+                }
+
+                if (!IsValidNumber(pageNo))
+                {
+                    return "Page number (pageNo) must be greater than 0 and less than or equal to the maximum value of int!";
+                }
+
+                return null; // Tất cả đều hợp lệ.
+            }
         }
 
     }

@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.DTOs
 {
-    public class UserDTO
+    public class UserDTO : BaseDTO
     {
         public int UserId { get; set; }
         public string UserName { get; set; }

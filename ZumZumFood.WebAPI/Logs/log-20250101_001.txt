@@ -1,0 +1,46 @@
+2025-01-01 16:50:57.060 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-01 16:50:57.346 +07:00 [WRN] Warning GET /api/deleted-users. Request Data: No request data provided. Response Data: { message = No deleted users found. }
+2025-01-01 16:50:57.363 +07:00 [INF] HTTP GET /api/v1/user/deleted-data responded 200 in 216.2970 ms
+2025-01-01 16:51:10.222 +07:00 [ERR] Error in GET /api/category. Request Data: No request data provided. Exception: Error mapping types.
+
+Mapping types:
+List`1 -> List`1
+System.Collections.Generic.List`1[[ZumZumFood.Domain.Entities.Category, ZumZumFood.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.List`1[[ZumZumFood.Application.Models.DTOs.CategoryDTO, ZumZumFood.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> List`1
+System.Collections.Generic.List`1[[ZumZumFood.Domain.Entities.Category, ZumZumFood.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.List`1[[ZumZumFood.Application.Models.DTOs.CategoryDTO, ZumZumFood.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+ ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+Category -> CategoryDTO
+ZumZumFood.Domain.Entities.Category -> ZumZumFood.Application.Models.DTOs.CategoryDTO
+   at lambda_method62(Closure, Category, CategoryDTO, ResolutionContext)
+   at lambda_method61(Closure, Object, List`1, ResolutionContext)
+   --- End of inner exception stack trace ---
+   at lambda_method61(Closure, Object, List`1, ResolutionContext)
+   at ZumZumFood.Application.Services.CategoryService.GetAllPaginationAsync(String keyword, String sort, Int32 pageNo) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.Application\Services\CategoryService.cs:line 66
+2025-01-01 16:51:10.254 +07:00 [INF] HTTP GET /api/v1/category responded 200 in 218.8191 ms
+2025-01-01 16:52:59.630 +07:00 [ERR] Error in GET /api/category. Request Data: No request data provided. Exception: Error mapping types.
+
+Mapping types:
+List`1 -> List`1
+System.Collections.Generic.List`1[[ZumZumFood.Domain.Entities.Category, ZumZumFood.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.List`1[[ZumZumFood.Application.Models.DTOs.CategoryDTO, ZumZumFood.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> List`1
+System.Collections.Generic.List`1[[ZumZumFood.Domain.Entities.Category, ZumZumFood.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.List`1[[ZumZumFood.Application.Models.DTOs.CategoryDTO, ZumZumFood.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+ ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+Category -> CategoryDTO
+ZumZumFood.Domain.Entities.Category -> ZumZumFood.Application.Models.DTOs.CategoryDTO
+   at lambda_method62(Closure, Category, CategoryDTO, ResolutionContext)
+   at lambda_method61(Closure, Object, List`1, ResolutionContext)
+   --- End of inner exception stack trace ---
+   at lambda_method61(Closure, Object, List`1, ResolutionContext)
+   at ZumZumFood.Application.Services.CategoryService.GetAllPaginationAsync(String keyword, String sort, Int32 pageNo)
+2025-01-01 16:52:59.642 +07:00 [INF] HTTP GET /api/v1/category responded 200 in 24069.6111 ms
+2025-01-01 16:54:09.258 +07:00 [WRN] Failed to determine the https port for redirect.

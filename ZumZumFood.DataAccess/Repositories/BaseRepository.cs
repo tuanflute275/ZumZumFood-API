@@ -23,7 +23,6 @@ namespace ZumZumFood.Persistence.Repositories
             IQueryable<T> query = _context.Set<T>();
             if (expression != null) query = query.Where(expression); // Apply filter
             if (include != null) query = include(query); // Include navigation properties
-            //query = query.OrderByDescending(t => EF.Property<object>(t, "CreateDate"));
             return await query.AsNoTracking().ToListAsync();
         }
 
