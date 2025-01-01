@@ -1,0 +1,12 @@
+2025-01-01 19:34:41.894 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-01 19:35:12.195 +07:00 [INF] Processed DELETE /api/product/10. Request Data: 10. Response Data: Deleted successfully
+2025-01-01 19:35:12.211 +07:00 [INF] HTTP DELETE /api/v1/product/10 responded 200 in 30244.3544 ms
+2025-01-01 19:41:10.538 +07:00 [ERR] Error in POST /api/product. Request Data: ZumZumFood.Application.Models.Request.ProductRequestModel. Exception: Invalid file type. Allowed types are: jpg, jpeg, png, gif.
+System.ArgumentException: Invalid file type. Allowed types are: jpg, jpeg, png, gif.
+   at ZumZumFood.Application.Utils.FileUploadHelper.UploadImageAsync(IFormFile imageFile, String oldImage, String requestScheme, String requestHost, String folderName)
+   at ZumZumFood.Application.Services.ProductService.SaveAsync(ProductRequestModel model)
+2025-01-01 19:41:10.562 +07:00 [INF] HTTP POST /api/v1/product responded 200 in 32948.9489 ms
+2025-01-01 19:42:18.057 +07:00 [INF] Processed POST /api/product. Request Data: ZumZumFood.Application.Models.Request.ProductRequestModel. Response Data: ZumZumFood.Domain.Entities.Product
+2025-01-01 19:42:19.399 +07:00 [INF] HTTP POST /api/v1/product responded 200 in 19118.2396 ms
+2025-01-01 19:44:15.201 +07:00 [INF] Processed POST /api/product. Request Data: ZumZumFood.Application.Models.Request.ProductRequestModel. Response Data: ZumZumFood.Domain.Entities.Product
+2025-01-01 19:44:15.205 +07:00 [INF] HTTP PUT /api/v1/product/13 responded 200 in 28.2890 ms

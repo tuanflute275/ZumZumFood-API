@@ -338,7 +338,7 @@ namespace ZumZumFood.Application.Services
 
                 // Gửi email xác nhận đăng ký
                 LogHelper.LogInformation(_logger, "GET", "/api/auth/register", null, null);
-                await _emailService.SendEmailAsync(model.Email, "Welcome to Our Service", BodyRegisterMail(model.FullName));
+                await _emailService.SendEmailAsync(model.Email, "Welcome to Our Service", Helpers.BodyRegisterMail(model.FullName));
                 return new ResponseObject(200, "Register successfully,please check email!", model);
             }
             catch (Exception ex)
@@ -347,17 +347,7 @@ namespace ZumZumFood.Application.Services
                 return new ResponseObject(500, "Internal server error. Please try again later.");
             }
         }
-        private string BodyRegisterMail(string fullName)
-        {
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RegisterSuccessMail.cshtml");
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException($"Template file not found at: {path}");
-            }
-
-            string body = File.ReadAllText(path);
-            return body.Replace("{{fullName}}", fullName);
-        }
+       
 
         public Task<ResponseObject> FacebookCallbackAsync(HttpContext httpContext)
         {
@@ -411,7 +401,7 @@ namespace ZumZumFood.Application.Services
                 LogHelper.LogInformation(_logger, "Password updated successfully", model.Email);
 
                 // Send email confirmation
-                await _emailService.SendEmailAsync(model.Email, "Forgot Password", BodyResetPasswordMail(pass));
+                await _emailService.SendEmailAsync(model.Email, "Forgot Password", Helpers.BodyResetPasswordMail(pass));
 
                 // Log email sent
                 LogHelper.LogInformation(_logger, "Password reset email sent", model.Email);
@@ -425,17 +415,6 @@ namespace ZumZumFood.Application.Services
 
                 return new ResponseObject(500, "Internal server error. Please try again later.");
             }
-        }
-        private string BodyResetPasswordMail(string pass)
-        {
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "ForgotPasswordMail.cshtml");
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException($"Template file not found at: {path}");
-            }
-
-            string body = File.ReadAllText(path);
-            return body.Replace("{{Password}}", pass);
         }
 
         public async Task<ResponseObject> UpdateAccountStateAsync(int userId, string action)

@@ -21,6 +21,30 @@ namespace ZumZumFood.Application.Utils
                 userAgent.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
+        public static string BodyRegisterMail(string fullName)
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RegisterSuccessMail.cshtml");
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"Template file not found at: {path}");
+            }
+
+            string body = File.ReadAllText(path);
+            return body.Replace("{{fullName}}", fullName);
+        }
+
+        public static string BodyResetPasswordMail(string pass)
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "ForgotPasswordMail.cshtml");
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"Template file not found at: {path}");
+            }
+
+            string body = File.ReadAllText(path);
+            return body.Replace("{{Password}}", pass);
+        }
+
         public static string CreateRandomPassword(int PasswordLength)
         {
             string _allowedChars = "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ";

@@ -21,7 +21,7 @@ namespace ZumZumFood.Application.Utils
                 }
 
                 // Kiểm tra loại file (ví dụ: chỉ cho phép hình ảnh JPEG, PNG, GIF)
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
                 var fileExtension = Path.GetExtension(imageFile.FileName).ToLower();
 
                 if (!allowedExtensions.Contains(fileExtension))

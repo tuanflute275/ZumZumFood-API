@@ -47,6 +47,8 @@ namespace ZumZumFood.Infrastructure.Configuration
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IRestaurantService, RestaurantService>();
+            services.AddTransient<IProductService, ProductService>();
         }
 
         // Add singleton

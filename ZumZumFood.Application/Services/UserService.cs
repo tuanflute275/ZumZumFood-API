@@ -127,6 +127,11 @@ namespace ZumZumFood.Application.Services
                    include: query => query.Include(x => x.UserRoles).ThenInclude(u => u.Role)
                 );
                 var result = _mapper.Map<UserDTO>(userQuery.FirstOrDefault());
+                if (result == null)
+                {
+                    LogHelper.LogWarning(_logger, "GET", "/api/user/{id}", null, result);
+                    return new ResponseObject(404, "User not found.", result);
+                }
                 LogHelper.LogInformation(_logger, "GET", "/api/user/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }

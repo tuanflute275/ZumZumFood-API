@@ -14,7 +14,7 @@ namespace ZumZumFood.Application.Models.RequestModel
         public string FullName { get; set; }
         public IFormFile? ImageFile { get; set; }
 
-        public string? OldImage { get; set; }
+        public string? OldImage { get; set; } = "";
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address format.")]
@@ -27,10 +27,10 @@ namespace ZumZumFood.Application.Models.RequestModel
 
         [Phone(ErrorMessage = "Invalid phone number format.")]
         [StringLength(15, ErrorMessage = "Phone number cannot exceed 15 characters.")]
-        public string? PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; } = "";
 
         [StringLength(200, ErrorMessage = "Address cannot exceed 200 characters.")]
-        public string? Address { get; set; }
+        public string? Address { get; set; } = "";
 
         [Range(0, 2, ErrorMessage = "Gender must be 0 (undefined), 1 (Male), or 2 (Female).")]
         public int? Gender { get; set; } = 0;
@@ -46,10 +46,7 @@ namespace ZumZumFood.Application.Models.RequestModel
 
         [StringLength(100, ErrorMessage = "Nationality cannot exceed 100 characters.")]
         public string? Nationality { get; set; } // Quốc tịch của người dùng.
-
-        [StringLength(500, ErrorMessage = "User bio cannot exceed 500 characters.")]
         public string? UserBio { get; set; } // Mô tả ngắn về người dùng.
-
         public string? SocialLinks { get; set; } // Liên kết đến các tài khoản mạng xã hội
     }
 

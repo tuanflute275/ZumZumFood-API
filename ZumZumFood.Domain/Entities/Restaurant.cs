@@ -15,6 +15,8 @@ namespace ZumZumFood.Domain.Entities
         [Column(TypeName = "nvarchar(200)")]
         public string Name { get; set; }
 
+        public string? Slug { get; set; }
+
         [Column(TypeName = "nvarchar(200)")]
         public string? Address { get; set; }
 
