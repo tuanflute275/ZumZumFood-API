@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.DTOs
 {
-    public class ProductDTO : BaseDTO
+    public class ProductMapperDTO : BaseDTO
     {
         public int ProductId { get; set; }
         public string Name { get; set; }
@@ -14,5 +14,8 @@
         public string RestaurantName { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public List<ProductImageDTO> ProductImages { get; set; } = new List<ProductImageDTO>();
+        public List<ProductCommentDTO> ProductComments { get; set; } = new List<ProductCommentDTO>();
+        public List<ProductDetailDTO> ProductDetails { get; set; } = new List<ProductDetailDTO>();
     }
 }

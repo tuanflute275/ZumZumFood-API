@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using X.PagedList;
@@ -109,11 +110,46 @@ namespace ZumZumFood.Application.Services
                 }
                 var dataQuery = await _unitOfWork.CategoryRepository.GetAllAsync(
                    expression: x => x.CategoryId == id && x.DeleteFlag == false
-                   /*,include: query => query.Include(x => x.Products).ThenInclude(p => p.ProductDetails)
-                   .Include(x => x.Products).ThenInclude(p => p.ProductComments)
-                   .Include(x => x.Products).ThenInclude(p => p.ProductImages)*/
+                   , include: query => query.Include(x => x.Products)
+                                            .ThenInclude(p => p.Restaurant)
                 );
-                var result = _mapper.Map<CategoryDTO>(dataQuery.FirstOrDefault());
+                var category = dataQuery.FirstOrDefault();
+                var result = new CategoryMapperDTO
+                {
+                    CategoryId = category.CategoryId,
+                    Image = category.Image,
+                    Name = category.Name,
+                    Slug = category.Slug,
+                    IsActive = category.IsActive,
+                    CreateBy = category.CreateBy,
+                    CreateDate = category.CreateDate.HasValue ? category.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    UpdateBy = category.UpdateBy,
+                    UpdateDate = category.UpdateDate.HasValue ? category.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    DeleteBy = category.DeleteBy,
+                    DeleteDate = category.DeleteDate.HasValue ? category.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    DeleteFlag = category.DeleteFlag,
+                    Products = category.Products.Select(p => new ProductDTO
+                    {
+                        ProductId = p.ProductId,
+                        Name = p.Name,
+                        Slug = p.Slug,
+                        Image = p.Image,
+                        Price = p.Price,
+                        Discount = p.Discount,
+                        IsActive= p.IsActive,
+                        RestaurantId = p.RestaurantId,
+                        RestaurantName = p.Restaurant.Name,
+                        CategoryId = 1,
+                        CategoryName = "category.Name",
+                        Description = p.Description,
+                        CreateDate = category.CreateDate.HasValue ? category.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        UpdateBy = category.UpdateBy,
+                        UpdateDate = category.UpdateDate.HasValue ? category.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        DeleteBy = category.DeleteBy,
+                        DeleteDate = category.DeleteDate.HasValue ? category.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        DeleteFlag = category.DeleteFlag,
+                    }).ToList()
+                };
                 if (result == null)
                 {
                     LogHelper.LogWarning(_logger, "GET", "/api/category/{id}", null, result);

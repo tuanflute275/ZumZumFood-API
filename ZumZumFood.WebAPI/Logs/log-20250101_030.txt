@@ -1,0 +1,24 @@
+2025-01-01 21:55:59.637 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-01 21:56:01.785 +07:00 [ERR] Error in GET /api/category/4. Request Data: No request data provided. Exception: Nullable object must have a value.
+System.InvalidOperationException: Nullable object must have a value.
+   at System.Nullable`1.get_Value()
+   at ZumZumFood.Application.Services.CategoryService.GetByIdAsync(Int32 id) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.Application\Services\CategoryService.cs:line 116
+2025-01-01 21:56:01.816 +07:00 [INF] HTTP GET /api/v1/category/4 responded 200 in 2098.4091 ms
+2025-01-01 21:57:32.359 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-01 21:57:32.902 +07:00 [ERR] Error in GET /api/category/4. Request Data: No request data provided. Exception: Nullable object must have a value.
+System.InvalidOperationException: Nullable object must have a value.
+   at System.Nullable`1.get_Value()
+   at ZumZumFood.Application.Services.CategoryService.GetByIdAsync(Int32 id) in C:\Users\DELL\Desktop\ZumZumFood\ZumZumFood.Application\Services\CategoryService.cs:line 117
+2025-01-01 21:57:32.948 +07:00 [INF] HTTP GET /api/v1/category/4 responded 200 in 511.4301 ms
+2025-01-01 21:57:58.441 +07:00 [ERR] Error in GET /api/category/4. Request Data: No request data provided. Exception: Nullable object must have a value.
+System.InvalidOperationException: Nullable object must have a value.
+   at System.Nullable`1.get_Value()
+   at ZumZumFood.Application.Services.CategoryService.GetByIdAsync(Int32 id)
+2025-01-01 21:57:58.448 +07:00 [INF] HTTP GET /api/v1/category/4 responded 200 in 77.3269 ms
+2025-01-01 21:58:17.543 +07:00 [ERR] Error in GET /api/category/4. Request Data: No request data provided. Exception: Nullable object must have a value.
+System.InvalidOperationException: Nullable object must have a value.
+   at System.Nullable`1.get_Value()
+   at ZumZumFood.Application.Services.CategoryService.GetByIdAsync(Int32 id)
+2025-01-01 21:58:17.551 +07:00 [INF] HTTP GET /api/v1/category/4 responded 200 in 76.1914 ms
+2025-01-01 21:58:35.644 +07:00 [INF] Processed GET /api/category/{id}. Request Data: No request data provided. Response Data: ZumZumFood.Application.Models.DTOs.CategoryMapperDTO
+2025-01-01 21:58:35.668 +07:00 [INF] HTTP GET /api/v1/category/4 responded 200 in 39.0595 ms

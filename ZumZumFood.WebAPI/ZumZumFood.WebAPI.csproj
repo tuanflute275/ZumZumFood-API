@@ -12,6 +12,7 @@
     <Content Remove="Templates\ForgotPasswordMail.cshtml" />
     <Content Remove="Templates\RegisterSuccessMail.cshtml" />
     <Content Remove="wwwroot\uploads\categories\.gitkeep" />
+    <Content Remove="wwwroot\uploads\products\.gitkeep" />
     <Content Remove="wwwroot\uploads\users\.gitkeep" />
   </ItemGroup>
 
@@ -41,6 +42,9 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\uploads\categories\.gitkeep">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\uploads\products\.gitkeep">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\uploads\users\.gitkeep" />

@@ -1,4 +1,0 @@
-2025-01-01 20:03:47.268 +07:00 [WRN] Failed to determine the https port for redirect.
-2025-01-01 20:04:20.008 +07:00 [INF] Processed DELETE /api/category/6. Request Data: 6. Response Data: Deleted successfully
-2025-01-01 20:04:20.025 +07:00 [INF] HTTP DELETE /api/v1/category/6 responded 200 in 32683.8097 ms
-2025-01-01 20:14:28.984 +07:00 [WRN] Failed to determine the https port for redirect.

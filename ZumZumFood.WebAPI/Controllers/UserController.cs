@@ -58,7 +58,7 @@ namespace ZumZumFood.WebAPI.Controllers
             return await _userService.RestoreAsync(id);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ResponseObject> Delete(int id)
         {

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using X.PagedList;
@@ -114,13 +115,62 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
                 var dataQuery = await _unitOfWork.ProductRepository.GetAllAsync(
-                   expression: x => x.ProductId == id && x.DeleteFlag == false
-                   /*,include: query => query.Include(x => x.Products).ThenInclude(p => p.ProductDetails)
-                   .Include(x => x.Products).ThenInclude(p => p.ProductComments)
-                   .Include(x => x.Products).ThenInclude(p => p.ProductImages)*/
+                   expression: x => x.ProductId == id && x.DeleteFlag == false,
+                   include: query => query.Include(x => x.ProductDetails)
+                                          .Include(x => x.ProductImages)
+                                          .Include(x => x.ProductComments)
+                                          .ThenInclude(pcm => pcm.User)
+                                          .Include(x => x.Category)
+                                          .Include(x => x.Restaurant)
                 );
-                var result = _mapper.Map<ProductDTO>(dataQuery.FirstOrDefault());
-                if(result == null)
+                var product = dataQuery.FirstOrDefault();
+                var result = new ProductMapperDTO
+                {
+                    ProductId = product.ProductId,
+                    Image = product.Image,
+                    Name = product.Name,
+                    Slug = product.Slug,
+                    Price = product.Price,
+                    Discount = product.Discount,
+                    IsActive = product.IsActive,
+                    Description = product.Description,
+                    CategoryId = product.CategoryId,
+                    CategoryName = product.Category.Name,
+                    RestaurantId = product.RestaurantId,
+                    RestaurantName = product.Restaurant.Name,
+                    ProductImages = product.ProductImages.Select(d => new ProductImageDTO
+                    {
+                       ProductImageId = d.ProductId,
+                       Path = d.Path
+                    }).ToList(),
+                    ProductComments = product.ProductComments.Select(c => new ProductCommentDTO
+                    {
+                        Email = c.Email,
+                        Message = c.Message,
+                        Name = c.Name,
+                        Users = new UserProductDTO
+                        {
+                            UserId = c.UserId,
+                            UserName = c.User.UserName,
+                            UserFullName = c.User.FullName,
+                            UserEmail = c.User.Email,
+                            DateOfBirth = c.User.DateOfBirth,
+                            Nationality = c.User.Nationality,
+                            PlaceOfBirth = c.User.PlaceOfBirth,
+                            UserAddress = c.User.Address,
+                            UserAvatar = c.User.Avatar,
+                            UserGender = c.User.Gender,
+                            UserPhoneNumber = c.User.PhoneNumber
+                        }
+                    }).ToList(),
+                    ProductDetails = product.ProductDetails.Select(d => new ProductDetailDTO
+                    {
+                        Color = d.Color,
+                        Size = d.Size,
+                        Quantity = d.Quantity,
+                    }).ToList()
+                };
+                if (result == null)
                 {
                     LogHelper.LogWarning(_logger, "GET", "/api/product/{id}", null, result);
                     return new ResponseObject(404, "Product not found.", result);
