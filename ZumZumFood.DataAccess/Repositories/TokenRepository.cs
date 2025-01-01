@@ -62,5 +62,19 @@ namespace ZumZumFood.Persistence.Repositories
                 return false;
             }
         }
+
+        public async Task<bool> DeleteRangeAsync(List<Token> listData)
+        {
+            try
+            {
+                base.DeleteRangeAsync(listData);
+                await base.Commit();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

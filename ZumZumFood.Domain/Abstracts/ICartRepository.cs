@@ -11,5 +11,6 @@ namespace ZumZumFood.Domain.Abstracts
         Task<Cart?> GetByIdAsync(int id);
         Task<bool> SaveOrUpdateAsync(Cart cart);
         Task<bool> DeleteAsync(Cart cart);
+        Task<bool> DeleteRangeAsync(List<Cart> listData);
     }
 }

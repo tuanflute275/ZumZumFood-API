@@ -342,6 +342,9 @@ namespace ZumZumFood.Application.Services
                 var productDetail = await _unitOfWork.ProductDetailRepository.GetAllAsync(x => x.ProductId == id);
                 var productComment = await _unitOfWork.ProductCommentRepository.GetAllAsync(x => x.ProductId == id);
                 var productImage = await _unitOfWork.ProductImageRepository.GetAllAsync(x => x.ProductId == id);
+                var carts = await _unitOfWork.CartRepository.GetAllAsync(x => x.ProductId == id);
+                var wishlists = await _unitOfWork.WishlistRepository.GetAllAsync(x => x.ProductId == id);
+                var orderDetails = await _unitOfWork.OrderDetailRepository.GetAllAsync(x => x.ProductId == id);
 
                 // Delete Product Details
                 if (productDetail != null && productDetail.Any())  // Ensure there's data to delete
@@ -359,6 +362,24 @@ namespace ZumZumFood.Application.Services
                 if (productImage != null && productImage.Any())  // Ensure there's data to delete
                 {
                     await _unitOfWork.ProductImageRepository.DeleteRangeAsync(productImage.ToList());
+                }
+
+                // Delete carts
+                if (carts != null && carts.Any())  // Ensure there's data to delete
+                {
+                    await _unitOfWork.CartRepository.DeleteRangeAsync(carts.ToList());
+                }
+
+                // Delete wishlists
+                if (wishlists != null && wishlists.Any())  // Ensure there's data to delete
+                {
+                    await _unitOfWork.WishlistRepository.DeleteRangeAsync(wishlists.ToList());
+                }
+
+                // Delete orderDetails
+                if (orderDetails != null && orderDetails.Any())  // Ensure there's data to delete
+                {
+                    await _unitOfWork.OrderDetailRepository.DeleteRangeAsync(orderDetails.ToList());
                 }
 
                 // Save changes after all deletions

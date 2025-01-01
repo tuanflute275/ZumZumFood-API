@@ -331,14 +331,53 @@ namespace ZumZumFood.Application.Services
                     LogHelper.LogWarning(_logger, "DELETE", $"/api/user/{id}", id, "User not found.");
                     return new ResponseObject(404, "User not found.", null);
                 }
-                //start delete foreign key
-                var userRole = await _unitOfWork.UserRoleRepository.GetUserByIdAsync(id);
-                if(userRole != null)
+                // Start: Deleting foreign key dependencies
+                var userRoles = await _unitOfWork.UserRoleRepository.GetAllAsync(x => x.UserId == id);
+                var tokens = await _unitOfWork.TokenRepository.GetAllAsync(x => x.UserId == id);
+                var productComment = await _unitOfWork.ProductCommentRepository.GetAllAsync(x => x.UserId == id);
+                var carts = await _unitOfWork.CartRepository.GetAllAsync(x => x.ProductId == id);
+                var wishlists = await _unitOfWork.WishlistRepository.GetAllAsync(x => x.ProductId == id);
+                var orders = await _unitOfWork.OrderRepository.GetAllAsync(x => x.UserId == id);
+
+                // Delete tokens
+                if (tokens != null && tokens.Any())  // Ensure there's data to delete
                 {
-                    await _unitOfWork.UserRoleRepository.DeleteAsync(userRole);
-                    await _unitOfWork.SaveChangeAsync();    
+                    await _unitOfWork.TokenRepository.DeleteRangeAsync(tokens.ToList());
                 }
-                //end delete foreign key
+
+                // Delete Product Details
+                if (userRoles != null && userRoles.Any())  // Ensure there's data to delete
+                {
+                    await _unitOfWork.UserRoleRepository.DeleteRangeAsync(userRoles.ToList());
+                }
+
+                // Delete carts
+                if (carts != null && carts.Any())  // Ensure there's data to delete
+                {
+                    await _unitOfWork.CartRepository.DeleteRangeAsync(carts.ToList());
+                }
+
+                // Delete wishlists
+                if (wishlists != null && wishlists.Any())  // Ensure there's data to delete
+                {
+                    await _unitOfWork.WishlistRepository.DeleteRangeAsync(wishlists.ToList());
+                }
+
+                // Delete orders
+                if (orders != null && orders.Any())  // Ensure there's data to delete
+                {
+                    await _unitOfWork.OrderRepository.DeleteRangeAsync(orders.ToList());
+                }
+
+                // Delete Product Comments
+                if (productComment != null && productComment.Any())  // Ensure there's data to delete
+                {
+                    await _unitOfWork.ProductCommentRepository.DeleteRangeAsync(productComment.ToList());
+                }
+
+                // Save changes after all deletions
+                await _unitOfWork.SaveChangeAsync();
+                // End: Deleting foreign key dependencies
                 await _unitOfWork.UserRepository.DeleteAsync(user);
                 await _unitOfWork.SaveChangeAsync();
                 LogHelper.LogInformation(_logger, "DELETE", $"/api/user/{id}", id, "Deleted successfully");

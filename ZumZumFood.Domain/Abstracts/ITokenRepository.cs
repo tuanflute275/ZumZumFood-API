@@ -12,5 +12,6 @@ namespace ZumZumFood.Domain.Abstracts
         Task<Token?> GetRefreshTokenAsync(string refreshToken);
         Task<bool> SaveOrUpdateAsync(Token token);
         Task<bool> DeleteAsync(Token token);
+        Task<bool> DeleteRangeAsync(List<Token> listData);
     }
 }

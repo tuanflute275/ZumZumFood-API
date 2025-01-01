@@ -322,14 +322,41 @@ namespace ZumZumFood.Application.Services
                     LogHelper.LogWarning(_logger, "DELETE", $"/api/category/{id}", id, "Category not found.");
                     return new ResponseObject(404, "Category not found.", null);
                 }
-               /* //start delete foreign key
-                var products = await _unitOfWork.ProductCommentRepository.GetAllAsync(x => x.UserId == );
-                if (userRole != null)
+                // Bắt đầu: Xóa các phụ thuộc khóa ngoại
+                var products = await _unitOfWork.ProductRepository.GetAllAsync(x => x.CategoryId == id);
+                if (products != null && products.Any())
                 {
-                    await _unitOfWork.UserRoleRepository.DeleteAsync(userRole);
-                    await _unitOfWork.SaveChangeAsync();
+                    // Lấy tất cả dữ liệu liên quan cùng lúc, giảm số lượng truy vấn
+                    var productDetails = await _unitOfWork.ProductDetailRepository.GetAllAsync(x => products.Select(p => p.ProductId).Contains(x.ProductId));
+                    var productComments = await _unitOfWork.ProductCommentRepository.GetAllAsync(x => products.Select(p => p.ProductId).Contains(x.ProductId));
+                    var productImages = await _unitOfWork.ProductImageRepository.GetAllAsync(x => products.Select(p => p.ProductId).Contains(x.ProductId));
+
+                    // Xóa Product Details
+                    if (productDetails?.Any() == true)
+                    {
+                        await _unitOfWork.ProductDetailRepository.DeleteRangeAsync(productDetails.ToList());
+                    }
+
+                    // Xóa Product Comments
+                    if (productComments?.Any() == true)
+                    {
+                        await _unitOfWork.ProductCommentRepository.DeleteRangeAsync(productComments.ToList());
+                    }
+
+                    // Xóa Product Images
+                    if (productImages?.Any() == true)
+                    {
+                        await _unitOfWork.ProductImageRepository.DeleteRangeAsync(productImages.ToList());
+                    }
+
+                    // Xóa Products
+                    await _unitOfWork.ProductRepository.DeleteRangeAsync(products.ToList());
                 }
-                //end delete foreign key*/
+
+                // Lưu các thay đổi sau khi xóa tất cả
+                await _unitOfWork.SaveChangeAsync();
+                // Kết thúc: Xóa các phụ thuộc khóa ngoại
+
                 await _unitOfWork.CategoryRepository.DeleteAsync(category);
                 await _unitOfWork.SaveChangeAsync();
                 LogHelper.LogInformation(_logger, "DELETE", $"/api/category/{id}", id, "Deleted successfully");

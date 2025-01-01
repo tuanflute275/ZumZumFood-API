@@ -12,5 +12,6 @@ namespace ZumZumFood.Domain.Abstracts
         Task<UserRole?> GetUserByIdAsync(int userId);
         Task<bool> SaveOrUpdateAsync(UserRole userRole);
         Task<bool> DeleteAsync(UserRole userRole);
+        Task<bool> DeleteRangeAsync(List<UserRole> listData);
     }
 }
