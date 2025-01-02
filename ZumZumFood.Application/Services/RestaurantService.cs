@@ -1,17 +1,17 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Domain.Entities;
+
+namespace ZumZumFood.Application.Services
 {
     public class RestaurantService : IRestaurantService
     {
         IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<RestaurantService> _logger;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public RestaurantService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<RestaurantService> logger, IHttpContextAccessor httpContextAccessor)
+        public RestaurantService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<RestaurantService> logger)
         {
             _logger = logger;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
@@ -94,12 +94,51 @@
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
                 var dataQuery = await _unitOfWork.RestaurantRepository.GetAllAsync(
-                   expression: x => x.RestaurantId == id && x.DeleteFlag == false
-                   /*,include: query => query.Include(x => x.Products).ThenInclude(p => p.ProductDetails)
-                   .Include(x => x.Products).ThenInclude(p => p.ProductComments)
-                   .Include(x => x.Products).ThenInclude(p => p.ProductImages)*/
+                   expression: x => x.RestaurantId == id && x.DeleteFlag == false,
+                   include: query => query.Include(x => x.Products)
+                                            .ThenInclude(p => p.Category)
                 );
-                var result = _mapper.Map<RestaurantDTO>(dataQuery.FirstOrDefault());
+                var restaurant = dataQuery.FirstOrDefault();
+                var result = new RestaurantMapperDTO
+                {
+                    RestaurantId = restaurant.RestaurantId,
+                    Name = restaurant.Name,
+                    Address = restaurant.Address,
+                    PhoneNumber = restaurant.PhoneNumber,
+                    Email = restaurant.Email,
+                    IsActive = restaurant.IsActive,
+                    OpenTime = restaurant.OpenTime.Value.ToString(@"hh\:mm"),
+                    CloseTime = restaurant.CloseTime.Value.ToString(@"hh\:mm"),
+                    Description = restaurant.Description,
+                    CreateBy = restaurant.CreateBy,
+                    CreateDate = restaurant.CreateDate.HasValue ? restaurant.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    UpdateBy = restaurant.UpdateBy,
+                    UpdateDate = restaurant.UpdateDate.HasValue ? restaurant.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    DeleteBy = restaurant.DeleteBy,
+                    DeleteDate = restaurant.DeleteDate.HasValue ? restaurant.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    DeleteFlag = restaurant.DeleteFlag,
+                    Products = restaurant.Products.Select(p => new ProductDTO
+                    {
+                        ProductId = p.ProductId,
+                        Name = p.Name,
+                        Slug = p.Slug,
+                        Image = p.Image,
+                        Price = p.Price,
+                        Discount = p.Discount,
+                        IsActive = p.IsActive,
+                        RestaurantId = p.RestaurantId,
+                        RestaurantName = p.Restaurant.Name,
+                        CategoryId = 1,
+                        CategoryName = "category.Name",
+                        Description = p.Description,
+                        CreateDate = p.CreateDate.HasValue ? p.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        UpdateBy = p.UpdateBy,
+                        UpdateDate = p.UpdateDate.HasValue ? p.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        DeleteBy = p.DeleteBy,
+                        DeleteDate = p.DeleteDate.HasValue ? p.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        DeleteFlag = p.DeleteFlag,
+                    }).ToList()
+                };
                 if (result == null)
                 {
                     LogHelper.LogWarning(_logger, "GET", "/api/restaurant/{id}", null, result);
@@ -138,6 +177,8 @@
                 restaurant.PhoneNumber = model.PhoneNumber;
                 restaurant.Email = model.Email;
                 restaurant.IsActive = model.IsActive;
+                restaurant.OpenTime = TimeSpan.Parse(model.OpenTime);
+                restaurant.CloseTime = TimeSpan.Parse(model.CloseTime);
                 restaurant.Description = model.Description;
                 restaurant.CreateBy = Constant.SYSADMIN;
                 restaurant.CreateDate = DateTime.Now;

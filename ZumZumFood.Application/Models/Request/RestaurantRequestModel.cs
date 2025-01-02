@@ -18,10 +18,8 @@
         public string? Description { get; set; }
         public bool? IsActive { get; set; }
 
-        [Range(typeof(TimeSpan), "00:00:00", "23:59:59", ErrorMessage = "Invalid opening time.")]
-        public TimeSpan? OpenTime { get; set; } = TimeSpan.FromHours(8);  // Opening time
+        public string? OpenTime { get; set; }
 
-        [Range(typeof(TimeSpan), "00:00:00", "23:59:59", ErrorMessage = "Invalid closing time.")]
-        public TimeSpan? CloseTime { get; set; } = TimeSpan.FromHours(22);  // Closing time
+        public string? CloseTime { get; set; }
     }
 }

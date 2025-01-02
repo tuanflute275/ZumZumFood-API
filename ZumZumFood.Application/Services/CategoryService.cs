@@ -94,8 +94,8 @@
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
                 var dataQuery = await _unitOfWork.CategoryRepository.GetAllAsync(
-                   expression: x => x.CategoryId == id && x.DeleteFlag == false
-                   , include: query => query.Include(x => x.Products)
+                   expression: x => x.CategoryId == id && x.DeleteFlag == false,
+                   include: query => query.Include(x => x.Products)
                                             .ThenInclude(p => p.Restaurant)
                 );
                 var category = dataQuery.FirstOrDefault();
@@ -127,12 +127,12 @@
                         CategoryId = 1,
                         CategoryName = "category.Name",
                         Description = p.Description,
-                        CreateDate = category.CreateDate.HasValue ? category.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
-                        UpdateBy = category.UpdateBy,
-                        UpdateDate = category.UpdateDate.HasValue ? category.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
-                        DeleteBy = category.DeleteBy,
-                        DeleteDate = category.DeleteDate.HasValue ? category.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
-                        DeleteFlag = category.DeleteFlag,
+                        CreateDate = p.CreateDate.HasValue ? p.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        UpdateBy = p.UpdateBy,
+                        UpdateDate = p.UpdateDate.HasValue ? p.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        DeleteBy = p.DeleteBy,
+                        DeleteDate = p.DeleteDate.HasValue ? p.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        DeleteFlag = p.DeleteFlag,
                     }).ToList()
                 };
                 if (result == null)
