@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ZumZumFood.Domain.Entities
+﻿namespace ZumZumFood.Domain.Entities
 {
     public class BaseEntity
     {

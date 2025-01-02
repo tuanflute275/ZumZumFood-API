@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using ZumZumFood.Persistence.Data;
-
-namespace ZumZumFood.Persistence.Repositories
+﻿namespace ZumZumFood.Persistence.Repositories
 {
     // Generic repository for CRUD operations with EF Core
     public class BaseRepository<T> where T : class

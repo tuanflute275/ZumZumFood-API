@@ -5,7 +5,8 @@
         public const string SYSADMIN = "ADMIN";
         //PAGESIZE DEFAULT
         public const int DEFAULT_PAGESIZE = 15;
-
+        // Status Redis connect
+        public static bool IsRedisConnectedStatic { get; set; } = false;
         // 
         public const string ENABLE = "Enable";      // Kích hoạt tài khoản
         public const string BLOCK = "Block";       // Khóa tài khoản

@@ -1,17 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using ZumZumFood.Application.Abstracts;
-using ZumZumFood.Application.Models.Request;
-using ZumZumFood.Application.Models.Response;
-using ZumZumFood.Application.Utils;
-using ZumZumFood.Domain.Abstracts;
-using ZumZumFood.Domain.Entities;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class AuthService : IAuthService
     {

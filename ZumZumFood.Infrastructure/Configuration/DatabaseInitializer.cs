@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using ZumZumFood.Domain.Entities;
-using ZumZumFood.Persistence.Data;
-
+﻿using Log = ZumZumFood.Domain.Entities.Log;
+using Role = ZumZumFood.Domain.Entities.Role;
 namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class DatabaseInitializer

@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
-using ZumZumFood.Domain.Entities;
-
-namespace ZumZumFood.Domain.Abstracts
+﻿namespace ZumZumFood.Domain.Abstracts
 {
     public interface IProductDetailRepository
     {

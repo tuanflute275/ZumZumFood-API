@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore;
-using ZumZumFood.Domain.Abstracts;
-using ZumZumFood.Persistence.Data;
-
-namespace ZumZumFood.Persistence.Repositories
+﻿namespace ZumZumFood.Persistence.Repositories
 {
     public class UnitOfWork : IDisposable, IUnitOfWork
     {

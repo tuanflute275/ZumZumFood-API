@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
-
-namespace ZumZumFood.Application.Models.Request
+﻿namespace ZumZumFood.Application.Models.Request
 {
     public class CategoryRequestModel
     {

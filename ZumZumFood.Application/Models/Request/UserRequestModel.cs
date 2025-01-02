@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
-
-namespace ZumZumFood.Application.Models.RequestModel
+﻿namespace ZumZumFood.Application.Models.RequestModel
 {
     public class UserRequestModel
     {

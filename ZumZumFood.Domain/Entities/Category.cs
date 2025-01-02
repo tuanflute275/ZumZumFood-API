@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-namespace ZumZumFood.Domain.Entities
+﻿namespace ZumZumFood.Domain.Entities
 {
     [Table("Categories")]
     public class Category : BaseEntity

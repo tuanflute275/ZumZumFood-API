@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace ZumZumFood.Domain.Entities
+﻿namespace ZumZumFood.Domain.Entities
 {
     [Table("ProductImages")]
     public class ProductImage : BaseEntity

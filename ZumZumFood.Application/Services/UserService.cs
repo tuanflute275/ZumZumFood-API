@@ -1,20 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using X.PagedList;
-using ZumZumFood.Application.Abstracts;
-using ZumZumFood.Application.Models.DTOs;
-using ZumZumFood.Application.Models.RequestModel;
-using ZumZumFood.Application.Models.Response;
-using ZumZumFood.Domain.Abstracts;
-using ZumZumFood.Domain.Entities;
-using ZumZumFood.Application.Utils;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.Data;
-using System.ComponentModel.DataAnnotations;
-using static ZumZumFood.Application.Utils.Helpers;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class UserService : IUserService
     {

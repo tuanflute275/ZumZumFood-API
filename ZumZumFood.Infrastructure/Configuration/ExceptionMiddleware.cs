@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.Text.Json;
-using ZumZumFood.Application.Utils;
-
-namespace ZumZumFood.Infrastructure.Configuration
+﻿namespace ZumZumFood.Infrastructure.Configuration
 {
     // Middleware này sẽ bắt tất cả các ngoại lệ không xử lý trong ứng dụng và trả về phản hồi phù hợp.
     public class ExceptionMiddleware

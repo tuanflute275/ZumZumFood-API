@@ -1,19 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
-using X.PagedList;
-using ZumZumFood.Application.Abstracts;
-using ZumZumFood.Application.Models.DTOs;
-using ZumZumFood.Application.Models.Request;
-using ZumZumFood.Application.Models.Response;
-using ZumZumFood.Application.Utils;
-using ZumZumFood.Domain.Abstracts;
-using ZumZumFood.Domain.Entities;
-using static ZumZumFood.Application.Utils.Helpers;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class CategoryService : ICategoryService
     {

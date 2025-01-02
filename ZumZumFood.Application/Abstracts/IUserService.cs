@@ -1,7 +1,4 @@
-﻿using ZumZumFood.Application.Models.RequestModel;
-using ZumZumFood.Application.Models.Response;
-
-namespace ZumZumFood.Application.Abstracts
+﻿namespace ZumZumFood.Application.Abstracts
 {
     public interface IUserService
     {

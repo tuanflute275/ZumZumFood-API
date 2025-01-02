@@ -1,0 +1,4 @@
+2025-01-02 11:32:08.229 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-02 11:32:59.104 +07:00 [INF] Processed GET /api/product. Request Data: No request data provided. Response Data: 9
+2025-01-02 11:32:59.136 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 50829.8469 ms
+2025-01-02 11:35:55.518 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 18518.9513 ms

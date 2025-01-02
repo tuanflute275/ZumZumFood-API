@@ -1,0 +1,16 @@
+2025-01-02 11:40:01.944 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-02 11:40:27.686 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 25666.9011 ms
+2025-01-02 11:40:38.899 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 26.0869 ms
+2025-01-02 11:40:40.760 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 12.3041 ms
+2025-01-02 11:40:50.390 +07:00 [INF] Processed GET /api/product. Request Data: No request data provided. Response Data: 9
+2025-01-02 11:40:50.393 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 182.9417 ms
+2025-01-02 11:40:53.656 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 9.8103 ms
+2025-01-02 11:43:59.112 +07:00 [INF] Processed GET /api/product. Request Data: No request data provided. Response Data: 9
+2025-01-02 11:43:59.117 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 29.2889 ms
+2025-01-02 11:44:13.009 +07:00 [INF] Processed GET /api/product. Request Data: No request data provided. Response Data: 0
+2025-01-02 11:44:13.013 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 16.4555 ms
+2025-01-02 11:45:14.158 +07:00 [INF] Processed POST /api/product. Request Data: ZumZumFood.Application.Models.Request.ProductRequestModel. Response Data: ZumZumFood.Domain.Entities.Product
+2025-01-02 11:45:14.163 +07:00 [INF] HTTP POST /api/v1/product responded 200 in 244.2215 ms
+2025-01-02 11:56:07.208 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-02 11:56:07.579 +07:00 [INF] Processed GET /api/category. Request Data: No request data provided. Response Data: 8
+2025-01-02 11:56:07.608 +07:00 [INF] HTTP GET /api/v1/category responded 200 in 318.5647 ms

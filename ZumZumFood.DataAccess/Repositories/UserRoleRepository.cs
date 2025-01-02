@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
-using ZumZumFood.Domain.Abstracts;
-using ZumZumFood.Domain.Entities;
-using ZumZumFood.Persistence.Data;
-
-namespace ZumZumFood.Persistence.Repositories
+﻿namespace ZumZumFood.Persistence.Repositories
 {
     public class UserRoleRepository : BaseRepository<UserRole>, IUserRoleRepository
     {

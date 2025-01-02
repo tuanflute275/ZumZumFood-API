@@ -1,0 +1,11 @@
+2025-01-02 11:56:07.208 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-02 11:56:07.579 +07:00 [INF] Processed GET /api/category. Request Data: No request data provided. Response Data: 8
+2025-01-02 11:56:07.608 +07:00 [INF] HTTP GET /api/v1/category responded 200 in 318.5647 ms
+2025-01-02 13:28:23.873 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-02 13:28:24.360 +07:00 [INF] Processed GET /api/product. Request Data: No request data provided. Response Data: 10
+2025-01-02 13:28:24.391 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 436.5626 ms
+2025-01-02 13:28:31.252 +07:00 [INF] HTTP GET /api/v1/product responded 200 in 38.3817 ms
+2025-01-02 13:28:46.813 +07:00 [INF] Processed GET /api/restaurant/{id}. Request Data: No request data provided. Response Data: ZumZumFood.Application.Models.DTOs.RestaurantDTO
+2025-01-02 13:28:46.818 +07:00 [INF] HTTP GET /api/v1/restaurant/2 responded 200 in 70.4593 ms
+2025-01-02 13:29:02.090 +07:00 [INF] Processed GET /api/category/{id}. Request Data: No request data provided. Response Data: ZumZumFood.Application.Models.DTOs.CategoryMapperDTO
+2025-01-02 13:29:02.096 +07:00 [INF] HTTP GET /api/v1/category/2 responded 200 in 104.9432 ms

@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ZumZumFood.Domain.Entities;
-
-namespace ZumZumFood.Persistence.Data
+﻿namespace ZumZumFood.Persistence.Data
 {
     public class ApplicationDbContext : DbContext
     {

@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ZumZumFood.Application.Abstracts;
-using ZumZumFood.Application.Models.Request;
-using ZumZumFood.Application.Models.Response;
-
-namespace ZumZumFood.WebAPI.Controllers
+﻿namespace ZumZumFood.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/v1/auth")]

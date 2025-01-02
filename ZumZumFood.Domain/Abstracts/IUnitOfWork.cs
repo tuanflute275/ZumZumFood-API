@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace ZumZumFood.Domain.Abstracts
+﻿namespace ZumZumFood.Domain.Abstracts
 {
     public interface IUnitOfWork
     {

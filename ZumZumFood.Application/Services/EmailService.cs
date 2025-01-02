@@ -1,9 +1,4 @@
-﻿using System.Net.Mail;
-using System.Net;
-using ZumZumFood.Application.Abstracts;
-using ZumZumFood.Application.Models.Request;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class EmailService : IEmailService
     {

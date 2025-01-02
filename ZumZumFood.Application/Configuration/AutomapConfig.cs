@@ -1,9 +1,4 @@
-﻿using AutoMapper;
-using ZumZumFood.Application.Models.DTOs;
-using ZumZumFood.Application.Models.RequestModel;
-using ZumZumFood.Domain.Entities;
-
-namespace ZumZumFood.Application.Configuration
+﻿namespace ZumZumFood.Application.Configuration
 {
     public class AutomapConfig : Profile
     {

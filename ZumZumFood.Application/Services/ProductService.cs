@@ -1,19 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
-using X.PagedList;
-using ZumZumFood.Application.Abstracts;
-using ZumZumFood.Application.Models.DTOs;
-using ZumZumFood.Application.Models.Request;
-using ZumZumFood.Application.Models.Response;
-using ZumZumFood.Application.Utils;
-using ZumZumFood.Domain.Abstracts;
-using ZumZumFood.Domain.Entities;
-using static ZumZumFood.Application.Utils.Helpers;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class ProductService : IProductService
     {
@@ -21,12 +6,21 @@ namespace ZumZumFood.Application.Services
         private readonly IMapper _mapper;
         private readonly ILogger<ProductService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<ProductService> logger, IHttpContextAccessor httpContextAccessor)
+        private readonly IRedisCacheService _redisCacheService;
+        private readonly string _cacheKeyPrefix = "product_";
+        public ProductService(
+            IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            ILogger<ProductService> logger, 
+            IHttpContextAccessor httpContextAccessor,
+            IRedisCacheService redisCacheService
+            )
         {
             _logger = logger;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
+            _redisCacheService = redisCacheService;
         }
 
         public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
@@ -40,6 +34,18 @@ namespace ZumZumFood.Application.Services
                     LogHelper.LogWarning(_logger, "GET", $"/api/product", null, "Input contains invalid special characters");
                     return new ResponseObject(400, "Input contains invalid special characters", validationResult);
                 }
+
+                // start cache
+                var cacheKey = $"{_cacheKeyPrefix}{keyword ?? "all"}_{sort ?? "default"}_page_{pageNo}";
+                var cachedData = await _redisCacheService.GetCacheAsync(cacheKey);
+                if (cachedData != null)
+                {
+                    // Nếu có dữ liệu trong cache, trả về dữ liệu từ cache
+                    var response = JsonConvert.DeserializeObject<ResponseCache>(cachedData);
+                    return new ResponseObject(200, "Query data successfully", response);
+                }
+                //end cache
+
                 var dataQuery = _unitOfWork.ProductRepository.GetAllAsync(
                     expression: s => s.DeleteFlag == false && string.IsNullOrEmpty(keyword) || s.Name.Contains(keyword)
                 );
@@ -93,6 +99,9 @@ namespace ZumZumFood.Application.Services
                     pageNumber = pagedData.PageNumber,     // Current page number
                     pageSize = pagedData.PageSize          // Page size
                 };
+
+                // Lưu vào Redis
+                await _redisCacheService.SetCacheAsync(cacheKey, JsonConvert.SerializeObject(responseData), TimeSpan.FromHours(1));
                 LogHelper.LogInformation(_logger, "GET", "/api/product", null, pagedData.Count());
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
@@ -221,6 +230,7 @@ namespace ZumZumFood.Application.Services
 
                 await _unitOfWork.ProductRepository.SaveOrUpdateAsync(product);
                 await _unitOfWork.SaveChangeAsync();
+                _redisCacheService.ClearCacheAsync();
                 LogHelper.LogInformation(_logger, "POST", "/api/product", model, product);
                 return new ResponseObject(200, "Create data successfully", null);
             }
@@ -267,6 +277,7 @@ namespace ZumZumFood.Application.Services
 
                 await _unitOfWork.ProductRepository.SaveOrUpdateAsync(product);
                 await _unitOfWork.SaveChangeAsync();
+                _redisCacheService.ClearCacheAsync();
                 LogHelper.LogInformation(_logger, "POST", "/api/product", model, product);
                 return new ResponseObject(200, "Update data successfully", null);
             }
@@ -437,6 +448,7 @@ namespace ZumZumFood.Application.Services
                 // End: Deleting foreign key dependencies
                 await _unitOfWork.ProductRepository.DeleteAsync(product);
                 await _unitOfWork.SaveChangeAsync();
+                _redisCacheService.ClearCacheAsync();
                 LogHelper.LogInformation(_logger, "DELETE", $"/api/product/{id}", id, "Deleted successfully");
                 return new ResponseObject(200, "Delete data successfully", null);
             }

@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Webp;
-using Image = SixLabors.ImageSharp.Image;
-
-namespace ZumZumFood.Application.Utils
+﻿namespace ZumZumFood.Application.Utils
 {
     public static class FileUploadHelper
     {

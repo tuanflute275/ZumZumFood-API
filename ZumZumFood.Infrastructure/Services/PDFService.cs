@@ -1,8 +1,4 @@
-﻿using DinkToPdf.Contracts;
-using DinkToPdf;
-using ZumZumFood.Infrastructure.Abstracts;
-
-namespace ZumZumFood.Infrastructure.Services
+﻿namespace ZumZumFood.Infrastructure.Services
 {
     public class PDFService : IPDFService
     {

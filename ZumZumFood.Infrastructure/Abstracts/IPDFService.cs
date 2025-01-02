@@ -1,6 +1,4 @@
-﻿using DinkToPdf;
-
-namespace ZumZumFood.Infrastructure.Abstracts
+﻿namespace ZumZumFood.Infrastructure.Abstracts
 {
     public interface IPDFService
     {

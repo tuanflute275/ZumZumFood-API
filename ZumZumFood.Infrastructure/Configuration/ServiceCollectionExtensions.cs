@@ -3,23 +3,10 @@ using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using System.Text.Json;
-using ZumZumFood.Application.Abstracts;
-using ZumZumFood.Application.Configuration;
-using ZumZumFood.Application.Models.Request;
-using ZumZumFood.Application.Models.Response;
-using ZumZumFood.Application.Services;
-using ZumZumFood.Domain.Abstracts;
-using ZumZumFood.Infrastructure.Abstracts;
-using ZumZumFood.Infrastructure.Services;
-using ZumZumFood.Persistence.Data;
-using ZumZumFood.Persistence.Repositories;
-
-
+using ILogger = Serilog.ILogger;
 namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class ServiceCollectionExtensions
@@ -34,6 +21,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                .AddSingletonServices()
                .AddEmailConfiguration(configuration)
                .AddJwtConfiguration(configuration)
+               .AddCacheConfiguration(configuration)
                .AddTransientServices();
             return services;
         }
@@ -42,6 +30,7 @@ namespace ZumZumFood.Infrastructure.Configuration
         {
             services.AddTransient<IPDFService, PDFService>();
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            services.AddTransient<ISQLQueryHandler, SQLQueryHandler>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IAuthService, AuthService>();
@@ -114,7 +103,7 @@ namespace ZumZumFood.Infrastructure.Configuration
             }
 
             // Cấu hình Serilog
-            Log.Logger = new LoggerConfiguration()
+            Serilog.Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)  // Đọc cấu hình từ appsettings.json
                 .Enrich.FromLogContext()                // Thêm ngữ cảnh log
                 .WriteTo.Console()                      // Ghi log ra Console
@@ -124,12 +113,61 @@ namespace ZumZumFood.Infrastructure.Configuration
                     retainedFileCountLimit: 7                // Giới hạn số file log giữ lại (ví dụ 7 ngày)
                 )
                 .CreateLogger();
-            services.AddSingleton<ILogger>(Log.Logger);
+            services.AddSingleton<ILogger>(Serilog.Log.Logger);
+            return services;
+        }
+
+        // Cấu hình bộ nhớ cache (Redis hoặc fallback MemoryCache)
+        public static IServiceCollection AddCacheConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            // Cấu hình kết nối Redis với fallback sử dụng bộ nhớ nếu Redis không khả dụng
+            var redisConnectionString = configuration["CacheConnection:RedisServer"];
+            var isRedisConnected = false;
+            IConnectionMultiplexer redis = null;
+
+            try
+            {
+                // Thử kết nối Redis
+                redis = ConnectionMultiplexer.Connect(redisConnectionString);
+                isRedisConnected = redis.IsConnected;
+                Constant.IsRedisConnectedStatic = redis.IsConnected;
+            }
+            catch (Exception ex)
+            {
+                // Ghi log nếu không thể kết nối Redis
+                Console.WriteLine($"Không thể kết nối Redis: {ex.Message}");
+            }
+            finally
+            {
+                redis?.Dispose();
+            }
+
+            if (isRedisConnected)
+            {
+                // Nếu kết nối Redis thành công, sử dụng RedisCache
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = redisConnectionString;
+                });
+
+                // Đảm bảo sử dụng RedisCacheService với kết nối Redis
+                services.AddScoped<IRedisCacheService, RedisCacheService>(sp =>
+                    new RedisCacheService(redisConnectionString, null));
+            }
+            else
+            {
+                // Nếu không thể kết nối Redis, sử dụng MemoryCache (fallback)
+                Console.WriteLine("Kết nối Redis thất bại, sử dụng MemoryCache.");
+                services.AddMemoryCache(); // Thêm MemoryCache nếu không kết nối được Redis
+                                           // Đảm bảo fallback sử dụng MemoryCache trong RedisCacheService
+                services.AddScoped<IRedisCacheService, RedisCacheService>(sp =>
+                    new RedisCacheService(redisConnectionString, sp.GetRequiredService<IMemoryCache>()));
+            }
             return services;
         }
 
         // Cấu hình JWT
-         public static IServiceCollection AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration)
          {
              var key = configuration["Jwt:Key"];
              var signingKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(key));

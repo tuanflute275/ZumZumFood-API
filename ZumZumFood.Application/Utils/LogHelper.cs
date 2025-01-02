@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace ZumZumFood.Application.Utils
+﻿namespace ZumZumFood.Application.Utils
 {
     public static class LogHelper
     {
