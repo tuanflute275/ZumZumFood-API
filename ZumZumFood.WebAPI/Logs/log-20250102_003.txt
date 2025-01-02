@@ -1,0 +1,22 @@
+2025-01-02 17:39:55.802 +07:00 [WRN] Failed to determine the https port for redirect.
+2025-01-02 22:14:27.149 +07:00 [INF] HTTP GET /api/v1/auth/signin-google responded 302 in 37.9560 ms
+2025-01-02 22:14:32.478 +07:00 [INF] HTTP GET /api/v1/auth/signin-google responded 302 in 2.1989 ms
+2025-01-02 22:14:35.206 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The authentication handler registered for scheme 'Bearer' is 'JwtBearerHandler' which cannot be used for SignInAsync. The registered sign-in schemes are: Cookies.
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.SignInAsync(HttpContext context, String scheme, ClaimsPrincipal principal, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler`1.HandleRequestAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-01-02 22:14:35.380 +07:00 [INF] HTTP GET /favicon.ico responded 404 in 0.1176 ms
+2025-01-02 22:14:40.566 +07:00 [INF] HTTP GET /api/v1/auth/signin-facebook responded 302 in 5.7375 ms
+2025-01-02 22:14:46.002 +07:00 [INF] HTTP GET /api/v1/auth/signin-facebook responded 302 in 0.6090 ms
+2025-01-02 22:14:51.950 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The authentication handler registered for scheme 'Bearer' is 'JwtBearerHandler' which cannot be used for SignInAsync. The registered sign-in schemes are: Cookies.
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.SignInAsync(HttpContext context, String scheme, ClaimsPrincipal principal, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler`1.HandleRequestAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)

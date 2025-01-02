@@ -1,0 +1,3 @@
+2025-01-02 22:27:44.702 +07:00 [INF] HTTP GET /api/v1/auth/signin-facebook responded 302 in 30.4972 ms
+2025-01-02 22:27:50.565 +07:00 [INF] Processed POST /api/auth/login. Request Data: No request data provided. Response Data: Login successfully
+2025-01-02 22:27:50.576 +07:00 [INF] HTTP GET /api/v1/auth/facebook-callback responded 200 in 1003.3739 ms

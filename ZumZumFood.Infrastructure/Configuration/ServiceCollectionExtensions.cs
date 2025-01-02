@@ -1,4 +1,5 @@
-﻿using ILogger = Serilog.ILogger;
+﻿using Microsoft.AspNetCore.Authentication.OAuth;
+using ILogger = Serilog.ILogger;
 namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class ServiceCollectionExtensions
@@ -111,41 +112,6 @@ namespace ZumZumFood.Infrastructure.Configuration
             return services;
         }
 
-        public static IServiceCollection AddOauth2Configuration(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options =>
-            {
-                options.Cookie.SameSite = SameSiteMode.Lax;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            })
-            .AddGoogle(options =>
-            {
-                options.ClientId = configuration["Authentication:Google:ClientId"];
-                options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-                options.CallbackPath = "/api/v1/auth/google-callback";
-                options.SaveTokens = true;
-                options.Scope.Add("email");
-                options.Scope.Add("profile");
-            })
-            .AddFacebook(options =>
-            {
-                options.AppId = configuration["Authentication:Facebook:AppId"];
-                options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
-                options.Scope.Add("public_profile");
-                options.Fields.Add("picture");
-                options.Scope.Add("email");
-                options.Fields.Add("email");
-            });
-
-            return services;
-        }
-
         // Cấu hình bộ nhớ cache (Redis hoặc fallback MemoryCache)
         public static IServiceCollection AddCacheConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
@@ -192,6 +158,54 @@ namespace ZumZumFood.Infrastructure.Configuration
                 services.AddScoped<IRedisCacheService, RedisCacheService>(sp =>
                     new RedisCacheService(redisConnectionString, sp.GetRequiredService<IMemoryCache>()));
             }
+            return services;
+        }
+
+        // Cấu hình Oauth2
+        public static IServiceCollection AddOauth2Configuration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = configuration["Authentication:Google:ClientId"];
+                options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+                options.CallbackPath = "/api/v1/auth/google-callback";
+                options.SaveTokens = true;
+                options.Scope.Add("email");
+                options.Scope.Add("profile");
+                options.Events = new OAuthEvents
+                {
+                    OnRedirectToAuthorizationEndpoint = context =>
+                    {
+                        // Ngăn redirect và trả về phản hồi JSON
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+                        var result = JsonSerializer.Serialize(new { statusCode = 401, message = "Unauthorized. Please log in with Google." });
+                        return context.Response.WriteAsync(result);
+                    }
+                };
+            })
+            .AddFacebook(options =>
+            {
+                options.AppId = configuration["Authentication:Facebook:AppId"];
+                options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+                options.Scope.Add("public_profile");
+                options.Fields.Add("picture");
+                options.Scope.Add("email");
+                options.Fields.Add("email");
+            });
+
             return services;
         }
 

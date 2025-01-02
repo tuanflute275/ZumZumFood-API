@@ -1,8 +1,8 @@
 ﻿namespace ZumZumFood.WebAPI.Controllers
 {
     [ApiController]
-    [Route("/api/v1/parameeter")]
-    [Authorize(Roles = "Admin")]
+    [Route("/api/v1/parameter")]
+    [Authorize]
     public class ParameterController : ControllerBase
     {
         private readonly IParameterService _parameterService;
