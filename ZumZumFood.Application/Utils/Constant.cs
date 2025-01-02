@@ -12,6 +12,9 @@
         public const string BLOCK = "Block";       // Khóa tài khoản
         public const string SUSPENDED = "Suspended"; // Đình chỉ tài khoản
 
+        // Defalut password
+        public const string DEFAULT_PASSWORD = "12345678";
+
         // ParaType Parameter
         public const string PARA_TYPE_INTEGER = "INTEGER";
         public const string PARA_TYPE_CODE = "CODE";

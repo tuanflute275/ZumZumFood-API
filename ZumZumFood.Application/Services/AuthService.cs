@@ -22,7 +22,7 @@
             _emailService = emailService;   
         }
 
-        public async Task<ResponseObject> LoginAsync(LoginRequestModel model)
+        public async Task<ResponseObject> LoginAsync(LoginRequestModel model, bool? oauth2 = false)
         {
             try
             {
@@ -88,14 +88,14 @@
                 var refreshToken = TokenHelper.GenerateRefreshToken();
 
                 //save token vào database
-                await ManageTokens(user.UserId, accessToken, refreshToken);
+                await ManageTokens(user.UserId, accessToken, refreshToken, (bool)oauth2);
 
                 // Reset trạng thái nếu đã hết thời gian khóa
                 ResetLockoutStatus(user);
                 await _unitOfWork.UserRepository.SaveOrUpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
 
-                LogHelper.LogInformation(_logger, "POST", "/api/auth/login", null, new { AccessToken = accessToken, RefreshToken = refreshToken });
+                LogHelper.LogInformation(_logger, "POST", "/api/auth/login", null, "Login successfully");
                 return new ResponseObject(200, "Login successfully", new { AccessToken = accessToken, RefreshToken = refreshToken });
             }
             catch (Exception ex)
@@ -186,7 +186,7 @@
             user.UserCurrentTime = null;
         }
 
-        private async Task ManageTokens(int userId, string accessToken, string refreshToken)
+        private async Task ManageTokens(int userId, string accessToken, string refreshToken, bool oauth2)
         {
             var userTokens = await _unitOfWork.TokenRepository.GetAllAsync(
                   expression: s => s.UserId == userId
@@ -207,7 +207,7 @@
                 UserId = userId,
                 IsMobile = isMobile,
                 IsRevoked = false,
-                TokenType = "AccessToken",
+                TokenType = oauth2 ? "Oauth2Token" : "AccessToken",
                 AccessToken = accessToken,
                 ExpirationDate = DateTime.UtcNow.AddHours(1),
                 RefreshToken = refreshToken,
@@ -306,7 +306,8 @@
                     UserName = model.UserName,
                     FullName = model.FullName,
                     Email = model.Email,
-                    Password = passwordHash
+                    Password = passwordHash,
+                    Avatar = model.Avatar
                 };
                 await _unitOfWork.UserRepository.SaveOrUpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
@@ -335,17 +336,6 @@
             }
         }
        
-
-        public Task<ResponseObject> FacebookCallbackAsync(HttpContext httpContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ResponseObject> GoogleCallbackAsync(HttpContext httpContext)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ResponseObject> ForgotPasswordAsync(ForgotPasswordModel model)
         {
             try
@@ -434,6 +424,117 @@
             catch (Exception ex)
             {
                 LogHelper.LogError(_logger, ex, "POST", $"/api/auth/register");
+                return new ResponseObject(500, "Internal server error. Please try again later.");
+            }
+        }
+
+        public async Task<ResponseObject> FacebookCallbackAsync(HttpContext httpContext)
+        {
+            try
+            {
+                var authenticateResult = await httpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                if (!authenticateResult.Succeeded)
+                {
+                    _logger.LogError("Facebook authentication failed: {error}", authenticateResult.Failure?.Message);
+                    return new ResponseObject(400, "Facebook authentication failed", null);
+                }
+
+                var claims = authenticateResult.Principal.Identities.FirstOrDefault()?.Claims;
+                var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                var picture = claims?.FirstOrDefault(c => c.Type == "picture")?.Value;
+
+                if (email == null || name == null)
+                {
+                    return new ResponseObject(404, "Required user information not found", new
+                    {
+                        Name = name,
+                        Email = email
+                    });
+                }
+
+
+                // logic login with facebook
+                var userCheck = await _unitOfWork.UserRepository.GetByEmailAsync(email);
+                // nếu null tức chưa có tài khoản, thì thực hiện tạo tài khoản trước rồi đăng nhập
+                if (userCheck == null)
+                {
+                    var user = new RegisterRequestModel();
+                    user.Email = email;
+                    user.Avatar = picture;
+                    user.UserName = Helpers.GenerateUsernameFromEmail(email);
+                    user.FullName = name;
+                    user.Password = Constant.DEFAULT_PASSWORD;
+                    await RegisterAsync(user);
+                }
+
+                // thực hiện login và trả về token
+                var login = new LoginRequestModel();
+                login.UsernameOrEmail = email;
+                login.Password = Constant.DEFAULT_PASSWORD;
+                var result = await LoginAsync(login, true);
+                return result;
+                // end login facebook
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError(_logger, ex, "POST", $"/api/auth/signin-facebook");
+                return new ResponseObject(500, "Internal server error. Please try again later.");
+            }
+        }
+
+        public async Task<ResponseObject> GoogleCallbackAsync(HttpContext httpContext)
+        {
+            try
+            {
+                var authenticateResult = await httpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                if (!authenticateResult.Succeeded)
+                {
+                    _logger.LogError("Google authentication failed: {error}", authenticateResult.Failure?.Message);
+                    return new ResponseObject(400, "Google authentication failed", null);
+                }
+
+                var claims = authenticateResult.Principal.Identities.FirstOrDefault()?.Claims;
+                var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                var picture = claims?.FirstOrDefault(c => c.Type == "picture")?.Value;
+
+                if (email == null || name == null)
+                {
+                    return new ResponseObject(404, "Required user information not found", new
+                    {
+                        Name = name,
+                        Email = email
+                    });
+                }
+
+
+                // logic login with facebook
+                var userCheck = await _unitOfWork.UserRepository.GetByEmailAsync(email);
+                // nếu null tức chưa có tài khoản, thì thực hiện tạo tài khoản trước rồi đăng nhập
+                if (userCheck == null)
+                {
+                    var user = new RegisterRequestModel();
+                    user.Email = email;
+                    user.Avatar = picture;
+                    user.UserName = Helpers.GenerateUsernameFromEmail(email);
+                    user.FullName = name;
+                    user.Password = Constant.DEFAULT_PASSWORD;
+                    await RegisterAsync(user);
+                }
+
+                // thực hiện login và trả về token
+                var login = new LoginRequestModel();
+                login.UsernameOrEmail = email;
+                login.Password = Constant.DEFAULT_PASSWORD;
+                var result = await LoginAsync(login, true);
+                return result;
+                // end login facebook
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError(_logger, ex, "POST", $"/api/auth/signin-facebook");
                 return new ResponseObject(500, "Internal server error. Please try again later.");
             }
         }

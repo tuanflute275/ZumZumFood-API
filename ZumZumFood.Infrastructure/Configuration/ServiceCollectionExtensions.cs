@@ -1,12 +1,4 @@
-﻿using DinkToPdf;
-using DinkToPdf.Contracts;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using ILogger = Serilog.ILogger;
+﻿using ILogger = Serilog.ILogger;
 namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class ServiceCollectionExtensions
@@ -22,6 +14,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                .AddEmailConfiguration(configuration)
                .AddJwtConfiguration(configuration)
                .AddCacheConfiguration(configuration)
+               .AddOauth2Configuration(configuration)
                .AddTransientServices();
             return services;
         }
@@ -114,6 +107,41 @@ namespace ZumZumFood.Infrastructure.Configuration
                 )
                 .CreateLogger();
             services.AddSingleton<ILogger>(Serilog.Log.Logger);
+            return services;
+        }
+
+        public static IServiceCollection AddOauth2Configuration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = configuration["Authentication:Google:ClientId"];
+                options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+                options.CallbackPath = "/api/v1/auth/google-callback";
+                options.SaveTokens = true;
+                options.Scope.Add("email");
+                options.Scope.Add("profile");
+            })
+            .AddFacebook(options =>
+            {
+                options.AppId = configuration["Authentication:Facebook:AppId"];
+                options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+                options.Scope.Add("public_profile");
+                options.Fields.Add("picture");
+                options.Scope.Add("email");
+                options.Fields.Add("email");
+            });
+
             return services;
         }
 

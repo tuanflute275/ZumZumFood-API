@@ -10,6 +10,35 @@
             _authService = authService;
         }
 
+        [HttpGet("signin-google")]
+        public async Task<ActionResult> GoogleLogin()
+        {
+            
+            var redirectUrl = Url.Action("GoogleCallback", "Auth");
+            return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, GoogleDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet("google-callback")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<ResponseObject> GoogleCallback()
+        {
+            return await _authService.GoogleCallbackAsync(HttpContext);
+        }
+
+        [HttpGet("signin-facebook")]
+        public async Task<ActionResult> FacebookLogin()
+        {
+            var redirectUrl = Url.Action("FacebookCallback", "Auth");
+            return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, FacebookDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet("facebook-callback")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<ResponseObject> FacebookCallback()
+        {
+           return await _authService.FacebookCallbackAsync(HttpContext);
+        }
+
         [HttpPost("login")]
         public async Task<ResponseObject> Login([FromBody] LoginRequestModel model)
         {

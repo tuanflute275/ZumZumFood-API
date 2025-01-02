@@ -63,6 +63,33 @@
             return slug;
         }
 
+
+        public static string GenerateUsernameFromEmail(string email)
+        {
+            // Lấy phần trước dấu '@'
+            var usernameBase = email.Split('@')[0];
+
+            // Loại bỏ ký tự đặc biệt (chỉ giữ chữ cái và số)
+            usernameBase = Regex.Replace(usernameBase, @"[^a-zA-Z0-9]", "");
+
+            return usernameBase;
+        }
+
+        // Hàm tạo chuỗi ngẫu nhiên gồm các ký tự chữ cái hoặc số
+        public static string GenerateRandomString(int length)
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            var randomString = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                randomString[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(randomString);
+        }
+
         private static string RemoveVietnameseAccents(string input)
         {
             string[] vietnameseSigns = new string[]

@@ -16,6 +16,8 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.Caching.Memory;
+global using Microsoft.AspNetCore.Authentication.Cookies;
+global using Microsoft.AspNetCore.Authentication;
 
 // 4. Thư viện xử lý hình ảnh
 global using SixLabors.ImageSharp;

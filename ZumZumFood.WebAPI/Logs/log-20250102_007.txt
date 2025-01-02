@@ -1,7 +1,0 @@
-2025-01-02 13:48:40.377 +07:00 [WRN] Failed to determine the https port for redirect.
-2025-01-02 13:48:40.711 +07:00 [INF] Processed GET /api/restaurant. Request Data: No request data provided. Response Data: 10
-2025-01-02 13:48:40.738 +07:00 [INF] HTTP GET /api/v1/restaurant responded 200 in 288.9855 ms
-2025-01-02 13:50:23.236 +07:00 [INF] HTTP POST /api/v1/restaurant responded 400 in 43.3531 ms
-2025-01-02 13:55:20.863 +07:00 [INF] HTTP POST /api/v1/restaurant responded 400 in 9.4541 ms
-2025-01-02 13:56:17.417 +07:00 [INF] HTTP POST /api/v1/restaurant responded 400 in 11.1268 ms
-2025-01-02 13:57:55.404 +07:00 [WRN] Failed to determine the https port for redirect.
