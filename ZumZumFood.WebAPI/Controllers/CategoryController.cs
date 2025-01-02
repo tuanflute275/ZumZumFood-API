@@ -52,7 +52,7 @@
             return await _categoryService.RestoreAsync(id);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ResponseObject> Delete(int id)
         {

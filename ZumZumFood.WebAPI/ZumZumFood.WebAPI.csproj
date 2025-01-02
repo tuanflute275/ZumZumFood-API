@@ -33,10 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logs\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Templates\ForgotPasswordMail.cshtml" />
     <None Include="Templates\RegisterSuccessMail.cshtml" />
   </ItemGroup>

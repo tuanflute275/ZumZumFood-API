@@ -25,8 +25,8 @@
         [Required]
         [StringLength(50)]
         public string ParaType { get; set; } // Loại tham số (String, Number, JSON, Boolean, etc.)
-        
-        public bool UserAccessibleFlag { get; set; } // Người dùng có thể truy cập (true/false)
-        public bool AdminAccessibleFlag { get; set; } // Admin có thể truy cập (true/false)
+
+        public bool? UserAccessibleFlag { get; set; } = false; // Người dùng có thể truy cập (true/false)
+        public bool? AdminAccessibleFlag { get; set; } = true; // Admin có thể truy cập (true/false)
     }
 }
