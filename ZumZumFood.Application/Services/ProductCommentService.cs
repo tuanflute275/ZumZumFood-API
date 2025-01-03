@@ -1,6 +1,4 @@
-﻿using ZumZumFood.Domain.Entities;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class ProductCommentService : IProductCommentService
     {
@@ -40,19 +38,19 @@ namespace ZumZumFood.Application.Services
                     Email = comment.Email,
                     Message = comment.Message,
                     Name = comment.Name,
-                    Users = new UserProductDTO
+                    Users = new UserMapperDTO
                     {
                         UserId = comment.UserId,
                         UserName = comment.User.UserName,
-                        UserFullName = comment.User.FullName,
-                        UserEmail = comment.User.Email,
+                        FullName = comment.User.FullName,
+                        Email = comment.User.Email,
+                        Avatar = comment.User.Avatar,
+                        Gender = comment.User.Gender,
+                        PhoneNumber = comment.User.PhoneNumber,
+                        Address = comment.User.Address,
+                        PlaceOfBirth = comment.User.PlaceOfBirth,
                         DateOfBirth = comment.User.DateOfBirth,
                         Nationality = comment.User.Nationality,
-                        PlaceOfBirth = comment.User.PlaceOfBirth,
-                        UserAddress = comment.User.Address,
-                        UserAvatar = comment.User.Avatar,
-                        UserGender = comment.User.Gender,
-                        UserPhoneNumber = comment.User.PhoneNumber
                     }
                 };
                 if (result == null)

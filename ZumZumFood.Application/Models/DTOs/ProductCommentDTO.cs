@@ -6,6 +6,6 @@
         public string Email { get; set; }
         public string Name { get; set; }
         public string Message { get; set; }
-        public UserProductDTO Users { get; set; }
+        public UserMapperDTO Users { get; set; }
     }
 }

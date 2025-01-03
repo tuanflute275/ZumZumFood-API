@@ -1,14 +1,11 @@
 ﻿namespace ZumZumFood.Domain.Entities
 {
     [Table("Wishlists")]
-    public class Wishlist
+    public class Wishlist : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int WishlistId { get; set; }
-
-        [Required]
-        public DateTime CreateDate { get; set; } = DateTime.Now;
 
         [Column("ProductId")]
         public int ProductId { get; set; }

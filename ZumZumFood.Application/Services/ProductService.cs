@@ -1,6 +1,4 @@
-﻿using ZumZumFood.Domain.Entities;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class ProductService : IProductService
     {
@@ -164,26 +162,24 @@ namespace ZumZumFood.Application.Services
                         Email = c.Email,
                         Message = c.Message,
                         Name = c.Name,
-                        Users = new UserProductDTO
+                        Users = new UserMapperDTO
                         {
                             UserId = c.UserId,
                             UserName = c.User.UserName,
-                            UserFullName = c.User.FullName,
-                            UserEmail = c.User.Email,
+                            FullName = c.User.FullName,
+                            Avatar = c.User.Avatar,
+                            Email = c.User.Email,
+                            Gender = c.User.Gender,
+                            Address = c.User.Address,
+                            PlaceOfBirth = c.User.PlaceOfBirth,
                             DateOfBirth = c.User.DateOfBirth,
                             Nationality = c.User.Nationality,
-                            PlaceOfBirth = c.User.PlaceOfBirth,
-                            UserAddress = c.User.Address,
-                            UserAvatar = c.User.Avatar,
-                            UserGender = c.User.Gender,
-                            UserPhoneNumber = c.User.PhoneNumber
+                            PhoneNumber = c.User.PhoneNumber
                         }
                     }).ToList(),
                     ProductDetails = product.ProductDetails.Select(d => new ProductDetailDTO
                     {
-                        Color = d.Color,
                         Size = d.Size,
-                        Quantity = d.Quantity,
                     }).ToList()
                 };
                 if (result == null)

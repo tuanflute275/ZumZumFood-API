@@ -1,6 +1,4 @@
-﻿using ZumZumFood.Domain.Entities;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class UserService : IUserService
     {
