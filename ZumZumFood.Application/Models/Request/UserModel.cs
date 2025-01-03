@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.RequestModel
 {
-    public class UserRequestModel
+    public class UserModel
     {
         [Required(ErrorMessage = "UserName is required.")]
         [StringLength(100, ErrorMessage = "UserName cannot exceed 100 characters.")]

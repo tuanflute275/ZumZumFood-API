@@ -23,13 +23,13 @@
         }
 
         [HttpPost]
-        public async Task<ResponseObject> Save([FromBody] RestaurantRequestModel model)
+        public async Task<ResponseObject> Save([FromBody] RestaurantModel model)
         {
             return await _restaurantService.SaveAsync(model);
         }
 
         [HttpPut("{id}")]
-        public async Task<ResponseObject> Update(int id, [FromBody] RestaurantRequestModel model)
+        public async Task<ResponseObject> Update(int id, [FromBody] RestaurantModel model)
         {
             return await _restaurantService.UpdateAsync(id, model);
         }

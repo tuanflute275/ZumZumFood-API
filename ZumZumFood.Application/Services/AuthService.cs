@@ -22,7 +22,7 @@
             _emailService = emailService;   
         }
 
-        public async Task<ResponseObject> LoginAsync(LoginRequestModel model, bool? oauth2 = false)
+        public async Task<ResponseObject> LoginAsync(LoginModel model, bool? oauth2 = false)
         {
             try
             {
@@ -268,7 +268,7 @@
             }
         }
 
-        public async Task<ResponseObject> RegisterAsync(RegisterRequestModel model)
+        public async Task<ResponseObject> RegisterAsync(RegisterModel model)
         {
             try
             {
@@ -460,7 +460,7 @@
                 // nếu null tức chưa có tài khoản, thì thực hiện tạo tài khoản trước rồi đăng nhập
                 if (userCheck == null)
                 {
-                    var user = new RegisterRequestModel();
+                    var user = new RegisterModel();
                     user.Email = email;
                     user.Avatar = picture;
                     user.UserName = Helpers.GenerateUsernameFromEmail(email);
@@ -470,7 +470,7 @@
                 }
 
                 // thực hiện login và trả về token
-                var login = new LoginRequestModel();
+                var login = new LoginModel();
                 login.UsernameOrEmail = email;
                 login.Password = Constant.DEFAULT_PASSWORD;
                 var result = await LoginAsync(login, true);
@@ -515,7 +515,7 @@
                 // nếu null tức chưa có tài khoản, thì thực hiện tạo tài khoản trước rồi đăng nhập
                 if (userCheck == null)
                 {
-                    var user = new RegisterRequestModel();
+                    var user = new RegisterModel();
                     user.Email = email;
                     user.Avatar = picture;
                     user.UserName = Helpers.GenerateUsernameFromEmail(email);
@@ -525,7 +525,7 @@
                 }
 
                 // thực hiện login và trả về token
-                var login = new LoginRequestModel();
+                var login = new LoginModel();
                 login.UsernameOrEmail = email;
                 login.Password = Constant.DEFAULT_PASSWORD;
                 var result = await LoginAsync(login, true);

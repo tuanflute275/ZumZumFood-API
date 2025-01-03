@@ -24,14 +24,14 @@
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ResponseObject> Save([FromBody] ParameterRequestModel model)
+        public async Task<ResponseObject> Save([FromBody] ParameterModel model)
         {
             return await _parameterService.SaveAsync(model);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ResponseObject> Update(int id, [FromBody] ParameterRequestModel model)
+        public async Task<ResponseObject> Update(int id, [FromBody] ParameterModel model)
         {
             return await _parameterService.UpdateAsync(id, model);
         }

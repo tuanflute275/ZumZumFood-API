@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Request
 {
-    public class ProductCommentRequestModel
+    public class ProductCommentModel
     {
         // Email: Phải là một địa chỉ email hợp lệ
         [Required(ErrorMessage = "Email is required.")]

@@ -4,7 +4,7 @@
     {
         public AutomapConfig()
         {
-            CreateMap<UserRequestModel, User>().ReverseMap();
+            CreateMap<UserModel, User>().ReverseMap();
             CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src =>
                    src.CreateDate.HasValue ? src.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null))
@@ -84,7 +84,7 @@
                   !string.IsNullOrEmpty(src.UpdateDate) ? DateTime.Parse(src.UpdateDate) : (DateTime?)null))
               .ForMember(dest => dest.DeleteDate, opt => opt.MapFrom(src =>
                   !string.IsNullOrEmpty(src.DeleteDate) ? DateTime.Parse(src.DeleteDate) : (DateTime?)null));
-            CreateMap<ParameterRequestModel, Parameter>().ReverseMap();
+            CreateMap<ParameterModel, Parameter>().ReverseMap();
 
            CreateMap<Banner, BannerDTO>()
               .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src =>

@@ -70,7 +70,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> SaveAsync(ProductCommentRequestModel model)
+        public async Task<ResponseObject> SaveAsync(ProductCommentModel model)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> UpdateAsync(int id, ProductCommentUpdateRequestModel model)
+        public async Task<ResponseObject> UpdateAsync(int id, ProductCommentUpdateModel model)
         {
             try
             {

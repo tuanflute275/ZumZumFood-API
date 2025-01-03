@@ -23,13 +23,13 @@
         }
 
         [HttpPost]
-        public async Task<ResponseObject> Save([FromForm] ProductRequestModel model)
+        public async Task<ResponseObject> Save([FromForm] ProductModel model)
         {
             return await _productService.SaveAsync(model);
         }
 
         [HttpPut("{id}")]
-        public async Task<ResponseObject> Update(int id, [FromForm] ProductRequestModel model)
+        public async Task<ResponseObject> Update(int id, [FromForm] ProductModel model)
         {
             return await _productService.UpdateAsync(id, model);
         }

@@ -4,8 +4,8 @@
     {
         Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
         Task<ResponseObject> GetByIdAsync(int id);
-        Task<ResponseObject> SaveAsync(BannerRequestModel model);
-        Task<ResponseObject> UpdateAsync(int id, BannerRequestModel model);
+        Task<ResponseObject> SaveAsync(BannerModel model);
+        Task<ResponseObject> UpdateAsync(int id, BannerModel model);
         Task<ResponseObject> DeleteAsync(int id);
         Task<ResponseObject> DeleteFlagAsync(int id);
         Task<ResponseObject> GetDeletedListAsync();

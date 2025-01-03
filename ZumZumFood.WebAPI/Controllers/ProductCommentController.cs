@@ -17,13 +17,13 @@
         }
 
         [HttpPost]
-        public async Task<ResponseObject> Save([FromBody] ProductCommentRequestModel model)
+        public async Task<ResponseObject> Save([FromBody] ProductCommentModel model)
         {
             return await _productCommentService.SaveAsync(model);
         }
 
         [HttpPut("{id}")]
-        public async Task<ResponseObject> Update(int id, [FromBody] ProductCommentUpdateRequestModel model)
+        public async Task<ResponseObject> Update(int id, [FromBody] ProductCommentUpdateModel model)
         {
             return await _productCommentService.UpdateAsync(id, model);
         }

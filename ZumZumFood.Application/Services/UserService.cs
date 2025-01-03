@@ -128,7 +128,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> SaveAsync(UserRequestModel model)
+        public async Task<ResponseObject> SaveAsync(UserModel model)
         {
             try
             {
@@ -178,7 +178,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> UpdateAsync(int id, UserRequestModel model)
+        public async Task<ResponseObject> UpdateAsync(int id, UserModel model)
         {
             try
             {

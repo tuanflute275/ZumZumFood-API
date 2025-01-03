@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Request
 {
-    public class LogRequestModel
+    public class LogModel
     {
         public string? UserName { get; set; }
         public string? WorkTation { get; set; }

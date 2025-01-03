@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Request
 {
-    public class BannerRequestModel
+    public class BannerModel
     {
         [Required(ErrorMessage = "Title is required.")]
         [StringLength(100, ErrorMessage = "Title cannot exceed 100 characters.")]

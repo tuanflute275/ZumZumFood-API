@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Request
 {
-    public class ProductCommentUpdateRequestModel
+    public class ProductCommentUpdateModel
     {
        
         // Message: Phải có nội dung và độ dài tối đa

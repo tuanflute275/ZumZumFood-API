@@ -40,13 +40,13 @@
         }
 
         [HttpPost("login")]
-        public async Task<ResponseObject> Login([FromBody] LoginRequestModel model)
+        public async Task<ResponseObject> Login([FromBody] LoginModel model)
         {
             return await _authService.LoginAsync(model);
         }
 
         [HttpPost("register")]
-        public async Task<ResponseObject> Register([FromBody] RegisterRequestModel model)
+        public async Task<ResponseObject> Register([FromBody] RegisterModel model)
         {
             return await _authService.RegisterAsync(model);
         }

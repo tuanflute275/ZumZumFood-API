@@ -182,7 +182,7 @@
             }
         }
 
-        public async Task<ResponseObject> SaveAsync(LogRequestModel model)
+        public async Task<ResponseObject> SaveAsync(LogModel model)
         {
             try
             {

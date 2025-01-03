@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Request
 {
-    public class ProductDetailRequestModel
+    public class ProductDetailModel
     {
         public string Color { get; set; }
         public string Size { get; set; }

@@ -23,13 +23,13 @@
         }
 
         [HttpPost]
-        public async Task<ResponseObject> Save([FromForm] BannerRequestModel model)
+        public async Task<ResponseObject> Save([FromForm] BannerModel model)
         {
             return await _bannerService.SaveAsync(model);
         }
 
         [HttpPut("{id}")]
-        public async Task<ResponseObject> Update(int id, [FromForm] BannerRequestModel model)
+        public async Task<ResponseObject> Update(int id, [FromForm] BannerModel model)
         {
             return await _bannerService.UpdateAsync(id, model);
         }

@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Request
 {
-    public class ParameterRequestModel
+    public class ParameterModel
     {
         public string ParaScope { get; set; }
         public string ParaName { get; set; }

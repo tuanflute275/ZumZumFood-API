@@ -118,7 +118,7 @@
             }
         }
 
-        public async Task<ResponseObject> SaveAsync(BannerRequestModel model)
+        public async Task<ResponseObject> SaveAsync(BannerModel model)
         {
             try
             {
@@ -196,7 +196,7 @@
             }
         }
 
-        public async Task<ResponseObject> UpdateAsync(int id, BannerRequestModel model)
+        public async Task<ResponseObject> UpdateAsync(int id, BannerModel model)
         {
             try
             {

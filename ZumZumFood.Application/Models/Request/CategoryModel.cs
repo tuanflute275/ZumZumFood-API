@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Request
 {
-    public class CategoryRequestModel
+    public class CategoryModel
     {
         public IFormFile? ImageFile { get; set; }
         public string? OldImage { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Request
 {
-    public class LoginRequestModel
+    public class LoginModel
     {
         [Required(ErrorMessage = "Username or email is required.")]
         public string UsernameOrEmail { get; set; }

@@ -24,7 +24,7 @@
 
         //[Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ResponseObject> Save([FromBody] LogRequestModel model)
+        public async Task<ResponseObject> Save([FromBody] LogModel model)
         {
             return await _logService.SaveAsync(model);
         }

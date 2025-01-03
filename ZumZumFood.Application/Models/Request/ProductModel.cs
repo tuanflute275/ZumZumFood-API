@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Request
 {
-    public class ProductRequestModel
+    public class ProductModel
     {
         [Required(ErrorMessage = "Product name is required.")]
         [StringLength(100, ErrorMessage = "Product name can't be longer than 100 characters.")]
