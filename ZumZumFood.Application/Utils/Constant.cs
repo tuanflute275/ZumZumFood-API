@@ -23,6 +23,10 @@
         public const string PARA_TYPE_LONG_TEXT = "LONG_TEXT";
         public const string PARA_TYPE_NUMBER = "NUMBER";
 
+        // Banner Type
+        public const string BANNER_TYPE_APP = "APP";
+        public const string BANNER_TYPE_RESTAURANT = "RESTAURANT";
+
 
         // STATUS
         public const string PENDING = "Pending";

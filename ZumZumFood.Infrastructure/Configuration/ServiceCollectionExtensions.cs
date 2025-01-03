@@ -33,6 +33,7 @@ namespace ZumZumFood.Infrastructure.Configuration
             services.AddTransient<IRestaurantService, RestaurantService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IParameterService, ParameterService>();
+            services.AddTransient<IBannerService, BannerService>();
         }
 
         // Add singleton

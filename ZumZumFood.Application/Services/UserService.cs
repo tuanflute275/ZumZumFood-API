@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Domain.Entities;
+
+namespace ZumZumFood.Application.Services
 {
     public class UserService : IUserService
     {
@@ -182,6 +184,11 @@
                 // end validate
 
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+                if (user == null)
+                {
+                    LogHelper.LogWarning(_logger, "PUT", $"/api/user", null, $"User not found with id {id}");
+                    return new ResponseObject(400, $"User not found with id {id}", null);
+                }
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password, 12);
                 user = _mapper.Map<User>(model);
                 user.UpdateBy = Constant.SYSADMIN;
@@ -194,12 +201,12 @@
 
                 await _unitOfWork.UserRepository.SaveOrUpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
-                LogHelper.LogInformation(_logger, "POST", "/api/user", model, user);
+                LogHelper.LogInformation(_logger, "PUT", "/api/user", model, user);
                 return new ResponseObject(200, "Update data successfully", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "POST", $"/api/user", model);
+                LogHelper.LogError(_logger, ex, "PUT", $"/api/user", model);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }

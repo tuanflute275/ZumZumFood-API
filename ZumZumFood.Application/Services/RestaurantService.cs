@@ -1,4 +1,5 @@
-﻿using ZumZumFood.Domain.Entities;
+﻿using System.Reflection;
+using ZumZumFood.Domain.Entities;
 
 namespace ZumZumFood.Application.Services
 {
@@ -212,6 +213,11 @@ namespace ZumZumFood.Application.Services
 
                 // mapper data
                 var restaurant = await _unitOfWork.RestaurantRepository.GetByIdAsync(id);
+                if (restaurant == null)
+                {
+                    LogHelper.LogWarning(_logger, "PUT", $"/api/restaurant", null, $"Restaurant not found with id {id}");
+                    return new ResponseObject(400, $"Restaurant not found with id {id}", null);
+                }
                 restaurant.Name = model.Name;
                 restaurant.Slug = Helpers.GenerateSlug(model.Name);
                 restaurant.Address = model.Address;
@@ -224,12 +230,12 @@ namespace ZumZumFood.Application.Services
               
                 await _unitOfWork.RestaurantRepository.SaveOrUpdateAsync(restaurant);
                 await _unitOfWork.SaveChangeAsync();
-                LogHelper.LogInformation(_logger, "POST", "/api/restaurant", model, restaurant);
+                LogHelper.LogInformation(_logger, "PUT", "/api/restaurant", model, restaurant);
                 return new ResponseObject(200, "Update data successfully", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "POST", $"/api/restaurant", model);
+                LogHelper.LogError(_logger, ex, "PUT", $"/api/restaurant", model);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }

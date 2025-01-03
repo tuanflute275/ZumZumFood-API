@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Domain.Entities;
+
+namespace ZumZumFood.Application.Services
 {
     public class ProductService : IProductService
     {
@@ -259,6 +261,11 @@
 
                 // mapper data
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(id);
+                if (product == null)
+                {
+                    LogHelper.LogWarning(_logger, "PUT", $"/api/product", null, $"Product not found with id {id}");
+                    return new ResponseObject(400, $"Product not found with id {id}", null);
+                }
                 product.Name = model.Name;
                 product.Slug = Helpers.GenerateSlug(model.Name);
                 product.Price = model.Price;
@@ -278,12 +285,12 @@
                 await _unitOfWork.ProductRepository.SaveOrUpdateAsync(product);
                 await _unitOfWork.SaveChangeAsync();
                 _redisCacheService.ClearCacheAsync();
-                LogHelper.LogInformation(_logger, "POST", "/api/product", model, product);
+                LogHelper.LogInformation(_logger, "PUT", "/api/product", model, product);
                 return new ResponseObject(200, "Update data successfully", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "POST", $"/api/product", model);
+                LogHelper.LogError(_logger, ex, "PUT", $"/api/product", model);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }

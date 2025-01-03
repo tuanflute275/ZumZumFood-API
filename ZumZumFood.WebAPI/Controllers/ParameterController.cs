@@ -2,7 +2,6 @@
 {
     [ApiController]
     [Route("/api/v1/parameter")]
-    [Authorize]
     public class ParameterController : ControllerBase
     {
         private readonly IParameterService _parameterService;
@@ -23,36 +22,42 @@
             return await _parameterService.GetByIdAsync(id);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ResponseObject> Save([FromBody] ParameterRequestModel model)
         {
             return await _parameterService.SaveAsync(model);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ResponseObject> Update(int id, [FromBody] ParameterRequestModel model)
         {
             return await _parameterService.UpdateAsync(id, model);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("soft-delete/{id}")]
         public async Task<ResponseObject> SoftDelete(int id)
         {
             return await _parameterService.DeleteFlagAsync(id);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("deleted-data")]
         public async Task<ResponseObject> GetDeletedUsers()
         {
             return await _parameterService.GetDeletedListAsync();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("restore/{id}")]
         public async Task<ResponseObject> RestoreUser(int id)
         {
             return await _parameterService.RestoreAsync(id);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ResponseObject> Delete(int id)
         {

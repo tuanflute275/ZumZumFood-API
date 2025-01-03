@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Domain.Entities;
+
+namespace ZumZumFood.Application.Services
 {
     public class CategoryService : ICategoryService
     {
@@ -209,6 +211,11 @@
 
                 // mapper data
                 var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+                if (category == null)
+                {
+                    LogHelper.LogWarning(_logger, "PUT", $"/api/category", null, $"Category not found with id {id}");
+                    return new ResponseObject(400, $"Category not found with id {id}", null);
+                }
                 category.Name = model.Name;
                 category.Slug = Helpers.GenerateSlug(model.Name);
                 category.Description = model.Description;
@@ -222,12 +229,12 @@
 
                 await _unitOfWork.CategoryRepository.SaveOrUpdateAsync(category);
                 await _unitOfWork.SaveChangeAsync();
-                LogHelper.LogInformation(_logger, "POST", "/api/category", model, category);
+                LogHelper.LogInformation(_logger, "PUT", "/api/category", model, category);
                 return new ResponseObject(200, "Update data successfully", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "POST", $"/api/category", model);
+                LogHelper.LogError(_logger, ex, "PUT", $"/api/category", model);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }

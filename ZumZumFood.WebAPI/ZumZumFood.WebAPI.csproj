@@ -38,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="Logs\.gitkeep">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\uploads\categories\.gitkeep">
       <SubType>Code</SubType>
     </TypeScriptCompile>

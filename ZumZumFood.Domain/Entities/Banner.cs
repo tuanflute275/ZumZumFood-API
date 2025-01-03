@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Domain.Entities
 {
-    [Table("Banner")]
+    [Table("Banners")]
     public class Banner : BaseEntity
     {
         [Key]

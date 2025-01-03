@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Domain.Entities;
+
+namespace ZumZumFood.Application.Services
 {
     public class ParameterService : IParameterService
     {
@@ -154,6 +156,11 @@
 
                 // mapper data
                 var parameter = await _unitOfWork.ParameterRepository.GetByIdAsync(id);
+                if (parameter == null)
+                {
+                    LogHelper.LogWarning(_logger, "PUT", $"/api/parameter", null, $"Parameter not found with id {id}");
+                    return new ResponseObject(400, $"Parameter not found with id {id}", null);
+                }
                 parameter.ParaScope = model.ParaScope;
                 parameter.ParaName = model.ParaName;
                 parameter.ParaType = model.ParaType;
@@ -166,12 +173,12 @@
                 parameter.UpdateDate = DateTime.Now;
                 await _unitOfWork.ParameterRepository.SaveOrUpdateAsync(parameter);
                 await _unitOfWork.SaveChangeAsync();
-                LogHelper.LogInformation(_logger, "POST", "/api/parameter", model, parameter);
+                LogHelper.LogInformation(_logger, "PUT", "/api/parameter", model, parameter);
                 return new ResponseObject(200, "Update data successfully", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "POST", $"/api/parameter", model);
+                LogHelper.LogError(_logger, ex, "PUT", $"/api/parameter", model);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }
