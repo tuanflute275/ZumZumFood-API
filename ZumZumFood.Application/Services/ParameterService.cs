@@ -91,6 +91,11 @@ namespace ZumZumFood.Application.Services
                 var dataQuery = await _unitOfWork.ParameterRepository.GetAllAsync(
                    expression: x => x.ParameterId == id && x.DeleteFlag == false
                 );
+                if (dataQuery == null || !(dataQuery.Count() > 0))
+                {
+                    LogHelper.LogWarning(_logger, "GET", "/api/parameter/{id}", null, dataQuery.FirstOrDefault());
+                    return new ResponseObject(404, "Parameter not found.", dataQuery.FirstOrDefault());
+                }
                 var result = _mapper.Map<ParameterDTO>(dataQuery.FirstOrDefault());
                 if (result == null)
                 {

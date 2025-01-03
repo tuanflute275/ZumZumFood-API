@@ -29,11 +29,14 @@ namespace ZumZumFood.Infrastructure.Configuration
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ILogService, LogService>();
+            services.AddTransient<IParameterService, ParameterService>();
+            services.AddTransient<IBannerService, BannerService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IRestaurantService, RestaurantService>();
             services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<IParameterService, ParameterService>();
-            services.AddTransient<IBannerService, BannerService>();
+            services.AddTransient<IProductCommentService, ProductCommentService>();
+            services.AddTransient<IProductImageService, ProductImageService>();
         }
 
         // Add singleton

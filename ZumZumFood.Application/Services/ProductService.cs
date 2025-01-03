@@ -135,6 +135,11 @@ namespace ZumZumFood.Application.Services
                                           .Include(x => x.Restaurant)
                 );
                 var product = dataQuery.FirstOrDefault();
+                if (product == null)
+                {
+                    LogHelper.LogWarning(_logger, "GET", "/api/product/{id}", null, product);
+                    return new ResponseObject(404, "Product not found.", product);
+                }
                 var result = new ProductMapperDTO
                 {
                     ProductId = product.ProductId,
@@ -219,8 +224,26 @@ namespace ZumZumFood.Application.Services
                 product.Price = model.Price;
                 product.Discount = model.Discount;
                 product.IsActive = model.IsActive;
-                product.RestaurantId = model.RestaurantId;
-                product.CategoryId = model.CategoryId;
+                var resCheck = await _unitOfWork.RestaurantRepository.GetByIdAsync(model.RestaurantId);
+                if(resCheck != null)
+                {
+                    product.RestaurantId = model.RestaurantId;
+                }
+                else
+                {
+                    LogHelper.LogWarning(_logger, "POST", "/api/product", null, null);
+                    return new ResponseObject(404, "Restaurant not found.", null);
+                }
+                var cateCheck = await _unitOfWork.CategoryRepository.GetByIdAsync(model.CategoryId);
+                if (cateCheck != null)
+                {
+                    product.CategoryId = model.CategoryId;
+                }
+                else
+                {
+                    LogHelper.LogWarning(_logger, "POST", "/api/product", null, null);
+                    return new ResponseObject(404, "Category not found.", null);
+                }
                 product.Description = model.Description;
                 product.CreateBy = Constant.SYSADMIN;
                 product.CreateDate = DateTime.Now;
@@ -271,8 +294,26 @@ namespace ZumZumFood.Application.Services
                 product.Price = model.Price;
                 product.Discount = model.Discount;
                 product.IsActive = model.IsActive;
-                product.RestaurantId = model.RestaurantId;
-                product.CategoryId = model.CategoryId;
+                var resCheck = await _unitOfWork.RestaurantRepository.GetByIdAsync(model.RestaurantId);
+                if (resCheck != null)
+                {
+                    product.RestaurantId = model.RestaurantId;
+                }
+                else
+                {
+                    LogHelper.LogWarning(_logger, "POST", "/api/product", null, null);
+                    return new ResponseObject(404, "Restaurant not found.", null);
+                }
+                var cateCheck = await _unitOfWork.CategoryRepository.GetByIdAsync(model.CategoryId);
+                if (cateCheck != null)
+                {
+                    product.CategoryId = model.CategoryId;
+                }
+                else
+                {
+                    LogHelper.LogWarning(_logger, "POST", "/api/product", null, null);
+                    return new ResponseObject(404, "Category not found.", null);
+                }
                 product.Description = model.Description;
                 product.UpdateBy = Constant.SYSADMIN;
                 product.UpdateDate = DateTime.Now;

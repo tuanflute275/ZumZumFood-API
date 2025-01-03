@@ -10,3 +10,7 @@ global using ZumZumFood.Application.Abstracts;
 global using ZumZumFood.Application.Models.Request;
 global using ZumZumFood.Application.Models.Response;
 global using ZumZumFood.Application.Models.RequestModel;
+global using ZumZumFood.Infrastructure.Configuration;
+
+// 3. Thư viện khác
+global using Serilog;

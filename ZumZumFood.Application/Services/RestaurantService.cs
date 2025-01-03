@@ -100,6 +100,11 @@ namespace ZumZumFood.Application.Services
                                             .ThenInclude(p => p.Category)
                 );
                 var restaurant = dataQuery.FirstOrDefault();
+                if (restaurant == null)
+                {
+                    LogHelper.LogWarning(_logger, "GET", "/api/restaurant/{id}", null, restaurant);
+                    return new ResponseObject(404, "Restaurant not found.", restaurant);
+                }
                 var result = new RestaurantMapperDTO
                 {
                     RestaurantId = restaurant.RestaurantId,

@@ -100,6 +100,21 @@
                   !string.IsNullOrEmpty(src.UpdateDate) ? DateTime.Parse(src.UpdateDate) : (DateTime?)null))
               .ForMember(dest => dest.DeleteDate, opt => opt.MapFrom(src =>
                   !string.IsNullOrEmpty(src.DeleteDate) ? DateTime.Parse(src.DeleteDate) : (DateTime?)null));
+
+            CreateMap<Log, LogDTO>()
+             .ForMember(dest => dest.TimeActionRequest, opt => opt.MapFrom(src =>
+             src.TimeActionRequest.HasValue ? src.TimeActionRequest.Value.ToString("dd-MM-yyyy HH:mm:ss") : null))
+             .ForMember(dest => dest.TimeLogin, opt => opt.MapFrom(src =>
+                 src.TimeLogin.HasValue ? src.TimeLogin.Value.ToString("dd-MM-yyyy HH:mm:ss") : null))
+             .ForMember(dest => dest.TimeLogout, opt => opt.MapFrom(src =>
+                 src.TimeLogout.HasValue ? src.TimeLogout.Value.ToString("dd-MM-yyyy HH:mm:ss") : null))
+             .ReverseMap()
+             .ForMember(dest => dest.TimeActionRequest, opt => opt.MapFrom(src =>
+                 !string.IsNullOrEmpty(src.TimeActionRequest) ? DateTime.Parse(src.TimeActionRequest) : (DateTime?)null))
+             .ForMember(dest => dest.TimeLogin, opt => opt.MapFrom(src =>
+                 !string.IsNullOrEmpty(src.TimeLogin) ? DateTime.Parse(src.TimeLogin) : (DateTime?)null))
+             .ForMember(dest => dest.TimeLogout, opt => opt.MapFrom(src =>
+                 !string.IsNullOrEmpty(src.TimeLogout) ? DateTime.Parse(src.TimeLogout) : (DateTime?)null));
         }
     }
 }

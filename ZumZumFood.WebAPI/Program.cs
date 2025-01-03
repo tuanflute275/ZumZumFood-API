@@ -1,13 +1,9 @@
-﻿using Serilog;
-using ZumZumFood.Infrastructure.Configuration;
-
-var builder         = WebApplication.CreateBuilder(args);
+﻿var builder         = WebApplication.CreateBuilder(args);
 var services        = builder.Services;
 var configuration   = builder.Configuration;
 
 // Add Infrastructure
 services.AddDerivativeTradeServices(configuration);
-// Cấu hình Serilog từ appsettings.json (được gọi trước khi thêm các service khác)
 builder.Host.UseSerilog();
 
 // Add services to the container.

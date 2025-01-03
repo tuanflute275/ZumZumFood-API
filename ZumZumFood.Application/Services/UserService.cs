@@ -112,12 +112,12 @@ namespace ZumZumFood.Application.Services
                    expression: x => x.UserId == id && x.DeleteFlag == false,
                    include: query => query.Include(x => x.UserRoles).ThenInclude(u => u.Role)
                 );
-                var result = _mapper.Map<UserDTO>(userQuery.FirstOrDefault());
-                if (result == null)
+                if (userQuery == null || !(userQuery.Count() > 0))
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/user/{id}", null, result);
-                    return new ResponseObject(404, "User not found.", result);
+                    LogHelper.LogWarning(_logger, "GET", "/api/user/{id}", null, userQuery.FirstOrDefault());
+                    return new ResponseObject(404, "User not found.", userQuery.FirstOrDefault());
                 }
+                var result = _mapper.Map<UserDTO>(userQuery.FirstOrDefault());
                 LogHelper.LogInformation(_logger, "GET", "/api/user/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
@@ -156,6 +156,17 @@ namespace ZumZumFood.Application.Services
                 }
                 
                 await _unitOfWork.UserRepository.SaveOrUpdateAsync(user);
+                await _unitOfWork.SaveChangeAsync();
+
+                // Lấy userId vừa tạo
+                var userId = user.UserId;
+                // Thêm vai trò vào bảng UserRole
+                var userRole = new UserRole
+                {
+                    UserId = userId,
+                    RoleId = 5
+                };
+                await _unitOfWork.UserRoleRepository.SaveOrUpdateAsync(userRole);
                 await _unitOfWork.SaveChangeAsync();
                 LogHelper.LogInformation(_logger, "POST", "/api/user", model, user);
                 return new ResponseObject(200, "Create data successfully", null);
@@ -200,6 +211,17 @@ namespace ZumZumFood.Application.Services
                 }
 
                 await _unitOfWork.UserRepository.SaveOrUpdateAsync(user);
+                await _unitOfWork.SaveChangeAsync();
+
+                // Lấy userId vừa tạo
+                var userId = user.UserId;
+                // Thêm vai trò vào bảng UserRole
+                var userRole = new UserRole
+                {
+                    UserId = userId,
+                    RoleId = 5
+                };
+                await _unitOfWork.UserRoleRepository.SaveOrUpdateAsync(userRole);
                 await _unitOfWork.SaveChangeAsync();
                 LogHelper.LogInformation(_logger, "PUT", "/api/user", model, user);
                 return new ResponseObject(200, "Update data successfully", null);

@@ -96,6 +96,11 @@
                 var dataQuery = await _unitOfWork.BannerRepository.GetAllAsync(
                    expression: x => x.BannerId == id && x.DeleteFlag == false
                 );
+                if (dataQuery == null || !(dataQuery.Count() > 0))
+                {
+                    LogHelper.LogWarning(_logger, "GET", "/api/banner/{id}", null, dataQuery.FirstOrDefault());
+                    return new ResponseObject(404, "Banner not found.", dataQuery.FirstOrDefault());
+                }
                 var result = _mapper.Map<BannerDTO>(dataQuery.FirstOrDefault());
 
                 if (result == null)
@@ -157,7 +162,16 @@
                     }
                     else
                     {
-                        banner.RestaurantId = Int32.Parse(model.RestaurantId);
+                        var restaurantCheck = await _unitOfWork.RestaurantRepository.GetByIdAsync(Int32.Parse(model.RestaurantId));
+                        if(restaurantCheck != null)
+                        {
+                            banner.RestaurantId = Int32.Parse(model.RestaurantId);
+                        }
+                        else
+                        {
+                            LogHelper.LogWarning(_logger, "POST", "/api/banner", null, null);
+                            return new ResponseObject(404, "Restaurant not found.", null);
+                        }
                     }
                 }
 
