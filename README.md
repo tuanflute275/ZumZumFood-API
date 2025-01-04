@@ -1,6 +1,8 @@
 # Deploy with docker
 	
-	http://localhost:8080/swagger/index.html
+	> http://localhost:8080/swagger/index.html
+	> http://localhost:8080/health
+	
 	step 1: remove file .git
 	step2 : refactor appSetting.json
 	step 3: build

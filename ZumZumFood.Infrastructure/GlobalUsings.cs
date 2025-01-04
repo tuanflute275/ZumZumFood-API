@@ -13,6 +13,7 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.AspNetCore.Authentication.Cookies;
 global using Microsoft.Extensions.Caching.Memory;
 global using Microsoft.AspNetCore.Authentication.OAuth;
+global using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 // 3. Thư viện xử lý cơ sở dữ liệu
 global using Microsoft.EntityFrameworkCore;

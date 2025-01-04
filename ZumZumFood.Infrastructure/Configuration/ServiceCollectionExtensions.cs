@@ -9,7 +9,7 @@
                .AddSqlServerConfiguration(configuration)
                .AddCorsConfiguration()
                .AddAutoMapperConfiguration()
-               .AddSingletonServices()
+               .AddSingletonServices(configuration)
                .AddEmailConfiguration(configuration)
                .AddJwtConfiguration(configuration)
                .AddCacheConfiguration(configuration)
@@ -40,10 +40,18 @@
         }
 
         // Add singleton
-        private static IServiceCollection AddSingletonServices(this IServiceCollection services)
+        private static IServiceCollection AddSingletonServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Đăng ký IHttpContextAccessor
             services.AddHttpContextAccessor();
+            services.AddHealthChecks()
+                .AddSqlServer(
+                    connectionString: configuration.GetConnectionString("DefaultConnection"),
+                    name: "SQL Server",
+                    failureStatus: HealthStatus.Unhealthy,
+                    tags: new[] { "db", "sql" })
+                .AddUrlGroup(new Uri("http://localhost:8080/api/v1/user/1"), name: "User API")
+                .AddCheck("Custom Check", () => HealthCheckResult.Healthy("All systems operational"));
             return services;
         }
 

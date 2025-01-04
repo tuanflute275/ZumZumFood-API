@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Infrastructure.Configuration
+﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+
+namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class AppConfiguration
     {
