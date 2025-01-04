@@ -1,9 +1,9 @@
 ﻿namespace ZumZumFood.Application.Models.DTOs
 {
-    public class WishlistDTO
+    public class CartWishlistDTO
     {
         public int WishlistId { get; set; }
-        public ProductDTO Products { get; set; }
         public UserMapperDTO Users { get; set; }
+        public List<ProductDTO> Products { get; set; } = new List<ProductDTO>();
     }
 }

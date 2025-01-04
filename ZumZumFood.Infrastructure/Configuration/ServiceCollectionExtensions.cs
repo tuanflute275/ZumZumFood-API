@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.OAuth;
-using ILogger = Serilog.ILogger;
-namespace ZumZumFood.Infrastructure.Configuration
+﻿namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class ServiceCollectionExtensions
     {
@@ -38,6 +36,7 @@ namespace ZumZumFood.Infrastructure.Configuration
             services.AddTransient<IProductCommentService, ProductCommentService>();
             services.AddTransient<IProductImageService, ProductImageService>();
             services.AddTransient<IWishlistService, WishlistService>();
+            services.AddTransient<ICartService, CartService>();
         }
 
         // Add singleton

@@ -129,8 +129,6 @@
                         IsActive= p.IsActive,
                         RestaurantId = p.RestaurantId,
                         RestaurantName = p.Restaurant.Name,
-                        CategoryId = 1,
-                        CategoryName = "category.Name",
                         Description = p.Description,
                         CreateDate = p.CreateDate.HasValue ? p.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                         UpdateBy = p.UpdateBy,

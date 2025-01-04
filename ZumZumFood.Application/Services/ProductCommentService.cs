@@ -3,12 +3,10 @@
     public class ProductCommentService : IProductCommentService
     {
         IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly ILogger<ProductCommentService> _logger;
-        public ProductCommentService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<ProductCommentService> logger)
+        public ProductCommentService(IUnitOfWork unitOfWork, ILogger<ProductCommentService> logger)
         {
             _logger = logger;
-            _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 

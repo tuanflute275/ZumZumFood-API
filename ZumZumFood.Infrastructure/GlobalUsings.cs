@@ -11,8 +11,8 @@ global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.AspNetCore.Authentication.Cookies;
-global using Microsoft.AspNetCore.Authentication.Google;
 global using Microsoft.Extensions.Caching.Memory;
+global using Microsoft.AspNetCore.Authentication.OAuth;
 
 // 3. Thư viện xử lý cơ sở dữ liệu
 global using Microsoft.EntityFrameworkCore;
@@ -25,6 +25,7 @@ global using Microsoft.IdentityModel.Tokens;
 global using DinkToPdf;
 global using DinkToPdf.Contracts;
 global using Serilog;
+global using ILogger = Serilog.ILogger;
 
 
 // 6. Thư viện ứng dụng (ZumZumFood)

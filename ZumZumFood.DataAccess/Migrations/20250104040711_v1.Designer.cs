@@ -12,8 +12,8 @@ using ZumZumFood.Persistence.Data;
 namespace ZumZumFood.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241231105048_v3")]
-    partial class v3
+    [Migration("20250104040711_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,7 +81,7 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Banner");
+                    b.ToTable("Banners");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Cart", b =>
@@ -144,7 +144,6 @@ namespace ZumZumFood.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
@@ -414,7 +413,7 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ParameterId"));
 
-                    b.Property<bool>("AdminAccessibleFlag")
+                    b.Property<bool?>("AdminAccessibleFlag")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreateBy")
@@ -466,7 +465,7 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("UserAccessibleFlag")
+                    b.Property<bool?>("UserAccessibleFlag")
                         .HasColumnType("bit");
 
                     b.HasKey("ParameterId");
@@ -619,10 +618,6 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductDetailId"));
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(10)");
-
                     b.Property<string>("CreateBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -640,16 +635,32 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<bool?>("DeleteFlag")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("ProductId");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("Size")
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("UpdateBy")
                         .HasMaxLength(100)
@@ -764,6 +775,9 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdateBy")
                         .HasMaxLength(100)
@@ -1027,12 +1041,33 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WishlistId"));
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<string>("CreateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("DeleteFlag")
+                        .HasColumnType("bit");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("ProductId");
+
+                    b.Property<string>("UpdateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -1161,7 +1196,7 @@ namespace ZumZumFood.Persistence.Migrations
             modelBuilder.Entity("ZumZumFood.Domain.Entities.ProductComment", b =>
                 {
                     b.HasOne("ZumZumFood.Domain.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductComments")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1180,7 +1215,7 @@ namespace ZumZumFood.Persistence.Migrations
             modelBuilder.Entity("ZumZumFood.Domain.Entities.ProductDetail", b =>
                 {
                     b.HasOne("ZumZumFood.Domain.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1191,7 +1226,7 @@ namespace ZumZumFood.Persistence.Migrations
             modelBuilder.Entity("ZumZumFood.Domain.Entities.ProductImage", b =>
                 {
                     b.HasOne("ZumZumFood.Domain.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductImages")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1265,6 +1300,15 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Navigation("CouponOrders");
 
                     b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("ProductComments");
+
+                    b.Navigation("ProductDetails");
+
+                    b.Navigation("ProductImages");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Restaurant", b =>

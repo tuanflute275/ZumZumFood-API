@@ -27,6 +27,9 @@
         public const string BANNER_TYPE_APP = "APP";
         public const string BANNER_TYPE_RESTAURANT = "RESTAURANT";
 
+        // Cart Type Update
+        public const string CART_UPDATE_MINUS = "minus";
+        public const string CART_UPDATE_PLUS = "plus";
 
         // STATUS
         public const string PENDING = "Pending";

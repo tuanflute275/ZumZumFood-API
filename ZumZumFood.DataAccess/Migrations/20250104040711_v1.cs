@@ -21,7 +21,7 @@ namespace ZumZumFood.Persistence.Migrations
                     Name = table.Column<string>(type: "nvarchar(200)", nullable: false),
                     Slug = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -83,8 +83,8 @@ namespace ZumZumFood.Persistence.Migrations
                     ParaLobValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParaDesc = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParaType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    UserAccessibleFlag = table.Column<bool>(type: "bit", nullable: false),
-                    AdminAccessibleFlag = table.Column<bool>(type: "bit", nullable: false),
+                    UserAccessibleFlag = table.Column<bool>(type: "bit", nullable: true),
+                    AdminAccessibleFlag = table.Column<bool>(type: "bit", nullable: true),
                     CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -105,6 +105,7 @@ namespace ZumZumFood.Persistence.Migrations
                     RestaurantId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 150, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(100)", nullable: true),
@@ -207,7 +208,7 @@ namespace ZumZumFood.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Banner",
+                name: "Banners",
                 columns: table => new
                 {
                     BannerId = table.Column<int>(type: "int", nullable: false)
@@ -227,9 +228,9 @@ namespace ZumZumFood.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Banner", x => x.BannerId);
+                    table.PrimaryKey("PK_Banners", x => x.BannerId);
                     table.ForeignKey(
-                        name: "FK_Banner_Restaurants_RestaurantId",
+                        name: "FK_Banners_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "RestaurantId");
@@ -242,12 +243,12 @@ namespace ZumZumFood.Persistence.Migrations
                     ProductId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 150, nullable: false),
-                    Slug = table.Column<string>(type: "nvarchar(200)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RestaurantId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -441,9 +442,13 @@ namespace ZumZumFood.Persistence.Migrations
                 {
                     ProductDetailId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Color = table.Column<string>(type: "nvarchar(10)", nullable: false),
-                    Size = table.Column<string>(type: "nvarchar(10)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    Size = table.Column<string>(type: "nvarchar(20)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", nullable: true),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -497,9 +502,15 @@ namespace ZumZumFood.Persistence.Migrations
                 {
                     WishlistId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteFlag = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -573,8 +584,8 @@ namespace ZumZumFood.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Banner_RestaurantId",
-                table: "Banner",
+                name: "IX_Banners_RestaurantId",
+                table: "Banners",
                 column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
@@ -682,7 +693,7 @@ namespace ZumZumFood.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Banner");
+                name: "Banners");
 
             migrationBuilder.DropTable(
                 name: "Carts");
