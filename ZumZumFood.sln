@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.WebAPI", "ZumZum
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.Domain", "ZumZumFood.Domain\ZumZumFood.Domain.csproj", "{1DDC2583-E0E7-4804-9E69-A760F88C1266}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.Persistence", "ZumZumFood.DataAccess\ZumZumFood.Persistence.csproj", "{834AD38D-8B8A-478E-BCBD-027804B8501F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.Persistence", "ZumZumFood.Persistence\ZumZumFood.Persistence.csproj", "{834AD38D-8B8A-478E-BCBD-027804B8501F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZumZumFood.Infrastructure", "ZumZumFood.Infrastructure\ZumZumFood.Infrastructure.csproj", "{5629FAE4-1189-4A54-90CD-77672FEADB3F}"
 EndProject

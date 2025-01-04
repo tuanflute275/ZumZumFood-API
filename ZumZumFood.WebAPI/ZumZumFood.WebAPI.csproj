@@ -13,6 +13,7 @@
     <Content Remove="Templates\RegisterSuccessMail.cshtml" />
     <Content Remove="wwwroot\uploads\banners\.gitkeep" />
     <Content Remove="wwwroot\uploads\categories\.gitkeep" />
+    <Content Remove="wwwroot\uploads\productImages\.gitkeep" />
     <Content Remove="wwwroot\uploads\products\.gitkeep" />
     <Content Remove="wwwroot\uploads\users\.gitkeep" />
   </ItemGroup>
@@ -46,6 +47,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\uploads\categories\.gitkeep">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\uploads\productImages\.gitkeep">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\uploads\products\.gitkeep">

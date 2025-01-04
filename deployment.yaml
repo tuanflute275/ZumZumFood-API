@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  sqlserver-container:
+    container_name: sqlserver-container
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Admin@1234
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - zumzum-food-network
+
+  redis-container:
+    image: docker.io/redis:7.2.3
+    container_name: redis-container
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - zumzum-food-network
+
+  zumzum-food-container:
+    container_name: zumzum-food-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - MSSQL_SA_PASSWORD=Admin@1234
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sqlserver-container
+    networks:
+      - zumzum-food-network
+
+volumes:
+  redis-data:
+    driver: local
+  sqlserver-data:
+    driver: local
+
+networks:
+  zumzum-food-network:
+    name: zumzum-food-network
+    driver: bridge
+    external: true
+# docker-compose -f ./deployment.yaml down
+# docker-compose -f ./deployment.yaml up -d
+
+# kiểm tra xem có container nào sử dụng network không
+# docker network inspect zumzum-food-network
+# docker network create zumzum-food-network
+
+# tạo image redis
+# docker-compose -f ./deployment.yaml rm -s -f redis-container
+# docker-compose -f ./deployment.yaml up -d redis-container
+
+# tạo image docker zumzum-food-container
+# docker-compose -f ./deployment.yaml rm -s -f zumzum-food-container
+# docker-compose -f ./deployment.yaml up -d zumzum-food-container
+
+# kiểm tra network
+# docker network ls
+# docker network inspect 07e49996e124
