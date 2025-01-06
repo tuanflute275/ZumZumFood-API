@@ -6,6 +6,9 @@
         [StringLength(100, ErrorMessage = "Restaurant name can't be longer than 100 characters.")]
         public string Name { get; set; }
 
+        public IFormFile? ImageFile { get; set; }
+        public string? OldImage { get; set; }
+
         [StringLength(255, ErrorMessage = "Address can't be longer than 255 characters.")]
         public string? Address { get; set; }
 

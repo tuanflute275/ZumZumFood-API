@@ -137,7 +137,7 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Restaurants");
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Cart", b =>
