@@ -15,6 +15,8 @@
         IProductDetailRepository ProductDetailRepository { get; }
         IProductImageRepository ProductImageRepository { get; }
         IProductCommentRepository ProductCommentRepository { get; }
+        IComboRepository ComboRepository { get; }
+        IComboProductRepository ComboProductRepository { get; }
         IWishlistRepository WishlistRepository { get; }
         ICartRepository CartRepository { get; }
         IOrderRepository OrderRepository { get; }

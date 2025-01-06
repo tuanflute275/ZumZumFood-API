@@ -17,6 +17,8 @@
         public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<ProductComment> ProductComments { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Combo> Combos { get; set; }
+        public DbSet<ComboProduct> ComboProducts { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
