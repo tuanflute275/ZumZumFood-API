@@ -24,7 +24,7 @@
                     return new ResponseObject(400, "Input contains invalid special characters", validationResult);
                 }
                 var dataQuery = _unitOfWork.ParameterRepository.GetAllAsync(
-                    expression: s => s.DeleteFlag == false && string.IsNullOrEmpty(keyword) 
+                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) 
                     || s.ParaScope.Contains(keyword) || s.ParaName.Contains(keyword) || s.ParaType.Contains(keyword)
                 );
                 var query = await dataQuery;
@@ -87,20 +87,20 @@
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
                 var dataQuery = await _unitOfWork.ParameterRepository.GetAllAsync(
-                   expression: x => x.ParameterId == id && x.DeleteFlag == false
+                   expression: x => x.ParameterId == id && x.DeleteFlag != true
                 );
                 if (dataQuery == null || !(dataQuery.Count() > 0))
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/parameter/{id}", null, dataQuery.FirstOrDefault());
+                    LogHelper.LogWarning(_logger, "GET", $"/api/parameter/{id}", null, dataQuery.FirstOrDefault());
                     return new ResponseObject(404, "Parameter not found.", dataQuery.FirstOrDefault());
                 }
                 var result = _mapper.Map<ParameterDTO>(dataQuery.FirstOrDefault());
                 if (result == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/parameter/{id}", null, result);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/parameter/{id}", null, result);
                     return new ResponseObject(404, "Parameter not found.", result);
                 }
-                LogHelper.LogInformation(_logger, "GET", "/api/parameter/{id}", null, result);
+                LogHelper.LogInformation(_logger, "GET", $"/api/parameter/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
             catch (Exception ex)

@@ -27,7 +27,7 @@
                                            .Include(x => x.Product)
                                            .ThenInclude(p => p.Category)
                                            .Include(x => x.Product)
-                                           .ThenInclude(p => p.Restaurant)
+                                           .ThenInclude(p => p.Brand)
                 );
                 var data = dataQuery;
                 var wishlist = dataQuery.FirstOrDefault();
@@ -62,8 +62,8 @@
                         Price = p.Product.Price,
                         Discount = p.Product.Discount,
                         IsActive = p.Product.IsActive,
-                        RestaurantId = p.Product.RestaurantId,
-                        RestaurantName = p.Product.Restaurant.Name,
+                        BrandId = p.Product.BrandId,
+                        BrandName = p.Product.Brand.Name,
                         Description = p.Product.Description,
                         CreateDate = p.Product.CreateDate.HasValue ? p.Product.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                         UpdateBy = p.Product.UpdateBy,

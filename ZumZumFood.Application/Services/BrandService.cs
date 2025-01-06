@@ -1,17 +1,15 @@
 ﻿namespace ZumZumFood.Application.Services
 {
-    public class CategoryService : ICategoryService
+    public class BrandService : IBrandService
     {
         IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILogger<CategoryService> _logger;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<CategoryService> logger, IHttpContextAccessor httpContextAccessor)
+        private readonly ILogger<BrandService> _logger;
+        public BrandService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<BrandService> logger)
         {
             _logger = logger;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
@@ -22,10 +20,10 @@
                 var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
                 if (!string.IsNullOrEmpty(validationResult))
                 {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/category", null, "Input contains invalid special characters");
+                    LogHelper.LogWarning(_logger, "GET", $"/api/brand", null, "Input contains invalid special characters");
                     return new ResponseObject(400, "Input contains invalid special characters", validationResult);
                 }
-                var dataQuery = _unitOfWork.CategoryRepository.GetAllAsync(
+                var dataQuery = _unitOfWork.BrandRepository.GetAllAsync(
                     expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) || s.Name.Contains(keyword)
                 );
                 var query = await dataQuery;
@@ -36,10 +34,10 @@
                     switch (sort)
                     {
                         case "Id-ASC":
-                            query = query.OrderBy(x => x.CategoryId);
+                            query = query.OrderBy(x => x.BrandId);
                             break;
                         case "Id-DESC":
-                            query = query.OrderByDescending(x => x.CategoryId);
+                            query = query.OrderByDescending(x => x.BrandId);
                             break;
                         case "Name-ASC":
                             query = query.OrderBy(x => x.Name);
@@ -48,14 +46,14 @@
                             query = query.OrderByDescending(x => x.Name);
                             break;
                         default:
-                            query = query.OrderByDescending(x => x.CategoryId);
+                            query = query.OrderByDescending(x => x.BrandId);
                             break;
                     }
                 }
 
                 // Map data to dataDTO
                 var dataList = query.ToList();
-                var data = _mapper.Map<List<CategoryDTO>>(dataList);
+                var data = _mapper.Map<List<BrandDTO>>(dataList);
 
                 // Paginate the result
                 // Phân trang dữ liệu
@@ -72,12 +70,12 @@
                     pageNumber = pagedData.PageNumber,     // Current page number
                     pageSize = pagedData.PageSize          // Page size
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/category", null, pagedData.Count());
+                LogHelper.LogInformation(_logger, "GET", "/api/brand", null, pagedData.Count());
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "GET", $"/api/category");
+                LogHelper.LogError(_logger, ex, "GET", $"/api/brand");
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }
@@ -90,35 +88,40 @@
                 var validationResult = InputValidator.IsValidNumber(id);
                 if (!validationResult)
                 {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/category/{id}", null, "Invalid ID. ID must be greater than 0.");
+                    LogHelper.LogWarning(_logger, "GET", $"/api/brand/{id}", null, "Invalid ID. ID must be greater than 0.");
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
-                var dataQuery = await _unitOfWork.CategoryRepository.GetAllAsync(
-                   expression: x => x.CategoryId == id && x.DeleteFlag != true,
+                var dataQuery = await _unitOfWork.BrandRepository.GetAllAsync(
+                   expression: x => x.BrandId == id && x.DeleteFlag != true,
                    include: query => query.Include(x => x.Products)
-                                            .ThenInclude(p => p.Brand)
+                                            .ThenInclude(p => p.Category)
                 );
-                var category = dataQuery.FirstOrDefault();
-                if (category == null)
+                var brand = dataQuery.FirstOrDefault();
+                if (brand == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/category/{id}", null, category);
-                    return new ResponseObject(404, "Category not found.", category);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/brand/{id}", null, brand);
+                    return new ResponseObject(404, "Brand not found.", brand);
                 }
-                var result = new CategoryMapperDTO
+                var result = new BrandMapperDTO
                 {
-                    CategoryId = category.CategoryId,
-                    Image = category.Image,
-                    Name = category.Name,
-                    Slug = category.Slug,
-                    IsActive = category.IsActive,
-                    CreateBy = category.CreateBy,
-                    CreateDate = category.CreateDate.HasValue ? category.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
-                    UpdateBy = category.UpdateBy,
-                    UpdateDate = category.UpdateDate.HasValue ? category.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
-                    DeleteBy = category.DeleteBy,
-                    DeleteDate = category.DeleteDate.HasValue ? category.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
-                    DeleteFlag = category.DeleteFlag,
-                    Products = category.Products.Select(p => new ProductDTO
+                    BrandId = brand.BrandId,
+                    Name = brand.Name,
+                    Image = brand.Image,
+                    Address = brand.Address,
+                    PhoneNumber = brand.PhoneNumber,
+                    Email = brand.Email,
+                    IsActive = brand.IsActive,
+                    OpenTime = brand.OpenTime.Value.ToString(@"hh\:mm"),
+                    CloseTime = brand.CloseTime.Value.ToString(@"hh\:mm"),
+                    Description = brand.Description,
+                    CreateBy = brand.CreateBy,
+                    CreateDate = brand.CreateDate.HasValue ? brand.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    UpdateBy = brand.UpdateBy,
+                    UpdateDate = brand.UpdateDate.HasValue ? brand.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    DeleteBy = brand.DeleteBy,
+                    DeleteDate = brand.DeleteDate.HasValue ? brand.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    DeleteFlag = brand.DeleteFlag,
+                    Products = brand.Products.Select(p => new ProductDTO
                     {
                         ProductId = p.ProductId,
                         Name = p.Name,
@@ -126,9 +129,11 @@
                         Image = p.Image,
                         Price = p.Price,
                         Discount = p.Discount,
-                        IsActive= p.IsActive,
+                        IsActive = p.IsActive,
                         BrandId = p.BrandId,
                         BrandName = p.Brand.Name,
+                        CategoryId = p.CategoryId,
+                        CategoryName = p.Category.Name,
                         Description = p.Description,
                         CreateDate = p.CreateDate.HasValue ? p.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                         UpdateBy = p.UpdateBy,
@@ -140,24 +145,23 @@
                 };
                 if (result == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/category/{id}", null, result);
-                    return new ResponseObject(404, "Category not found.", result);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/brand/{id}", null, result);
+                    return new ResponseObject(404, "Brand not found.", result);
                 }
-                LogHelper.LogInformation(_logger, "GET", $"/api/category/{id}", null, result);
+                LogHelper.LogInformation(_logger, "GET", $"/api/brand/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "GET", $"/api/category/{id}");
+                LogHelper.LogError(_logger, ex, "GET", $"/api/brand/{id}");
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }
 
-        public async Task<ResponseObject> SaveAsync(CategoryModel model)
+        public async Task<ResponseObject> SaveAsync(BrandModel model)
         {
             try
             {
-                var request = _httpContextAccessor.HttpContext?.Request;
                 // Validate data annotations
                 var validationResults = new List<ValidationResult>();
                 var validationContext = new ValidationContext(model, null, null);
@@ -170,35 +174,35 @@
                 // end validate
 
                 // mapper data
-                var category = new Category();
-                category.Name = model.Name;
-                category.Slug = Helpers.GenerateSlug(model.Name);
-                category.Description = model.Description;
-                category.CreateBy = Constant.SYSADMIN;
-                category.CreateDate = DateTime.Now;
-                if (model.ImageFile != null)
-                {
-                    var image = await FileUploadHelper.UploadImageAsync(model.ImageFile, model.OldImage, request.Scheme, request.Host.Value, "categories");
-                    category.Image = image;
-                }
-
-                await _unitOfWork.CategoryRepository.SaveOrUpdateAsync(category);
+                var brand = new Brand();
+                brand.Name = model.Name;
+                brand.Slug = Helpers.GenerateSlug(model.Name);
+                brand.Address = model.Address;
+                brand.PhoneNumber = model.PhoneNumber;
+                brand.Email = model.Email;
+                brand.IsActive = model.IsActive;
+                brand.OpenTime = TimeSpan.Parse(model.OpenTime);
+                brand.CloseTime = TimeSpan.Parse(model.CloseTime);
+                brand.Description = model.Description;
+                brand.CreateBy = Constant.SYSADMIN;
+                brand.CreateDate = DateTime.Now;
+                
+                await _unitOfWork.BrandRepository.SaveOrUpdateAsync(brand);
                 await _unitOfWork.SaveChangeAsync();
-                LogHelper.LogInformation(_logger, "POST", "/api/category", model, category);
+                LogHelper.LogInformation(_logger, "POST", "/api/brand", model, brand);
                 return new ResponseObject(200, "Create data successfully", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "POST", $"/api/category", model);
+                LogHelper.LogError(_logger, ex, "POST", $"/api/brand", model);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }
 
-        public async Task<ResponseObject> UpdateAsync(int id, CategoryModel model)
+        public async Task<ResponseObject> UpdateAsync(int id, BrandModel model)
         {
             try
             {
-                var request = _httpContextAccessor.HttpContext?.Request;
                 // Validate data annotations
                 var validationResults = new List<ValidationResult>();
                 var validationContext = new ValidationContext(model, null, null);
@@ -211,31 +215,30 @@
                 // end validate
 
                 // mapper data
-                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
-                if (category == null)
+                var brand = await _unitOfWork.BrandRepository.GetByIdAsync(id);
+                if (brand == null)
                 {
-                    LogHelper.LogWarning(_logger, "PUT", $"/api/category", null, $"Category not found with id {id}");
-                    return new ResponseObject(400, $"Category not found with id {id}", null);
+                    LogHelper.LogWarning(_logger, "PUT", $"/api/brand", null, $"Brand not found with id {id}");
+                    return new ResponseObject(400, $"Brand not found with id {id}", null);
                 }
-                category.Name = model.Name;
-                category.Slug = Helpers.GenerateSlug(model.Name);
-                category.Description = model.Description;
-                category.UpdateBy = Constant.SYSADMIN;
-                category.UpdateDate = DateTime.Now;
-                if (model.ImageFile != null)
-                {
-                    var image = await FileUploadHelper.UploadImageAsync(model.ImageFile, model.OldImage, request.Scheme, request.Host.Value, "categories");
-                    category.Image = image;
-                }
-
-                await _unitOfWork.CategoryRepository.SaveOrUpdateAsync(category);
+                brand.Name = model.Name;
+                brand.Slug = Helpers.GenerateSlug(model.Name);
+                brand.Address = model.Address;
+                brand.PhoneNumber = model.PhoneNumber;
+                brand.Email = model.Email;
+                brand.IsActive = model.IsActive;
+                brand.Description = model.Description;
+                brand.UpdateBy = Constant.SYSADMIN;
+                brand.UpdateDate = DateTime.Now;
+              
+                await _unitOfWork.BrandRepository.SaveOrUpdateAsync(brand);
                 await _unitOfWork.SaveChangeAsync();
-                LogHelper.LogInformation(_logger, "PUT", "/api/category", model, category);
+                LogHelper.LogInformation(_logger, "PUT", "/api/brand", model, brand);
                 return new ResponseObject(200, "Update data successfully", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "PUT", $"/api/category", model);
+                LogHelper.LogError(_logger, ex, "PUT", $"/api/brand", model);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }
@@ -248,26 +251,26 @@
                 var validationResult = InputValidator.IsValidNumber(id);
                 if (!validationResult)
                 {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/category/{id}", null, "Invalid ID. ID must be greater than 0.");
+                    LogHelper.LogWarning(_logger, "GET", $"/api/brand/{id}", null, "Invalid ID. ID must be greater than 0.");
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
-                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
-                if (category == null)
+                var brand = await _unitOfWork.BrandRepository.GetByIdAsync(id);
+                if (brand == null)
                 {
-                    LogHelper.LogWarning(_logger, "POST", $"/api/category/{id}", id, "Category not found.");
-                    return new ResponseObject(404, "Category not found.", null);
+                    LogHelper.LogWarning(_logger, "POST", $"/api/brand/{id}", id, "Brand not found.");
+                    return new ResponseObject(404, "Brand not found.", null);
                 }
-                category.DeleteFlag = true;
-                category.DeleteBy = Constant.SYSADMIN;
-                category.DeleteDate = DateTime.Now;
-                await _unitOfWork.CategoryRepository.SaveOrUpdateAsync(category);
+                brand.DeleteFlag = true;
+                brand.DeleteBy = Constant.SYSADMIN;
+                brand.DeleteDate = DateTime.Now;
+                await _unitOfWork.BrandRepository.SaveOrUpdateAsync(brand);
                 await _unitOfWork.SaveChangeAsync();
-                LogHelper.LogInformation(_logger, "POST", $"/api/category/{id}", id, "Deleted Flag successfully");
+                LogHelper.LogInformation(_logger, "POST", $"/api/brand/{id}", id, "Deleted Flag successfully");
                 return new ResponseObject(200, "Delete Flag data successfully", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "PUT", $"/api/category/{id}", id);
+                LogHelper.LogError(_logger, ex, "PUT", $"/api/brand/{id}", id);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }
@@ -276,19 +279,19 @@
         {
             try
             {
-                var deletedData = await _unitOfWork.CategoryRepository.GetAllAsync(x => x.DeleteFlag == true);
+                var deletedData = await _unitOfWork.BrandRepository.GetAllAsync(x => x.DeleteFlag != true);
                 if (deletedData == null || !deletedData.Any())
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/deleted-data", null, new { message = "No deleted categories found." });
-                    return new ResponseObject(404, "No deleted categories found.", null);
+                    LogHelper.LogWarning(_logger, "GET", "/api/deleted-data", null, new { message = "No deleted brand found." });
+                    return new ResponseObject(404, "No deleted brand found.", null);
                 }
-                var data = _mapper.Map<List<CategoryDTO>>(deletedData);
+                var data = _mapper.Map<List<BrandDTO>>(deletedData);
                 LogHelper.LogInformation(_logger, "GET", $"/api/deleted-data", null, "Query data deleted successfully");
                 return new ResponseObject(200, "Query data delete flag successfully.", data);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "GET", "/api/category/deleted-data", null);
+                LogHelper.LogError(_logger, ex, "GET", "/api/brand/deleted-data", null);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }
@@ -301,35 +304,35 @@
                 var validationResult = InputValidator.IsValidNumber(id);
                 if (!validationResult)
                 {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/category/{id}", null, "Invalid ID. ID must be greater than 0.");
+                    LogHelper.LogWarning(_logger, "GET", $"/api/brand/{id}", null, "Invalid ID. ID must be greater than 0.");
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
-                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
-                if (category == null)
+                var brand = await _unitOfWork.BrandRepository.GetByIdAsync(id);
+                if (brand == null)
                 {
-                    LogHelper.LogWarning(_logger, "POST", $"/api/category/{id}/restore", new { id }, new { message = "Category not found." });
-                    return new ResponseObject(404, "Category not found.", null);
+                    LogHelper.LogWarning(_logger, "POST", $"/api/brand/{id}/restore", new { id }, new { message = "Brand not found." });
+                    return new ResponseObject(404, "Brand not found.", null);
                 }
 
-                if ((bool)!category.DeleteFlag)
+                if ((bool)!brand.DeleteFlag)
                 {
-                    LogHelper.LogWarning(_logger, "POST", $"/api/category/{id}/restore", new { id }, new { message = "Category is not flagged as deleted." });
-                    return new ResponseObject(400, "Category is not flagged as deleted.", null);
+                    LogHelper.LogWarning(_logger, "POST", $"/api/brand/{id}/restore", new { id }, new { message = "Brand is not flagged as deleted." });
+                    return new ResponseObject(400, "Brand is not flagged as deleted.", null);
                 }
 
-                category.DeleteFlag = false;
-                category.DeleteBy = null;
-                category.DeleteDate = null;
+                brand.DeleteFlag = false;
+                brand.DeleteBy = null;
+                brand.DeleteDate = null;
 
-                await _unitOfWork.CategoryRepository.SaveOrUpdateAsync(category);
+                await _unitOfWork.BrandRepository.SaveOrUpdateAsync(brand);
                 await _unitOfWork.SaveChangeAsync();
 
-                LogHelper.LogInformation(_logger, "POST", $"/api/category/{id}/restore", id, "Category restored successfully");
-                return new ResponseObject(200, "Category restored successfully.", null);
+                LogHelper.LogInformation(_logger, "POST", $"/api/brand/{id}/restore", id, "Brand restored successfully");
+                return new ResponseObject(200, "Brand restored successfully.", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "POST", $"/api/category/{id}/restore", id);
+                LogHelper.LogError(_logger, ex, "POST", $"/api/brand/{id}/restore", id);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }
@@ -342,17 +345,17 @@
                 var validationResult = InputValidator.IsValidNumber(id);
                 if (!validationResult)
                 {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/category/{id}", null, "Invalid ID. ID must be greater than 0.");
+                    LogHelper.LogWarning(_logger, "GET", $"/api/brand/{id}", null, "Invalid ID. ID must be greater than 0.");
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
-                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
-                if (category == null)
+                var brand = await _unitOfWork.BrandRepository.GetByIdAsync(id);
+                if (brand == null)
                 {
-                    LogHelper.LogWarning(_logger, "DELETE", $"/api/category/{id}", id, "Category not found.");
-                    return new ResponseObject(404, "Category not found.", null);
+                    LogHelper.LogWarning(_logger, "DELETE", $"/api/brand/{id}", id, "Brand not found.");
+                    return new ResponseObject(404, "Brand not found.", null);
                 }
                 // Bắt đầu: Xóa các phụ thuộc khóa ngoại
-                var products = await _unitOfWork.ProductRepository.GetAllAsync(x => x.CategoryId == id);
+                var products = await _unitOfWork.ProductRepository.GetAllAsync(x => x.BrandId == id);
                 if (products != null && products.Any())
                 {
                     // Lấy tất cả dữ liệu liên quan cùng lúc, giảm số lượng truy vấn
@@ -385,15 +388,14 @@
                 // Lưu các thay đổi sau khi xóa tất cả
                 await _unitOfWork.SaveChangeAsync();
                 // Kết thúc: Xóa các phụ thuộc khóa ngoại
-
-                await _unitOfWork.CategoryRepository.DeleteAsync(category);
+                await _unitOfWork.BrandRepository.DeleteAsync(brand);
                 await _unitOfWork.SaveChangeAsync();
-                LogHelper.LogInformation(_logger, "DELETE", $"/api/category/{id}", id, "Deleted successfully");
+                LogHelper.LogInformation(_logger, "DELETE", $"/api/brand/{id}", id, "Deleted successfully");
                 return new ResponseObject(200, "Delete data successfully", null);
             }
             catch (Exception ex)
             {
-                LogHelper.LogError(_logger, ex, "DELETE", $"/api/category/{id}", id);
+                LogHelper.LogError(_logger, ex, "DELETE", $"/api/brand/{id}", id);
                 return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
             }
         }

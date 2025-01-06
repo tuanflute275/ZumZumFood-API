@@ -29,7 +29,7 @@
                 var productImage = dataQuery.FirstOrDefault();
                 if (productImage == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/product-image/{id}", null, productImage);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/product-image/{id}", null, productImage);
                     return new ResponseObject(404, "Product Image not found.", productImage);
                 }
                 var result = new ProductImageDTO
@@ -40,10 +40,10 @@
                 };
                 if (result == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/product-image/{id}", null, result);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/product-image/{id}", null, result);
                     return new ResponseObject(404, "Product Image not found.", result);
                 }
-                LogHelper.LogInformation(_logger, "GET", "/api/product-image/{id}", null, result);
+                LogHelper.LogInformation(_logger, "GET", $"/api/product-image/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
             catch (Exception ex)

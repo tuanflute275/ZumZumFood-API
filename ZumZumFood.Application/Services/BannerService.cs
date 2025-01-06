@@ -26,7 +26,7 @@
                     return new ResponseObject(400, "Input contains invalid special characters", validationResult);
                 }
                 var dataQuery = _unitOfWork.BannerRepository.GetAllAsync(
-                    expression: s => s.DeleteFlag == false && string.IsNullOrEmpty(keyword) || s.Title.Contains(keyword)
+                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) || s.Title.Contains(keyword)
                 );
                 var query = await dataQuery;
                
@@ -94,21 +94,21 @@
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
                 var dataQuery = await _unitOfWork.BannerRepository.GetAllAsync(
-                   expression: x => x.BannerId == id && x.DeleteFlag == false
+                   expression: x => x.BannerId == id && x.DeleteFlag != true
                 );
                 if (dataQuery == null || !(dataQuery.Count() > 0))
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/banner/{id}", null, dataQuery.FirstOrDefault());
+                    LogHelper.LogWarning(_logger, "GET", $"/api/banner/{id}", null, dataQuery.FirstOrDefault());
                     return new ResponseObject(404, "Banner not found.", dataQuery.FirstOrDefault());
                 }
                 var result = _mapper.Map<BannerDTO>(dataQuery.FirstOrDefault());
 
                 if (result == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/banner/{id}", null, result);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/banner/{id}", null, result);
                     return new ResponseObject(404, "Banner not found.", result);
                 }
-                LogHelper.LogInformation(_logger, "GET", "/api/banner/{id}", null, result);
+                LogHelper.LogInformation(_logger, "GET", $"/api/banner/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
             catch (Exception ex)
@@ -142,39 +142,6 @@
                 // mapper data
                 var banner = new Banner();
                 banner.Title = model.Title;
-                if (model.BannerType == Constant.BANNER_TYPE_APP 
-                    || model.BannerType == Constant.BANNER_TYPE_RESTAURANT)
-                {
-                    banner.BannerType = model.BannerType;
-                }
-                else
-                {
-                    return new ResponseObject(400, "Invalid BannerType value. Only 'APP' or 'RESTAURANT' are allowed.", null);
-                }
-
-                if (!string.IsNullOrEmpty(model.RestaurantId))
-                {
-                    var validationResult = InputValidator.IsValidNumber(Int32.Parse(model.RestaurantId));
-                    if (!validationResult || string.IsNullOrEmpty(model.RestaurantId))
-                    {
-                        LogHelper.LogWarning(_logger, "GET", $"/api/banner", null, "Invalid RestaurantId. RestaurantId must be greater than 0.");
-                        return new ResponseObject(400, "Input invalid", "Invalid RestaurantId. RestaurantId must be greater than 0 and less than or equal to the maximum value of int!.");
-                    }
-                    else
-                    {
-                        var restaurantCheck = await _unitOfWork.RestaurantRepository.GetByIdAsync(Int32.Parse(model.RestaurantId));
-                        if(restaurantCheck != null)
-                        {
-                            banner.RestaurantId = Int32.Parse(model.RestaurantId);
-                        }
-                        else
-                        {
-                            LogHelper.LogWarning(_logger, "POST", "/api/banner", null, null);
-                            return new ResponseObject(404, "Restaurant not found.", null);
-                        }
-                    }
-                }
-
                 banner.IsActive = model.IsActive;
                 banner.CreateBy = Constant.SYSADMIN;
                 banner.CreateDate = DateTime.Now;
@@ -220,30 +187,6 @@
                     return new ResponseObject(400, $"Banner not found with id {id}", null);
                 }
                 banner.Title = model.Title;
-                if (model.BannerType == Constant.BANNER_TYPE_APP
-                    || model.BannerType == Constant.BANNER_TYPE_RESTAURANT)
-                {
-                    banner.BannerType = model.BannerType;
-                }
-                else
-                {
-                    LogHelper.LogWarning(_logger, "PUT", $"/api/banner", null, "Invalid BannerType value. Only 'APP' or 'RESTAURANT' are allowed.");
-                    return new ResponseObject(400, "Invalid BannerType value. Only 'APP' or 'RESTAURANT' are allowed.", null);
-                }
-
-                if (!string.IsNullOrEmpty(model.RestaurantId))
-                {
-                    var validationResult = InputValidator.IsValidNumber(Int32.Parse(model.RestaurantId));
-                    if (!validationResult || string.IsNullOrEmpty(model.RestaurantId))
-                    {
-                        LogHelper.LogWarning(_logger, "PUT", $"/api/banner", null, "Invalid RestaurantId. RestaurantId must be greater than 0.");
-                        return new ResponseObject(400, "Input invalid", "Invalid RestaurantId. RestaurantId must be greater than 0 and less than or equal to the maximum value of int!.");
-                    }
-                    else
-                    {
-                        banner.RestaurantId = Int32.Parse(model.RestaurantId);
-                    }
-                }
                 banner.IsActive = model.IsActive;
                 banner.UpdateBy = Constant.SYSADMIN;
                 banner.UpdateDate = DateTime.Now;

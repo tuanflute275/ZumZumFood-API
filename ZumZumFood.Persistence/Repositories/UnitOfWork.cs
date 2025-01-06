@@ -14,7 +14,7 @@
         ILogRepository _logRepository;
         IBannerRepository _bannerRepository;
         ICategoryRepository _categoryRepository;
-        IRestaurantRepository _restaurantRepository;
+        IBrandRepository _brandRepository;
         IProductRepository _productRepository;
         IProductDetailRepository _productDetailRepository;
         IProductImageRepository _productImageRepository;
@@ -42,7 +42,7 @@
         public ILogRepository LogRepository => _logRepository ??= new LogRepository(_context);
         public IBannerRepository BannerRepository => _bannerRepository ??= new BannerRepository(_context);
         public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_context);
-        public IRestaurantRepository RestaurantRepository => _restaurantRepository ??= new RestaurantRepository(_context);
+        public IBrandRepository BrandRepository => _brandRepository ??= new BrandRepository(_context);
         public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_context);
         public IProductDetailRepository ProductDetailRepository => _productDetailRepository ??= new ProductDetailRepository(_context);
         public IProductImageRepository ProductImageRepository => _productImageRepository ??= new ProductImageRepository(_context);

@@ -1,8 +1,8 @@
 ﻿namespace ZumZumFood.Application.Models.DTOs
 {
-    public class RestaurantMapperDTO : BaseDTO
+    public class BrandDTO : BaseDTO
     {
-        public int RestaurantId { get; set; }
+        public int BrandId { get; set; }
         public string Name { get; set; }
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
@@ -11,6 +11,5 @@
         public bool? IsActive { get; set; }
         public string? OpenTime { get; set; }  // Thời gian mở cửa
         public string? CloseTime { get; set; }  // Thời gian đóng cửa
-        public List<ProductDTO> Products { get; set; } = new List<ProductDTO>();
     }
 }

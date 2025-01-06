@@ -1,7 +1,7 @@
 ﻿namespace ZumZumFood.Domain.Entities
 {
     [Table("Coupons")]
-    public class Coupon
+    public class Coupon : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -12,7 +12,7 @@
         public string Code { get; set; }
 
         [Range(0, 100)]
-        public int? Percent { get; set; }
+        public int Percent { get; set; } = 0;
 
         [Column(TypeName = "ntext")]
         public string? Description { get; set; }

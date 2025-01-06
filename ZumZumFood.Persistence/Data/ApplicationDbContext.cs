@@ -12,7 +12,7 @@
         public DbSet<Log> Logs { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<Brand> Restaurants { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<ProductComment> ProductComments { get; set; }

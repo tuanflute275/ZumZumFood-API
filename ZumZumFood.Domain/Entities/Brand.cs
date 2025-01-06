@@ -1,11 +1,11 @@
 ﻿namespace ZumZumFood.Domain.Entities
 {
     [Table("Restaurants")]
-    public class Restaurant : BaseEntity
+    public class Brand : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RestaurantId { get; set; }
+        public int BrandId { get; set; }
 
         [Required]
         [StringLength(150)]
@@ -13,6 +13,9 @@
         public string Name { get; set; }
 
         public string? Slug { get; set; }
+
+        [Column(TypeName = "nvarchar(200)")]
+        public string? Image { get; set; }
 
         [Column(TypeName = "nvarchar(200)")]
         public string? Address { get; set; }
@@ -33,11 +36,5 @@
 
         // Quan hệ với bảng Product (Menu của nhà hàng)
         public virtual ICollection<Product> Products { get; set; }  // Các sản phẩm (món ăn) của nhà hàng
-
-        // Quan hệ với bảng Banner (Hình ảnh quảng bá nhà hàng)
-        public virtual ICollection<Banner> Banners { get; set; }
-
-        // Quan hệ với bảng Order (Các đơn hàng của nhà hàng)
-        public virtual ICollection<Order> Orders { get; set; }
     }
 }

@@ -26,7 +26,7 @@
                     return new ResponseObject(400, "Input contains invalid special characters", validationResult);
                 }
                 var userQuery = _unitOfWork.UserRepository.GetAllAsync(
-                expression: s => s.DeleteFlag == false && string.IsNullOrEmpty(keyword) || s.UserName.Contains(keyword)
+                expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) || s.UserName.Contains(keyword)
                 || s.FullName.Contains(keyword),
                 include: query => query.Include(x => x.UserRoles).ThenInclude(u => u.Role)
             );
@@ -107,16 +107,16 @@
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
                 var userQuery = await _unitOfWork.UserRepository.GetAllAsync(
-                   expression: x => x.UserId == id && x.DeleteFlag == false,
+                   expression: x => x.UserId == id && x.DeleteFlag != true,
                    include: query => query.Include(x => x.UserRoles).ThenInclude(u => u.Role)
                 );
                 if (userQuery == null || !(userQuery.Count() > 0))
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/user/{id}", null, userQuery.FirstOrDefault());
+                    LogHelper.LogWarning(_logger, "GET", $"/api/user/{id}", null, userQuery.FirstOrDefault());
                     return new ResponseObject(404, "User not found.", userQuery.FirstOrDefault());
                 }
                 var result = _mapper.Map<UserDTO>(userQuery.FirstOrDefault());
-                LogHelper.LogInformation(_logger, "GET", "/api/user/{id}", null, result);
+                LogHelper.LogInformation(_logger, "GET", $"/api/user/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
             catch (Exception ex)

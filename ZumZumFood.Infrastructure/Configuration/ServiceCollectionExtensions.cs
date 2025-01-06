@@ -35,12 +35,14 @@ namespace ZumZumFood.Infrastructure.Configuration
             services.AddTransient<IParameterService, ParameterService>();
             services.AddTransient<IBannerService, BannerService>();
             services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<IRestaurantService, RestaurantService>();
+            services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IProductCommentService, ProductCommentService>();
             services.AddTransient<IProductImageService, ProductImageService>();
             services.AddTransient<IWishlistService, WishlistService>();
             services.AddTransient<ICartService, CartService>();
+            services.AddTransient<ICouponService, CouponService>();
+            services.AddTransient<ICouponConditionService, CouponConditionService>();
         }
 
         // Add singleton

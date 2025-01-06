@@ -163,16 +163,16 @@
                 );
                 if (dataQuery == null || !(dataQuery.Count() > 0))
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/log/{id}", null, dataQuery.FirstOrDefault());
+                    LogHelper.LogWarning(_logger, "GET", $"/api/log/{id}", null, dataQuery.FirstOrDefault());
                     return new ResponseObject(404, "Log not found.", dataQuery.FirstOrDefault());
                 }
                 var result = _mapper.Map<LogDTO>(dataQuery.FirstOrDefault());
                 if (result == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/log/{id}", null, result);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/log/{id}", null, result);
                     return new ResponseObject(404, "Log not found.", result);
                 }
-                LogHelper.LogInformation(_logger, "GET", "/api/log/{id}", null, result);
+                LogHelper.LogInformation(_logger, "GET", $"/api/log/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
             catch (Exception ex)

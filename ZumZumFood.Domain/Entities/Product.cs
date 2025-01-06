@@ -34,9 +34,9 @@
         public string? Description { get; set; }
 
         [Column]
-        public int RestaurantId { get; set; }
-        [ForeignKey("RestaurantId")]
-        public virtual Restaurant Restaurant { get; set; }
+        public int BrandId { get; set; }
+        [ForeignKey("BrandId")]
+        public virtual Brand Brand { get; set; }
 
         [Column]
         public int CategoryId { get; set; }

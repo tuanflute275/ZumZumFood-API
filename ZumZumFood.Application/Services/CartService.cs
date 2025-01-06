@@ -27,13 +27,13 @@
                                            .Include(x => x.Product)
                                            .ThenInclude(p => p.Category)
                                            .Include(x => x.Product)
-                                           .ThenInclude(p => p.Restaurant)
+                                           .ThenInclude(p => p.Brand)
                 );
                 var data = dataQuery;
                 var cart = dataQuery.FirstOrDefault();
                 if (cart == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/cart/{id}", null, cart);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/cart/{id}", null, cart);
                     return new ResponseObject(404, "Cart not found.", cart);
                 }
                 var result = new CartWishlistDTO
@@ -62,8 +62,8 @@
                         Price = p.Product.Price,
                         Discount = p.Product.Discount,
                         IsActive = p.Product.IsActive,
-                        RestaurantId = p.Product.RestaurantId,
-                        RestaurantName = p.Product.Restaurant.Name,
+                        BrandId = p.Product.BrandId,
+                        BrandName = p.Product.Brand.Name,
                         Description = p.Product.Description,
                         CreateDate = p.Product.CreateDate.HasValue ? p.Product.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                         UpdateBy = p.Product.UpdateBy,
@@ -75,10 +75,10 @@
                 };
                 if (result == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/cart/{id}", null, result);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/cart/{id}", null, result);
                     return new ResponseObject(404, "Cart not found.", result);
                 }
-                LogHelper.LogInformation(_logger, "GET", "/api/cart/{id}", null, result);
+                LogHelper.LogInformation(_logger, "GET", $"/api/cart/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
             catch (Exception ex)

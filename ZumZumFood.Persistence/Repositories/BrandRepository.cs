@@ -1,27 +1,27 @@
 ﻿namespace ZumZumFood.Persistence.Repositories
 {
-    public class RestaurantRepository : BaseRepository<Restaurant>, IRestaurantRepository
+    public class BrandRepository : BaseRepository<Brand>, IBrandRepository
     {
-        public RestaurantRepository(ApplicationDbContext context) : base(context)
+        public BrandRepository(ApplicationDbContext context) : base(context)
         {
         }
 
-        public async Task<IEnumerable<Restaurant>> GetAllAsync(Expression<Func<Restaurant, bool>> expression = null,
-         Func<IQueryable<Restaurant>, IIncludableQueryable<Restaurant, object>>? include = null)
+        public async Task<IEnumerable<Brand>> GetAllAsync(Expression<Func<Brand, bool>> expression = null,
+         Func<IQueryable<Brand>, IIncludableQueryable<Brand, object>>? include = null)
         {
             return await base.GetAllAsync(expression, include);
         }
 
-        public async Task<Restaurant?> GetByIdAsync(int id)
+        public async Task<Brand?> GetByIdAsync(int id)
         {
-            return await base.GetSingleAsync(x => x.RestaurantId == id);
+            return await base.GetSingleAsync(x => x.BrandId == id);
         }
 
-        public async Task<bool> SaveOrUpdateAsync(Restaurant restaurant)
+        public async Task<bool> SaveOrUpdateAsync(Brand restaurant)
         {
             try
             {
-                if (restaurant.RestaurantId == 0)
+                if (restaurant.BrandId == 0)
                 {
                     await base.AddAsync(restaurant);
                 }
@@ -38,7 +38,7 @@
             }
         }
 
-        public async Task<bool> DeleteAsync(Restaurant restaurant)
+        public async Task<bool> DeleteAsync(Brand restaurant)
         {
             try
             {

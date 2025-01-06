@@ -47,7 +47,7 @@
                 //end cache
 
                 var dataQuery = _unitOfWork.ProductRepository.GetAllAsync(
-                    expression: s => s.DeleteFlag == false && string.IsNullOrEmpty(keyword) || s.Name.Contains(keyword)
+                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) || s.Name.Contains(keyword)
                 );
                 var query = await dataQuery;
 
@@ -124,18 +124,18 @@
                     return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
                 }
                 var dataQuery = await _unitOfWork.ProductRepository.GetAllAsync(
-                   expression: x => x.ProductId == id && x.DeleteFlag == false,
+                   expression: x => x.ProductId == id && x.DeleteFlag != true,
                    include: query => query.Include(x => x.ProductDetails)
                                           .Include(x => x.ProductImages)
                                           .Include(x => x.ProductComments)
                                           .ThenInclude(pcm => pcm.User)
                                           .Include(x => x.Category)
-                                          .Include(x => x.Restaurant)
+                                          .Include(x => x.Brand)
                 );
                 var product = dataQuery.FirstOrDefault();
                 if (product == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/product/{id}", null, product);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/product/{id}", null, product);
                     return new ResponseObject(404, "Product not found.", product);
                 }
                 var result = new ProductMapperDTO
@@ -150,8 +150,15 @@
                     Description = product.Description,
                     CategoryId = product.CategoryId,
                     CategoryName = product.Category.Name,
-                    RestaurantId = product.RestaurantId,
-                    RestaurantName = product.Restaurant.Name,
+                    BrandId = product.BrandId,
+                    BrandName = product.Brand.Name,
+                    CreateBy = product.CreateBy,
+                    CreateDate = product.CreateDate.HasValue ? product.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    UpdateBy = product.UpdateBy,
+                    UpdateDate = product.UpdateDate.HasValue ? product.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    DeleteBy = product.DeleteBy,
+                    DeleteDate = product.DeleteDate.HasValue ? product.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                    DeleteFlag = product.DeleteFlag,
                     ProductImages = product.ProductImages.Select(d => new ProductImageDTO
                     {
                        ProductImageId = d.ProductId,
@@ -184,10 +191,10 @@
                 };
                 if (result == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/product/{id}", null, result);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/product/{id}", null, result);
                     return new ResponseObject(404, "Product not found.", result);
                 }
-                LogHelper.LogInformation(_logger, "GET", "/api/product/{id}", null, result);
+                LogHelper.LogInformation(_logger, "GET", $"/api/product/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
             catch (Exception ex)
@@ -220,10 +227,10 @@
                 product.Price = model.Price;
                 product.Discount = model.Discount;
                 product.IsActive = model.IsActive;
-                var resCheck = await _unitOfWork.RestaurantRepository.GetByIdAsync(model.RestaurantId);
+                var resCheck = await _unitOfWork.BrandRepository.GetByIdAsync(model.RestaurantId);
                 if(resCheck != null)
                 {
-                    product.RestaurantId = model.RestaurantId;
+                    product.BrandId = model.RestaurantId;
                 }
                 else
                 {
@@ -290,10 +297,10 @@
                 product.Price = model.Price;
                 product.Discount = model.Discount;
                 product.IsActive = model.IsActive;
-                var resCheck = await _unitOfWork.RestaurantRepository.GetByIdAsync(model.RestaurantId);
+                var resCheck = await _unitOfWork.BrandRepository.GetByIdAsync(model.RestaurantId);
                 if (resCheck != null)
                 {
-                    product.RestaurantId = model.RestaurantId;
+                    product.BrandId = model.RestaurantId;
                 }
                 else
                 {

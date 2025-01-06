@@ -10,7 +10,7 @@
         ILogRepository LogRepository { get; }
         IBannerRepository BannerRepository { get; }
         ICategoryRepository CategoryRepository { get; }
-        IRestaurantRepository RestaurantRepository { get; }
+        IBrandRepository BrandRepository { get; }
         IProductRepository ProductRepository { get; }
         IProductDetailRepository ProductDetailRepository { get; }
         IProductImageRepository ProductImageRepository { get; }

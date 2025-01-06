@@ -296,16 +296,16 @@ namespace ZumZumFood.Infrastructure.Configuration
                 if (!appContext.Restaurants.Any())
                 {
                     appContext.Restaurants.AddRange(
-                         new Restaurant { Name = "Pizza Hut", Slug = "pizza-hut", Address = "123 Pizza Street, Hanoi", PhoneNumber = "0901234567", Email = "contact@pizzahut.com", Description = "Famous pizza chain offering a wide variety of pizzas.", IsActive = true, OpenTime = TimeSpan.FromHours(10), CloseTime = TimeSpan.FromHours(22) },
-                         new Restaurant { Name = "Burger King", Slug = "burger-king", Address = "456 Burger Lane, Hanoi", PhoneNumber = "0907654321", Email = "support@burgerking.com", Description = "Fast food chain known for its flame-grilled burgers.", IsActive = true, OpenTime = TimeSpan.FromHours(8), CloseTime = TimeSpan.FromHours(23) },
-                         new Restaurant { Name = "Sushi World", Slug = "sushi-world", Address = "789 Sushi Boulevard, Hanoi", PhoneNumber = "0908765432", Email = "info@sushiworld.com", Description = "Japanese sushi restaurant with fresh seafood.", IsActive = true, OpenTime = TimeSpan.FromHours(11), CloseTime = TimeSpan.FromHours(21) },
-                         new Restaurant { Name = "Pasta House", Slug = "pasta-house", Address = "321 Pasta Avenue, Hanoi", PhoneNumber = "0901236547", Email = "service@pastahouse.com", Description = "Authentic Italian pasta dishes served in a cozy environment.", IsActive = true, OpenTime = TimeSpan.FromHours(10), CloseTime = TimeSpan.FromHours(22) },
-                         new Restaurant { Name = "Grill Master", Slug = "grill-master", Address = "654 Grill Road, Hanoi", PhoneNumber = "0908765430", Email = "contact@grillmaster.com", Description = "Grilled meats and vegetables served with sides.", IsActive = true, OpenTime = TimeSpan.FromHours(9), CloseTime = TimeSpan.FromHours(22) },
-                         new Restaurant { Name = "Vegan Delights", Slug = "vegan-delights", Address = "987 Vegan Street, Hanoi", PhoneNumber = "0905555555", Email = "hello@vegandelights.com", Description = "Vegan restaurant with plant-based dishes and desserts.", IsActive = true, OpenTime = TimeSpan.FromHours(8), CloseTime = TimeSpan.FromHours(21) },
-                         new Restaurant { Name = "Noodle Express", Slug = "noodle-express", Address = "543 Noodle Place, Hanoi", PhoneNumber = "0903333333", Email = "info@noodleexpress.com", Description = "Asian noodle bar offering quick and tasty meals.", IsActive = true, OpenTime = TimeSpan.FromHours(9), CloseTime = TimeSpan.FromHours(20) },
-                         new Restaurant { Name = "Seafood Paradise", Slug = "seafood-paradise", Address = "678 Ocean Road, Hanoi", PhoneNumber = "0902222222", Email = "contact@seafoodparadise.com", Description = "Fresh seafood dishes served with traditional flavors.", IsActive = true, OpenTime = TimeSpan.FromHours(10), CloseTime = TimeSpan.FromHours(23) },
-                         new Restaurant { Name = "Burger House", Slug = "burger-house", Address = "321 Burger Street, Hanoi", PhoneNumber = "0904444444", Email = "support@burgerhouse.com", Description = "Specialty burgers with a range of toppings and sauces.", IsActive = true, OpenTime = TimeSpan.FromHours(10), CloseTime = TimeSpan.FromHours(22) },
-                         new Restaurant { Name = "Café Delight", Slug = "cafe-Delight", Address = "111 Café Road, Hanoi", PhoneNumber = "0909999999", Email = "info@cafedelight.com", Description = "A cozy café serving coffee, pastries, and light snacks.", IsActive = true, OpenTime = TimeSpan.FromHours(7), CloseTime = TimeSpan.FromHours(20) }
+                         new Brand { Name = "Pizza Hut", Slug = "pizza-hut", Address = "123 Pizza Street, Hanoi", PhoneNumber = "0901234567", Email = "contact@pizzahut.com", Description = "Famous pizza chain offering a wide variety of pizzas.", IsActive = true, OpenTime = TimeSpan.FromHours(10), CloseTime = TimeSpan.FromHours(22) },
+                         new Brand { Name = "Burger King", Slug = "burger-king", Address = "456 Burger Lane, Hanoi", PhoneNumber = "0907654321", Email = "support@burgerking.com", Description = "Fast food chain known for its flame-grilled burgers.", IsActive = true, OpenTime = TimeSpan.FromHours(8), CloseTime = TimeSpan.FromHours(23) },
+                         new Brand { Name = "Sushi World", Slug = "sushi-world", Address = "789 Sushi Boulevard, Hanoi", PhoneNumber = "0908765432", Email = "info@sushiworld.com", Description = "Japanese sushi restaurant with fresh seafood.", IsActive = true, OpenTime = TimeSpan.FromHours(11), CloseTime = TimeSpan.FromHours(21) },
+                         new Brand { Name = "Pasta House", Slug = "pasta-house", Address = "321 Pasta Avenue, Hanoi", PhoneNumber = "0901236547", Email = "service@pastahouse.com", Description = "Authentic Italian pasta dishes served in a cozy environment.", IsActive = true, OpenTime = TimeSpan.FromHours(10), CloseTime = TimeSpan.FromHours(22) },
+                         new Brand { Name = "Grill Master", Slug = "grill-master", Address = "654 Grill Road, Hanoi", PhoneNumber = "0908765430", Email = "contact@grillmaster.com", Description = "Grilled meats and vegetables served with sides.", IsActive = true, OpenTime = TimeSpan.FromHours(9), CloseTime = TimeSpan.FromHours(22) },
+                         new Brand { Name = "Vegan Delights", Slug = "vegan-delights", Address = "987 Vegan Street, Hanoi", PhoneNumber = "0905555555", Email = "hello@vegandelights.com", Description = "Vegan restaurant with plant-based dishes and desserts.", IsActive = true, OpenTime = TimeSpan.FromHours(8), CloseTime = TimeSpan.FromHours(21) },
+                         new Brand { Name = "Noodle Express", Slug = "noodle-express", Address = "543 Noodle Place, Hanoi", PhoneNumber = "0903333333", Email = "info@noodleexpress.com", Description = "Asian noodle bar offering quick and tasty meals.", IsActive = true, OpenTime = TimeSpan.FromHours(9), CloseTime = TimeSpan.FromHours(20) },
+                         new Brand { Name = "Seafood Paradise", Slug = "seafood-paradise", Address = "678 Ocean Road, Hanoi", PhoneNumber = "0902222222", Email = "contact@seafoodparadise.com", Description = "Fresh seafood dishes served with traditional flavors.", IsActive = true, OpenTime = TimeSpan.FromHours(10), CloseTime = TimeSpan.FromHours(23) },
+                         new Brand { Name = "Burger House", Slug = "burger-house", Address = "321 Burger Street, Hanoi", PhoneNumber = "0904444444", Email = "support@burgerhouse.com", Description = "Specialty burgers with a range of toppings and sauces.", IsActive = true, OpenTime = TimeSpan.FromHours(10), CloseTime = TimeSpan.FromHours(22) },
+                         new Brand { Name = "Café Delight", Slug = "cafe-Delight", Address = "111 Café Road, Hanoi", PhoneNumber = "0909999999", Email = "info@cafedelight.com", Description = "A cozy café serving coffee, pastries, and light snacks.", IsActive = true, OpenTime = TimeSpan.FromHours(7), CloseTime = TimeSpan.FromHours(20) }
                      );
 
                     // Lưu các thay đổi vào cơ sở dữ liệu
@@ -322,7 +322,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 20,
                             IsActive = true,
                             Description = "Classic pizza with fresh tomatoes, mozzarella, and basil.",
-                            RestaurantId = 1,
+                            BrandId = 1,
                             CategoryId = 1
                         },
                         new Product
@@ -333,7 +333,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 10,
                             IsActive = true,
                             Description = "Juicy cheeseburger with fresh lettuce and tomato.",
-                            RestaurantId = 2,
+                            BrandId = 2,
                             CategoryId = 2
                         },
                         new Product
@@ -344,7 +344,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 0,
                             IsActive = true,
                             Description = "Fresh sushi rolls with tuna, salmon, and avocado.",
-                            RestaurantId = 3,
+                            BrandId = 3,
                             CategoryId = 3
                         },
                         new Product
@@ -355,7 +355,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 15,
                             IsActive = true,
                             Description = "Italian spaghetti in a creamy carbonara sauce.",
-                            RestaurantId = 4,
+                            BrandId = 4,
                             CategoryId = 4
                         },
                         new Product
@@ -366,7 +366,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 30,
                             IsActive = true,
                             Description = "Tender grilled steak served with a side of vegetables.",
-                            RestaurantId = 5,
+                            BrandId = 5,
                             CategoryId = 5
                         },
                         new Product
@@ -377,7 +377,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 5,
                             IsActive = true,
                             Description = "A tasty vegan burger with plant-based ingredients.",
-                            RestaurantId = 6,
+                            BrandId = 6,
                             CategoryId = 2
                         },
                         new Product
@@ -388,7 +388,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 10,
                             IsActive = true,
                             Description = "Stir-fried mixed vegetables with soy sauce.",
-                            RestaurantId = 7,
+                            BrandId = 7,
                             CategoryId = 6
                         },
                         new Product
@@ -399,7 +399,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 20,
                             IsActive = true,
                             Description = "A Spanish dish with rice, seafood, and saffron.",
-                            RestaurantId = 8,
+                            BrandId = 8,
                             CategoryId = 3
                         },
                         new Product
@@ -410,7 +410,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 10,
                             IsActive = true,
                             Description = "A double cheeseburger with extra cheese and bacon.",
-                            RestaurantId = 9,
+                            BrandId = 9,
                             CategoryId = 2
                         },
                         new Product
@@ -421,7 +421,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                             Discount = 0,
                             IsActive = true,
                             Description = "A rich and creamy café mocha with whipped cream.",
-                            RestaurantId = 10,
+                            BrandId = 10,
                             CategoryId = 7
                         }
                     );

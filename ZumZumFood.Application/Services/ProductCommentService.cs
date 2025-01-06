@@ -28,7 +28,7 @@
                 var comment = dataQuery.FirstOrDefault();
                 if (comment == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/product-comment/{id}", null, comment);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/product-comment/{id}", null, comment);
                     return new ResponseObject(404, "Comment not found.", comment);
                 }
                 var result = new ProductCommentDTO
@@ -53,10 +53,10 @@
                 };
                 if (result == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", "/api/product-comment/{id}", null, result);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/product-comment/{id}", null, result);
                     return new ResponseObject(404, "Comment not found.", result);
                 }
-                LogHelper.LogInformation(_logger, "GET", "/api/product-comment/{id}", null, result);
+                LogHelper.LogInformation(_logger, "GET", $"/api/product-comment/{id}", null, result);
                 return new ResponseObject(200, "Query data successfully", result);
             }
             catch (Exception ex)
