@@ -14,6 +14,7 @@
                .AddJwtConfiguration(configuration)
                .AddCacheConfiguration(configuration)
                .AddOauth2Configuration(configuration)
+               .AddRabbitMQConfiguration(configuration)
                .AddTransientServices();
             return services;
         }
@@ -287,5 +288,40 @@
              });
              return services;
          }
+
+        // Cấu hình rabbitMQ
+        public static IServiceCollection AddRabbitMQConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IRabbitService, RabbitService>(sp => {
+                var logger = sp.GetRequiredService<ILogger<RabbitService>>();
+                var rabbitSettingConfigurations = configuration.GetSection(nameof(RabbitSetting)).GetChildren();
+
+                var rabbitSettings = new List<RabbitSetting>();
+                foreach (var rabbitSettingConfiguration in rabbitSettingConfigurations)
+                {
+                    var rabbit = rabbitSettingConfiguration.Get<RabbitSetting>();
+                    if (!rabbitSettings.Contains(rabbit))
+                        rabbitSettings.Add(rabbit);
+                }
+
+                var configHNX = rabbitSettings.FirstOrDefault(e => e.Id.Equals(Constant.HNXSettingId));
+                var configFixReceive = rabbitSettings.FirstOrDefault(e => e.Id.Equals(Constant.FixReceiveSettingId));
+                var factoryHNX = new ConnectionFactory()
+                {
+                    UserName = configHNX.UserName,
+                    Password = configHNX.Password,
+                    HostName = configHNX.HostName,
+                };
+                var factoryFixReceive = new ConnectionFactory()
+                {
+                    UserName = configFixReceive.UserName,
+                    Password = configFixReceive.Password,
+                    HostName = configFixReceive.HostName,
+                };
+
+                return new RabbitService(factoryHNX, factoryFixReceive, logger, configHNX, configFixReceive);
+            });
+            return services;
+        }
     }
 }

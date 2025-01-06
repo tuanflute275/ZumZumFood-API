@@ -27,6 +27,8 @@ global using DinkToPdf;
 global using DinkToPdf.Contracts;
 global using Serilog;
 global using ILogger = Serilog.ILogger;
+global using RabbitMQ.Client;
+global using System.Text;
 
 
 // 6. Thư viện ứng dụng (ZumZumFood)

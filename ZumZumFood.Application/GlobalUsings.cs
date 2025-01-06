@@ -7,6 +7,8 @@ global using System.ComponentModel.DataAnnotations;
 global using System.Net.Mail;
 global using System.Net;
 global using System.Data;
+global using JsonSerializer = System.Text.Json.JsonSerializer;
+
 
 // 2. Thư viện liên quan đến bảo mật và xác thực
 global using Microsoft.IdentityModel.Tokens;
@@ -32,6 +34,9 @@ global using StackExchange.Redis;
 global using AutoMapper;
 global using X.PagedList;
 global using Newtonsoft.Json;
+global using RabbitMQ.Client;
+global using System.Text;
+global using RabbitMQ.Client.Events;
 
 // 7. Thư viện của ứng dụng riêng (ZumZumFood)
 global using ZumZumFood.Application.Abstracts;
@@ -42,4 +47,6 @@ global using ZumZumFood.Application.Models.RequestModel;
 global using ZumZumFood.Application.Utils;
 global using ZumZumFood.Domain.Abstracts;
 global using ZumZumFood.Domain.Entities;
+global using ZumZumFood.Infrastructure.Abstracts;
 global using static ZumZumFood.Application.Utils.Helpers;
+global using ZumZumFood.Infrastructure.Services;

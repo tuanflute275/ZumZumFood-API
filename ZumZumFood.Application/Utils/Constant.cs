@@ -31,6 +31,10 @@
         public const string CART_UPDATE_MINUS = "minus";
         public const string CART_UPDATE_PLUS = "plus";
 
+        // RabbitMQ
+        public const string HNXSettingId = "HNX";
+        public const string FixReceiveSettingId = "FixReceive";
+
         // STATUS
         public const string PENDING = "Pending";
         public const string COMPLETED = "Completed";
