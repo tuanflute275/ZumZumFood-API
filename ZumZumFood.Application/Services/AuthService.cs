@@ -7,19 +7,22 @@
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
+        private readonly IRabbitService _rabbitService;
         public AuthService(
             IUnitOfWork unitOfWork, 
             ILogger<AuthService> logger,
             IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor,
-            IEmailService emailService
+            IEmailService emailService,
+            IRabbitService rabbitService
             )
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
-            _emailService = emailService;   
+            _emailService = emailService;
+            _rabbitService = rabbitService;
         }
 
         public async Task<ResponseObject> LoginAsync(LoginModel model, bool? oauth2 = false)
@@ -382,6 +385,18 @@
 
                 // Log email sent
                 LogHelper.LogInformation(_logger, "Password reset email sent", model.Email);
+
+
+                // Send the reset password request to RabbitMQ (Producer)
+                var isPublished = await _rabbitService.PublishHNX(model.Email);
+                if (!isPublished)
+                {
+                    LogHelper.LogWarning(_logger, "Failed to publish password reset request to RabbitMQ", model.Email);
+                    return new ResponseObject(500, "Failed to process your request, please try again later.");
+                }
+
+                // Log the event of sending request to RabbitMQ
+                LogHelper.LogInformation(_logger, "Password reset request sent to RabbitMQ", model.Email);
 
                 return new ResponseObject(200, "Forgot password successfully. Please check your email!", model);
             }

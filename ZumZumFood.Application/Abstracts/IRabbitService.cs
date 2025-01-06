@@ -2,7 +2,7 @@
 {
     public interface IRabbitService
     {
-        void PublishHNX(string data);
-        void PublishFixReceive(string data);
+        Task<bool> PublishHNX(string data);
+        Task<bool> PublishFixReceive(string data);
     }
 }

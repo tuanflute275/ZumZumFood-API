@@ -1,4 +1,7 @@
-﻿namespace ZumZumFood.Infrastructure.Configuration
+﻿using Microsoft.Extensions.DependencyInjection;
+using ZumZumFood.Application.Services.RabbitMQ;
+
+namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class ServiceCollectionExtensions
     {
@@ -53,6 +56,7 @@
                     tags: new[] { "db", "sql" })
                 .AddUrlGroup(new Uri("http://localhost:8080/api/v1/user/1"), name: "User API")
                 .AddCheck("Custom Check", () => HealthCheckResult.Healthy("All systems operational"));
+
             return services;
         }
 
@@ -292,20 +296,29 @@
         // Cấu hình rabbitMQ
         public static IServiceCollection AddRabbitMQConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IRabbitService, RabbitService>(sp => {
+            services.AddSingleton<IRabbitService, RabbitService>(sp =>
+            {
                 var logger = sp.GetRequiredService<ILogger<RabbitService>>();
-                var rabbitSettingConfigurations = configuration.GetSection(nameof(RabbitSetting)).GetChildren();
+                var rabbitSettings = configuration.GetSection(nameof(RabbitSetting)).Get<List<RabbitSetting>>();
 
-                var rabbitSettings = new List<RabbitSetting>();
-                foreach (var rabbitSettingConfiguration in rabbitSettingConfigurations)
+                // Kiểm tra nếu cấu hình trống hoặc có vấn đề gì đó
+                if (rabbitSettings == null || !rabbitSettings.Any())
                 {
-                    var rabbit = rabbitSettingConfiguration.Get<RabbitSetting>();
-                    if (!rabbitSettings.Contains(rabbit))
-                        rabbitSettings.Add(rabbit);
+                    logger.LogError("RabbitMQ settings not found in configuration.");
+                    throw new InvalidOperationException("RabbitMQ settings are required.");
                 }
 
+                // Lấy cấu hình cho HNX và FixReceive
                 var configHNX = rabbitSettings.FirstOrDefault(e => e.Id.Equals(Constant.HNXSettingId));
                 var configFixReceive = rabbitSettings.FirstOrDefault(e => e.Id.Equals(Constant.FixReceiveSettingId));
+
+                if (configHNX == null || configFixReceive == null)
+                {
+                    logger.LogError("RabbitMQ configuration for HNX or FixReceive not found.");
+                    throw new InvalidOperationException("Required RabbitMQ settings not found.");
+                }
+
+                // Tạo ConnectionFactory cho HNX và FixReceive
                 var factoryHNX = new ConnectionFactory()
                 {
                     UserName = configHNX.UserName,
@@ -319,9 +332,16 @@
                     HostName = configFixReceive.HostName,
                 };
 
+                // Trả về dịch vụ RabbitService với các cài đặt đã cấu hình
                 return new RabbitService(factoryHNX, factoryFixReceive, logger, configHNX, configFixReceive);
             });
+
+            // Đăng ký RabbitMqConsumer và HostedService
+            //services.AddSingleton<RabbitMqConsumer>();
+            //services.AddHostedService<RabbitMqBackgroundService>();
+
             return services;
         }
+
     }
 }
