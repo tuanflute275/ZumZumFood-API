@@ -544,16 +544,11 @@ namespace ZumZumFood.Infrastructure.Configuration
                 if (!appContext.ComboProducts.Any())
                 {
                     appContext.ComboProducts.AddRange(
-                        new Combo { ComboId = 1, Name = "Super Combo 1", Price = new Random().Next(20000, 100000), Description = "A special combo offering a great variety of products.", IsActive = true },
-                        new Combo { ComboId = 2, Name = "Deluxe Combo 2", Price = new Random().Next(20000, 100000), Description = "Premium combo with high-end items.", IsActive = true },
-                        new Combo { ComboId = 3, Name = "Ultimate Combo 3", Price = new Random().Next(20000, 100000), Description = "The ultimate combo for the ultimate experience.", IsActive = true },
-                        new Combo { ComboId = 4, Name = "Classic Combo 4", Price = new Random().Next(20000, 100000), Description = "Classic combo for those who prefer the basics.", IsActive = true },
-                        new Combo { ComboId = 5, Name = "Luxury Combo 5", Price = new Random().Next(20000, 100000), Description = "A luxury combo designed for those who want the best.", IsActive = true },
-                        new Combo { ComboId = 6, Name = "Family Combo 6", Price = new Random().Next(20000, 100000), Description = "Combo designed for a family meal with multiple servings.", IsActive = true },
-                        new Combo { ComboId = 7, Name = "Veggie Combo 7", Price = new Random().Next(20000, 100000), Description = "A healthy and tasty vegetarian combo.", IsActive = true },
-                        new Combo { ComboId = 8, Name = "Quick Meal Combo 8", Price = new Random().Next(20000, 100000), Description = "Fast and satisfying combo for quick meals.", IsActive = true },
-                        new Combo { ComboId = 9, Name = "Student Combo 9", Price = new Random().Next(20000, 100000), Description = "Affordable combo for students on a budget.", IsActive = true },
-                        new Combo { ComboId = 10, Name = "Party Combo 10", Price = new Random().Next(20000, 100000), Description = "Perfect combo for parties with a lot of guests.", IsActive = true }
+                        new ComboProduct
+                        { 
+                            ComboId = 1,
+                            ProductId = 1,
+                        }
                     );
 
                     // Lưu các thay đổi vào cơ sở dữ liệu
