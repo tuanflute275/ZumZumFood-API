@@ -22,42 +22,36 @@
             return await _comboService.GetByIdAsync(id);
         }
 
-        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ResponseObject> Save([FromForm] ComboModel model)
         {
             return await _comboService.SaveAsync(model);
         }
 
-        //[Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ResponseObject> Update(int id, [FromForm] ComboModel model)
         {
             return await _comboService.UpdateAsync(id, model);
         }
 
-        //[Authorize(Roles = "Admin")]
         [HttpPost("soft-delete/{id}")]
         public async Task<ResponseObject> SoftDelete(int id)
         {
             return await _comboService.DeleteFlagAsync(id);
         }
 
-        //[Authorize(Roles = "Admin")]
         [HttpGet("deleted-data")]
         public async Task<ResponseObject> GetDeletedUsers()
         {
             return await _comboService.GetDeletedListAsync();
         }
 
-        //[Authorize(Roles = "Admin")]
         [HttpPost("restore/{id}")]
         public async Task<ResponseObject> RestoreUser(int id)
         {
             return await _comboService.RestoreAsync(id);
         }
 
-        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ResponseObject> Delete(int id)
         {
