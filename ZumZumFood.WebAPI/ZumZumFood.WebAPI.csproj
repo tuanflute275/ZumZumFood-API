@@ -12,7 +12,9 @@
     <Content Remove="Templates\ForgotPasswordMail.cshtml" />
     <Content Remove="Templates\RegisterSuccessMail.cshtml" />
     <Content Remove="wwwroot\uploads\banners\.gitkeep" />
+    <Content Remove="wwwroot\uploads\brands\.gitkeep" />
     <Content Remove="wwwroot\uploads\categories\.gitkeep" />
+    <Content Remove="wwwroot\uploads\combos\.gitkeep" />
     <Content Remove="wwwroot\uploads\productImages\.gitkeep" />
     <Content Remove="wwwroot\uploads\products\.gitkeep" />
     <Content Remove="wwwroot\uploads\users\.gitkeep" />
@@ -46,7 +48,13 @@
     <TypeScriptCompile Include="wwwroot\uploads\banners\.gitkeep">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\uploads\brands\.gitkeep">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\uploads\categories\.gitkeep">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\uploads\combos\.gitkeep">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\uploads\productImages\.gitkeep">

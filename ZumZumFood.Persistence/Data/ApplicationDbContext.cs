@@ -12,11 +12,13 @@
         public DbSet<Log> Logs { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Brand> Restaurants { get; set; }
+        public DbSet<Brand> Brands { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<ProductComment> ProductComments { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Combo> Combos { get; set; }
+        public DbSet<ComboProduct> ComboProducts { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }

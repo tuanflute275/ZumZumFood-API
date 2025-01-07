@@ -1,15 +1,19 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Domain.Entities;
+
+namespace ZumZumFood.Application.Services
 {
     public class BrandService : IBrandService
     {
         IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<BrandService> _logger;
-        public BrandService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<BrandService> logger)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public BrandService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<BrandService> logger, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
@@ -162,6 +166,7 @@
         {
             try
             {
+                var request = _httpContextAccessor.HttpContext?.Request;
                 // Validate data annotations
                 var validationResults = new List<ValidationResult>();
                 var validationContext = new ValidationContext(model, null, null);
@@ -181,12 +186,16 @@
                 brand.PhoneNumber = model.PhoneNumber;
                 brand.Email = model.Email;
                 brand.IsActive = model.IsActive;
-                brand.OpenTime = TimeSpan.Parse(model.OpenTime);
-                brand.CloseTime = TimeSpan.Parse(model.CloseTime);
+                brand.OpenTime = model.OpenTime != null ? TimeSpan.Parse(model.OpenTime) : null;
+                brand.CloseTime = model.CloseTime != null ? TimeSpan.Parse(model.CloseTime) : null;
                 brand.Description = model.Description;
                 brand.CreateBy = Constant.SYSADMIN;
                 brand.CreateDate = DateTime.Now;
-                
+                if (model.ImageFile != null)
+                {
+                    var image = await FileUploadHelper.UploadImageAsync(model.ImageFile, model.OldImage, request.Scheme, request.Host.Value, "brands");
+                    brand.Image = image;
+                }
                 await _unitOfWork.BrandRepository.SaveOrUpdateAsync(brand);
                 await _unitOfWork.SaveChangeAsync();
                 LogHelper.LogInformation(_logger, "POST", "/api/brand", model, brand);
@@ -203,6 +212,7 @@
         {
             try
             {
+                var request = _httpContextAccessor.HttpContext?.Request;
                 // Validate data annotations
                 var validationResults = new List<ValidationResult>();
                 var validationContext = new ValidationContext(model, null, null);
@@ -230,7 +240,11 @@
                 brand.Description = model.Description;
                 brand.UpdateBy = Constant.SYSADMIN;
                 brand.UpdateDate = DateTime.Now;
-              
+                if (model.ImageFile != null)
+                {
+                    var image = await FileUploadHelper.UploadImageAsync(model.ImageFile, model.OldImage, request.Scheme, request.Host.Value, "brands");
+                    brand.Image = image;
+                }
                 await _unitOfWork.BrandRepository.SaveOrUpdateAsync(brand);
                 await _unitOfWork.SaveChangeAsync();
                 LogHelper.LogInformation(_logger, "PUT", "/api/brand", model, brand);

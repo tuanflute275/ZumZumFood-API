@@ -6,63 +6,53 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZumZumFood.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class v2 : Migration
+    public partial class v3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "Percent",
-                table: "Coupons",
-                type: "int",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
-
             migrationBuilder.AddColumn<string>(
                 name: "CreateBy",
-                table: "Coupons",
+                table: "Combos",
                 type: "nvarchar(100)",
                 maxLength: 100,
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "CreateDate",
-                table: "Coupons",
+                table: "Combos",
                 type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "DeleteBy",
-                table: "Coupons",
+                table: "Combos",
                 type: "nvarchar(100)",
                 maxLength: 100,
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DeleteDate",
-                table: "Coupons",
+                table: "Combos",
                 type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "DeleteFlag",
-                table: "Coupons",
+                table: "Combos",
                 type: "bit",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "UpdateBy",
-                table: "Coupons",
+                table: "Combos",
                 type: "nvarchar(100)",
                 maxLength: 100,
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "UpdateDate",
-                table: "Coupons",
+                table: "Combos",
                 type: "datetime2",
                 nullable: true);
         }
@@ -72,39 +62,31 @@ namespace ZumZumFood.Persistence.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "CreateBy",
-                table: "Coupons");
+                table: "Combos");
 
             migrationBuilder.DropColumn(
                 name: "CreateDate",
-                table: "Coupons");
+                table: "Combos");
 
             migrationBuilder.DropColumn(
                 name: "DeleteBy",
-                table: "Coupons");
+                table: "Combos");
 
             migrationBuilder.DropColumn(
                 name: "DeleteDate",
-                table: "Coupons");
+                table: "Combos");
 
             migrationBuilder.DropColumn(
                 name: "DeleteFlag",
-                table: "Coupons");
+                table: "Combos");
 
             migrationBuilder.DropColumn(
                 name: "UpdateBy",
-                table: "Coupons");
+                table: "Combos");
 
             migrationBuilder.DropColumn(
                 name: "UpdateDate",
-                table: "Coupons");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "Percent",
-                table: "Coupons",
-                type: "int",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int");
+                table: "Combos");
         }
     }
 }

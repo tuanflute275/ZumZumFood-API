@@ -293,9 +293,9 @@ namespace ZumZumFood.Infrastructure.Configuration
                 }
 
                 // Khởi tạo dữ liệu cho bảng Restaurants
-                if (!appContext.Restaurants.Any())
+                if (!appContext.Brands.Any())
                 {
-                    appContext.Restaurants.AddRange(
+                    appContext.Brands.AddRange(
                          new Brand { Name = "Pizza Hut", Slug = "pizza-hut", Address = "123 Pizza Street, Hanoi", PhoneNumber = "0901234567", Email = "contact@pizzahut.com", Description = "Famous pizza chain offering a wide variety of pizzas.", IsActive = true, OpenTime = TimeSpan.FromHours(10), CloseTime = TimeSpan.FromHours(22) },
                          new Brand { Name = "Burger King", Slug = "burger-king", Address = "456 Burger Lane, Hanoi", PhoneNumber = "0907654321", Email = "support@burgerking.com", Description = "Fast food chain known for its flame-grilled burgers.", IsActive = true, OpenTime = TimeSpan.FromHours(8), CloseTime = TimeSpan.FromHours(23) },
                          new Brand { Name = "Sushi World", Slug = "sushi-world", Address = "789 Sushi Boulevard, Hanoi", PhoneNumber = "0908765432", Email = "info@sushiworld.com", Description = "Japanese sushi restaurant with fresh seafood.", IsActive = true, OpenTime = TimeSpan.FromHours(11), CloseTime = TimeSpan.FromHours(21) },
@@ -515,6 +515,46 @@ namespace ZumZumFood.Infrastructure.Configuration
                         ProductId = 10
                     }
                 );
+
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    appContext.SaveChanges();
+                }
+
+                // Khởi tạo dữ liệu cho bảng Combo
+                if (!appContext.Combos.Any())
+                {
+                    appContext.Combos.AddRange(
+                        new Combo { ComboId = 1, Name = "Super Combo 1", Price = new Random().Next(20000, 100000), Description = "A special combo offering a great variety of products.", IsActive = true },
+                        new Combo { ComboId = 2, Name = "Deluxe Combo 2", Price = new Random().Next(20000, 100000), Description = "Premium combo with high-end items.", IsActive = true },
+                        new Combo { ComboId = 3, Name = "Ultimate Combo 3", Price = new Random().Next(20000, 100000), Description = "The ultimate combo for the ultimate experience.", IsActive = true },
+                        new Combo { ComboId = 4, Name = "Classic Combo 4", Price = new Random().Next(20000, 100000), Description = "Classic combo for those who prefer the basics.", IsActive = true },
+                        new Combo { ComboId = 5, Name = "Luxury Combo 5", Price = new Random().Next(20000, 100000), Description = "A luxury combo designed for those who want the best.", IsActive = true },
+                        new Combo { ComboId = 6, Name = "Family Combo 6", Price = new Random().Next(20000, 100000), Description = "Combo designed for a family meal with multiple servings.", IsActive = true },
+                        new Combo { ComboId = 7, Name = "Veggie Combo 7", Price = new Random().Next(20000, 100000), Description = "A healthy and tasty vegetarian combo.", IsActive = true },
+                        new Combo { ComboId = 8, Name = "Quick Meal Combo 8", Price = new Random().Next(20000, 100000), Description = "Fast and satisfying combo for quick meals.", IsActive = true },
+                        new Combo { ComboId = 9, Name = "Student Combo 9", Price = new Random().Next(20000, 100000), Description = "Affordable combo for students on a budget.", IsActive = true },
+                        new Combo { ComboId = 10, Name = "Party Combo 10", Price = new Random().Next(20000, 100000), Description = "Perfect combo for parties with a lot of guests.", IsActive = true }
+                    );
+
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    appContext.SaveChanges();
+                }
+
+                // Khởi tạo dữ liệu cho bảng Combo
+                if (!appContext.ComboProducts.Any())
+                {
+                    appContext.ComboProducts.AddRange(
+                        new Combo { ComboId = 1, Name = "Super Combo 1", Price = new Random().Next(20000, 100000), Description = "A special combo offering a great variety of products.", IsActive = true },
+                        new Combo { ComboId = 2, Name = "Deluxe Combo 2", Price = new Random().Next(20000, 100000), Description = "Premium combo with high-end items.", IsActive = true },
+                        new Combo { ComboId = 3, Name = "Ultimate Combo 3", Price = new Random().Next(20000, 100000), Description = "The ultimate combo for the ultimate experience.", IsActive = true },
+                        new Combo { ComboId = 4, Name = "Classic Combo 4", Price = new Random().Next(20000, 100000), Description = "Classic combo for those who prefer the basics.", IsActive = true },
+                        new Combo { ComboId = 5, Name = "Luxury Combo 5", Price = new Random().Next(20000, 100000), Description = "A luxury combo designed for those who want the best.", IsActive = true },
+                        new Combo { ComboId = 6, Name = "Family Combo 6", Price = new Random().Next(20000, 100000), Description = "Combo designed for a family meal with multiple servings.", IsActive = true },
+                        new Combo { ComboId = 7, Name = "Veggie Combo 7", Price = new Random().Next(20000, 100000), Description = "A healthy and tasty vegetarian combo.", IsActive = true },
+                        new Combo { ComboId = 8, Name = "Quick Meal Combo 8", Price = new Random().Next(20000, 100000), Description = "Fast and satisfying combo for quick meals.", IsActive = true },
+                        new Combo { ComboId = 9, Name = "Student Combo 9", Price = new Random().Next(20000, 100000), Description = "Affordable combo for students on a budget.", IsActive = true },
+                        new Combo { ComboId = 10, Name = "Party Combo 10", Price = new Random().Next(20000, 100000), Description = "Perfect combo for parties with a lot of guests.", IsActive = true }
+                    );
 
                     // Lưu các thay đổi vào cơ sở dữ liệu
                     appContext.SaveChanges();

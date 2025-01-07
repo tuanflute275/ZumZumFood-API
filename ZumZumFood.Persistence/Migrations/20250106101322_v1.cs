@@ -12,6 +12,57 @@ namespace ZumZumFood.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Banners",
+                columns: table => new
+                {
+                    BannerId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteFlag = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Banners", x => x.BannerId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Brands",
+                columns: table => new
+                {
+                    BrandId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 150, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    OpenTime = table.Column<TimeSpan>(type: "time", nullable: true),
+                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: true),
+                    CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteFlag = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brands", x => x.BrandId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -42,9 +93,16 @@ namespace ZumZumFood.Persistence.Migrations
                     CouponId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(255)", nullable: false),
-                    Percent = table.Column<int>(type: "int", nullable: true),
+                    Percent = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "ntext", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteFlag = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,34 +154,6 @@ namespace ZumZumFood.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Parameters", x => x.ParameterId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Restaurants",
-                columns: table => new
-                {
-                    RestaurantId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 150, nullable: false),
-                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(200)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(200)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(500)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    OpenTime = table.Column<TimeSpan>(type: "time", nullable: true),
-                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: true),
-                    CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteFlag = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Restaurants", x => x.RestaurantId);
                 });
 
             migrationBuilder.CreateTable(
@@ -185,6 +215,46 @@ namespace ZumZumFood.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 150, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BrandId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteFlag = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
+                    table.ForeignKey(
+                        name: "FK_Products_Brands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brands",
+                        principalColumn: "BrandId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "couponConditions",
                 columns: table => new
                 {
@@ -208,75 +278,6 @@ namespace ZumZumFood.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Banners",
-                columns: table => new
-                {
-                    BannerId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    BannerType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    RestaurantId = table.Column<int>(type: "int", nullable: true),
-                    CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteFlag = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Banners", x => x.BannerId);
-                    table.ForeignKey(
-                        name: "FK_Banners_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 150, nullable: false),
-                    Slug = table.Column<string>(type: "nvarchar(200)", nullable: true),
-                    Image = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RestaurantId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteFlag = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
-                    table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Products_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -293,17 +294,11 @@ namespace ZumZumFood.Persistence.Migrations
                     OrderQuantity = table.Column<int>(type: "int", nullable: true),
                     OrderAmount = table.Column<double>(type: "float", nullable: true),
                     OrderNote = table.Column<string>(type: "ntext", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    RestaurantId = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.OrderId);
-                    table.ForeignKey(
-                        name: "FK_Orders_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
-                        principalColumn: "RestaurantId");
                     table.ForeignKey(
                         name: "FK_Orders_Users_UserId",
                         column: x => x.UserId,
@@ -584,11 +579,6 @@ namespace ZumZumFood.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Banners_RestaurantId",
-                table: "Banners",
-                column: "RestaurantId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Carts_ProductId",
                 table: "Carts",
                 column: "ProductId");
@@ -624,11 +614,6 @@ namespace ZumZumFood.Persistence.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_RestaurantId",
-                table: "Orders",
-                column: "RestaurantId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
                 table: "Orders",
                 column: "UserId");
@@ -654,14 +639,14 @@ namespace ZumZumFood.Persistence.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_BrandId",
+                table: "Products",
+                column: "BrandId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_RestaurantId",
-                table: "Products",
-                column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tokens_UserId",
@@ -747,10 +732,10 @@ namespace ZumZumFood.Persistence.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Brands");
 
             migrationBuilder.DropTable(
-                name: "Restaurants");
+                name: "Categories");
         }
     }
 }

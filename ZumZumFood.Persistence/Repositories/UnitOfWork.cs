@@ -19,6 +19,8 @@
         IProductDetailRepository _productDetailRepository;
         IProductImageRepository _productImageRepository;
         IProductCommentRepository _productCommentRepository;
+        IComboRepository _comboRepository;
+        IComboProductRepository _comboProductRepository;
         IWishlistRepository _wishlistRepository;
         ICartRepository _cartRepository;
         IOrderRepository _orderRepository;
@@ -47,6 +49,8 @@
         public IProductDetailRepository ProductDetailRepository => _productDetailRepository ??= new ProductDetailRepository(_context);
         public IProductImageRepository ProductImageRepository => _productImageRepository ??= new ProductImageRepository(_context);
         public IProductCommentRepository ProductCommentRepository => _productCommentRepository ??= new ProductCommentRepository(_context);
+        public IComboRepository ComboRepository => _comboRepository ??= new ComboRepository(_context);
+        public IComboProductRepository ComboProductRepository => _comboProductRepository ??= new ComboProductRepository(_context);
         public IWishlistRepository WishlistRepository => _wishlistRepository ??= new WishlistRepository(_context);
         public ICartRepository CartRepository => _cartRepository ??= new CartRepository(_context);
         public IOrderRepository OrderRepository => _orderRepository ??= new OrderRepository(_context);

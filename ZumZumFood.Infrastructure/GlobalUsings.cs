@@ -45,3 +45,4 @@ global using ZumZumFood.Infrastructure.Services;
 global using ZumZumFood.Persistence.Data;
 global using ZumZumFood.Persistence.Dapper;
 global using ZumZumFood.Persistence.Repositories;
+global using ZumZumFood.Application.Services.RabbitMQ;

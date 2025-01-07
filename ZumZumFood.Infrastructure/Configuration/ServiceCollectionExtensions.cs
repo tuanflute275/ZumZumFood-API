@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using ZumZumFood.Application.Services.RabbitMQ;
-
-namespace ZumZumFood.Infrastructure.Configuration
+﻿namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class ServiceCollectionExtensions
     {
@@ -17,7 +14,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                .AddJwtConfiguration(configuration)
                .AddCacheConfiguration(configuration)
                .AddOauth2Configuration(configuration)
-               .AddRabbitMQConfiguration(configuration)
+               //.AddRabbitMQConfiguration(configuration)
                .AddTransientServices();
             return services;
         }
@@ -43,6 +40,7 @@ namespace ZumZumFood.Infrastructure.Configuration
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<ICouponService, CouponService>();
             services.AddTransient<ICouponConditionService, CouponConditionService>();
+            services.AddTransient<IComboService, ComboService>();
         }
 
         // Add singleton
@@ -203,17 +201,6 @@ namespace ZumZumFood.Infrastructure.Configuration
                 options.SaveTokens = true;
                 options.Scope.Add("email");
                 options.Scope.Add("profile");
-                options.Events = new OAuthEvents
-                {
-                    OnRedirectToAuthorizationEndpoint = context =>
-                    {
-                        // Ngăn redirect và trả về phản hồi JSON
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        context.Response.ContentType = "application/json";
-                        var result = JsonSerializer.Serialize(new { statusCode = 401, message = "Unauthorized. Please log in with Google." });
-                        return context.Response.WriteAsync(result);
-                    }
-                };
             })
             .AddFacebook(options =>
             {

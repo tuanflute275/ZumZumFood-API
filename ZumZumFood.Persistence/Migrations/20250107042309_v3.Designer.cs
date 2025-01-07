@@ -12,8 +12,8 @@ using ZumZumFood.Persistence.Data;
 namespace ZumZumFood.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250104040711_v1")]
-    partial class v1
+    [Migration("20250107042309_v3")]
+    partial class v3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,11 +32,6 @@ namespace ZumZumFood.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BannerId"));
-
-                    b.Property<string>("BannerType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CreateBy")
                         .HasMaxLength(100)
@@ -63,9 +58,6 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("RestaurantId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -79,9 +71,76 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.HasKey("BannerId");
 
-                    b.HasIndex("RestaurantId");
-
                     b.ToTable("Banners");
+                });
+
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.Brand", b =>
+                {
+                    b.Property<int>("BrandId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandId"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<TimeSpan?>("CloseTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("CreateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("DeleteFlag")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<TimeSpan?>("OpenTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("BrandId");
+
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Cart", b =>
@@ -172,6 +231,83 @@ namespace ZumZumFood.Persistence.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.Combo", b =>
+                {
+                    b.Property<int>("ComboId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComboId"));
+
+                    b.Property<string>("CreateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("DeleteFlag")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UpdateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ComboId");
+
+                    b.ToTable("Combos");
+                });
+
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.ComboProduct", b =>
+                {
+                    b.Property<int>("ComboProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComboProductId"));
+
+                    b.Property<int>("ComboId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ComboProductId");
+
+                    b.HasIndex("ComboId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ComboProducts");
+                });
+
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Coupon", b =>
                 {
                     b.Property<int>("CouponId")
@@ -184,14 +320,38 @@ namespace ZumZumFood.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("CreateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("DeleteFlag")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Description")
                         .HasColumnType("ntext");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("Percent")
+                    b.Property<int>("Percent")
                         .HasColumnType("int");
+
+                    b.Property<string>("UpdateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("CouponId");
 
@@ -356,15 +516,10 @@ namespace ZumZumFood.Persistence.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("OrderStatusPayment");
 
-                    b.Property<int?>("RestaurantId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("OrderId");
-
-                    b.HasIndex("RestaurantId");
 
                     b.HasIndex("UserId");
 
@@ -481,7 +636,16 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
+                    b.Property<int>("AverageDeliveryTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ComboId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreateBy")
@@ -514,15 +678,30 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsBestSeller")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNew")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("OrderCount")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("RestaurantId")
+                    b.Property<decimal?>("Rating")
+                        .HasColumnType("decimal(3,2)");
+
+                    b.Property<int>("ReviewsCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Slug")
@@ -537,9 +716,11 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.HasKey("ProductId");
 
+                    b.HasIndex("BrandId");
+
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("RestaurantId");
+                    b.HasIndex("ComboId");
 
                     b.ToTable("Products");
                 });
@@ -723,72 +904,6 @@ namespace ZumZumFood.Persistence.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
-                });
-
-            modelBuilder.Entity("ZumZumFood.Domain.Entities.Restaurant", b =>
-                {
-                    b.Property<int>("RestaurantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RestaurantId"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<TimeSpan?>("CloseTime")
-                        .HasColumnType("time");
-
-                    b.Property<string>("CreateBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeleteBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("DeleteFlag")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<TimeSpan?>("OpenTime")
-                        .HasColumnType("time");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Slug")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UpdateBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("RestaurantId");
-
-                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Role", b =>
@@ -1082,15 +1197,6 @@ namespace ZumZumFood.Persistence.Migrations
                     b.ToTable("Wishlists");
                 });
 
-            modelBuilder.Entity("ZumZumFood.Domain.Entities.Banner", b =>
-                {
-                    b.HasOne("ZumZumFood.Domain.Entities.Restaurant", "Restaurant")
-                        .WithMany("Banners")
-                        .HasForeignKey("RestaurantId");
-
-                    b.Navigation("Restaurant");
-                });
-
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Cart", b =>
                 {
                     b.HasOne("ZumZumFood.Domain.Entities.Product", "Product")
@@ -1108,6 +1214,25 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.ComboProduct", b =>
+                {
+                    b.HasOne("ZumZumFood.Domain.Entities.Combo", "Combo")
+                        .WithMany()
+                        .HasForeignKey("ComboId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ZumZumFood.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Combo");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.CouponCondition", b =>
@@ -1142,10 +1267,6 @@ namespace ZumZumFood.Persistence.Migrations
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("ZumZumFood.Domain.Entities.Restaurant", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("RestaurantId");
-
                     b.HasOne("ZumZumFood.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -1176,21 +1297,25 @@ namespace ZumZumFood.Persistence.Migrations
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Product", b =>
                 {
+                    b.HasOne("ZumZumFood.Domain.Entities.Brand", "Brand")
+                        .WithMany("Products")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("ZumZumFood.Domain.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ZumZumFood.Domain.Entities.Restaurant", "Restaurant")
+                    b.HasOne("ZumZumFood.Domain.Entities.Combo", null)
                         .WithMany("Products")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ComboId");
+
+                    b.Navigation("Brand");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.ProductComment", b =>
@@ -1283,7 +1408,17 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.Brand", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.Combo", b =>
                 {
                     b.Navigation("Products");
                 });
@@ -1309,15 +1444,6 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Navigation("ProductDetails");
 
                     b.Navigation("ProductImages");
-                });
-
-            modelBuilder.Entity("ZumZumFood.Domain.Entities.Restaurant", b =>
-                {
-                    b.Navigation("Banners");
-
-                    b.Navigation("Orders");
-
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Role", b =>
