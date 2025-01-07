@@ -236,6 +236,7 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComboId"));
 
+<<<<<<< HEAD
                     b.Property<string>("CreateBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -253,6 +254,8 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<bool?>("DeleteFlag")
                         .HasColumnType("bit");
 
+=======
+>>>>>>> 849ba548d295ccdb4e4f26637330e715d866e993
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -270,6 +273,7 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+<<<<<<< HEAD
                     b.Property<string>("UpdateBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -277,6 +281,8 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
+=======
+>>>>>>> 849ba548d295ccdb4e4f26637330e715d866e993
                     b.HasKey("ComboId");
 
                     b.ToTable("Combos");
