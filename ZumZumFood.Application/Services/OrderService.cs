@@ -109,7 +109,13 @@
                                           .Include(x => x.OrderDetails)
                                           .ThenInclude(d => d.ComboProduct)
                                           .ThenInclude(co => co.Product)
+                                          .ThenInclude(p => p.Brand)
+                                          .Include(x => x.OrderDetails)
+                                          .ThenInclude(d => d.ComboProduct)
+                                          .ThenInclude(co => co.Product)
+                                          .ThenInclude(p => p.Category)
                 );
+
                 var order = dataQuery.FirstOrDefault();
                 if (order == null)
                 {
@@ -173,7 +179,7 @@
                             DeleteDate = detail.Product.DeleteDate.HasValue ? detail.Product.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                             DeleteFlag = detail.Product.DeleteFlag,
                         } : null,
-                        Combo = detail.ComboProduct.Combo != null ? new ComboDTO
+                        Combo = detail.ComboProduct != null ? new ComboDTO
                         {
                             ComboId = detail.ComboProduct.Combo.ComboId,
                             Name = detail.ComboProduct.Combo.Name,
@@ -188,7 +194,28 @@
                             DeleteBy = detail.ComboProduct.Combo.DeleteBy,
                             DeleteDate = detail.ComboProduct.Combo.DeleteDate.HasValue ? detail.ComboProduct.Combo.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                             DeleteFlag = detail.ComboProduct.Combo.DeleteFlag,
-
+                            Products = order.OrderDetails.Where(d => d.ComboProduct?.Product != null).Select(d => new ProductDTO
+                            {
+                                ProductId = d.ComboProduct.Product.ProductId,
+                                Name = d.ComboProduct.Product.Name,
+                                Slug = d.ComboProduct.Product.Slug,
+                                Image = d.ComboProduct.Product.Image,
+                                Price = d.ComboProduct.Product.Price,
+                                Discount = d.ComboProduct.Product.Discount,
+                                IsActive = d.ComboProduct.Product.IsActive,
+                                Description = d.ComboProduct.Product.Description,
+                                BrandId = d.ComboProduct.Product.BrandId,
+                                BrandName = d.ComboProduct.Product.Brand.Name,
+                                CategoryId = d.ComboProduct.Product.CategoryId,
+                                CategoryName = d.ComboProduct.Product.Category.Name,
+                                CreateBy = d.ComboProduct.Product.CreateBy,
+                                CreateDate = d.ComboProduct.Product.CreateDate.HasValue ? d.ComboProduct.Product.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                                UpdateBy = d.ComboProduct.Product.UpdateBy,
+                                UpdateDate = d.ComboProduct.Product.UpdateDate.HasValue ? d.ComboProduct.Product.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                                DeleteBy = d.ComboProduct.Product.DeleteBy,
+                                DeleteDate = d.ComboProduct.Product.DeleteDate.HasValue ? d.ComboProduct.Product.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                                DeleteFlag = d.ComboProduct.Product.DeleteFlag,
+                            }).ToList()
                         } : null
                     }).ToList()
                 };
@@ -210,17 +237,17 @@
 
         public async Task<ResponseObject> SaveAsync(OrderModel model)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public async Task<ResponseObject> UpdateAsync(int id, OrderUpdateModel model)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public async Task<ResponseObject> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
