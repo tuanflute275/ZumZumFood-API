@@ -236,7 +236,6 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComboId"));
 
-<<<<<<< HEAD
                     b.Property<string>("CreateBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -254,8 +253,6 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<bool?>("DeleteFlag")
                         .HasColumnType("bit");
 
-=======
->>>>>>> 849ba548d295ccdb4e4f26637330e715d866e993
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -273,7 +270,6 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-<<<<<<< HEAD
                     b.Property<string>("UpdateBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -281,8 +277,6 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-=======
->>>>>>> 849ba548d295ccdb4e4f26637330e715d866e993
                     b.HasKey("ComboId");
 
                     b.ToTable("Combos");
@@ -538,11 +532,18 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
 
+                    b.Property<int?>("ComboId")
+                        .HasColumnType("int")
+                        .HasColumnName("ComboId");
+
+                    b.Property<string>("OrderDetailType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int")
                         .HasColumnName("OrderId");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("ProductId");
 
@@ -555,6 +556,8 @@ namespace ZumZumFood.Persistence.Migrations
                         .HasColumnName("TotalMoney");
 
                     b.HasKey("OrderDetailId");
+
+                    b.HasIndex("ComboId");
 
                     b.HasIndex("OrderId");
 
@@ -1281,6 +1284,10 @@ namespace ZumZumFood.Persistence.Migrations
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.OrderDetail", b =>
                 {
+                    b.HasOne("ZumZumFood.Domain.Entities.Combo", "Combo")
+                        .WithMany()
+                        .HasForeignKey("ComboId");
+
                     b.HasOne("ZumZumFood.Domain.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
@@ -1289,9 +1296,9 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.HasOne("ZumZumFood.Domain.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Combo");
 
                     b.Navigation("Order");
 

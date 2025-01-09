@@ -12,8 +12,8 @@ using ZumZumFood.Persistence.Data;
 namespace ZumZumFood.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250107042309_v3")]
-    partial class v3
+    [Migration("20250109120006_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -535,11 +535,18 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
 
+                    b.Property<int?>("ComboId")
+                        .HasColumnType("int")
+                        .HasColumnName("ComboId");
+
+                    b.Property<string>("OrderDetailType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int")
                         .HasColumnName("OrderId");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("ProductId");
 
@@ -552,6 +559,8 @@ namespace ZumZumFood.Persistence.Migrations
                         .HasColumnName("TotalMoney");
 
                     b.HasKey("OrderDetailId");
+
+                    b.HasIndex("ComboId");
 
                     b.HasIndex("OrderId");
 
@@ -1278,6 +1287,10 @@ namespace ZumZumFood.Persistence.Migrations
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.OrderDetail", b =>
                 {
+                    b.HasOne("ZumZumFood.Domain.Entities.Combo", "Combo")
+                        .WithMany()
+                        .HasForeignKey("ComboId");
+
                     b.HasOne("ZumZumFood.Domain.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
@@ -1286,9 +1299,9 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.HasOne("ZumZumFood.Domain.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Combo");
 
                     b.Navigation("Order");
 

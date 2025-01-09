@@ -524,16 +524,16 @@ namespace ZumZumFood.Infrastructure.Configuration
                 if (!appContext.Combos.Any())
                 {
                     appContext.Combos.AddRange(
-                        new Combo { ComboId = 1, Name = "Super Combo 1", Price = new Random().Next(20000, 100000), Description = "A special combo offering a great variety of products.", IsActive = true },
-                        new Combo { ComboId = 2, Name = "Deluxe Combo 2", Price = new Random().Next(20000, 100000), Description = "Premium combo with high-end items.", IsActive = true },
-                        new Combo { ComboId = 3, Name = "Ultimate Combo 3", Price = new Random().Next(20000, 100000), Description = "The ultimate combo for the ultimate experience.", IsActive = true },
-                        new Combo { ComboId = 4, Name = "Classic Combo 4", Price = new Random().Next(20000, 100000), Description = "Classic combo for those who prefer the basics.", IsActive = true },
-                        new Combo { ComboId = 5, Name = "Luxury Combo 5", Price = new Random().Next(20000, 100000), Description = "A luxury combo designed for those who want the best.", IsActive = true },
-                        new Combo { ComboId = 6, Name = "Family Combo 6", Price = new Random().Next(20000, 100000), Description = "Combo designed for a family meal with multiple servings.", IsActive = true },
-                        new Combo { ComboId = 7, Name = "Veggie Combo 7", Price = new Random().Next(20000, 100000), Description = "A healthy and tasty vegetarian combo.", IsActive = true },
-                        new Combo { ComboId = 8, Name = "Quick Meal Combo 8", Price = new Random().Next(20000, 100000), Description = "Fast and satisfying combo for quick meals.", IsActive = true },
-                        new Combo { ComboId = 9, Name = "Student Combo 9", Price = new Random().Next(20000, 100000), Description = "Affordable combo for students on a budget.", IsActive = true },
-                        new Combo { ComboId = 10, Name = "Party Combo 10", Price = new Random().Next(20000, 100000), Description = "Perfect combo for parties with a lot of guests.", IsActive = true }
+                        new Combo { Name = "Super Combo 1", Price = new Random().Next(20000, 100000), Description = "A special combo offering a great variety of products.", IsActive = true },
+                        new Combo { Name = "Deluxe Combo 2", Price = new Random().Next(20000, 100000), Description = "Premium combo with high-end items.", IsActive = true },
+                        new Combo { Name = "Ultimate Combo 3", Price = new Random().Next(20000, 100000), Description = "The ultimate combo for the ultimate experience.", IsActive = true },
+                        new Combo { Name = "Classic Combo 4", Price = new Random().Next(20000, 100000), Description = "Classic combo for those who prefer the basics.", IsActive = true },
+                        new Combo { Name = "Luxury Combo 5", Price = new Random().Next(20000, 100000), Description = "A luxury combo designed for those who want the best.", IsActive = true },
+                        new Combo { Name = "Family Combo 6", Price = new Random().Next(20000, 100000), Description = "Combo designed for a family meal with multiple servings.", IsActive = true },
+                        new Combo { Name = "Veggie Combo 7", Price = new Random().Next(20000, 100000), Description = "A healthy and tasty vegetarian combo.", IsActive = true },
+                        new Combo { Name = "Quick Meal Combo 8", Price = new Random().Next(20000, 100000), Description = "Fast and satisfying combo for quick meals.", IsActive = true },
+                        new Combo { Name = "Student Combo 9", Price = new Random().Next(20000, 100000), Description = "Affordable combo for students on a budget.", IsActive = true },
+                        new Combo { Name = "Party Combo 10", Price = new Random().Next(20000, 100000), Description = "Perfect combo for parties with a lot of guests.", IsActive = true }
                     );
 
                     // Lưu các thay đổi vào cơ sở dữ liệu
@@ -550,6 +550,236 @@ namespace ZumZumFood.Infrastructure.Configuration
                             ProductId = 1,
                         }
                     );
+
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    appContext.SaveChanges();
+                }
+
+                // Khởi tạo dữ liệu cho bảng Order
+                if (!appContext.Orders.Any())
+                {
+                    appContext.Orders.AddRange(
+                        new Domain.Entities.Order
+                        {
+                            UserId = 2,
+                            OrderFullName = "John Doe",
+                            OrderAddress = "123 Main St, Hanoi",
+                            OrderPhoneNumber = "0901234567",
+                            OrderEmail = "john.doe@example.com",
+                            OrderDate = DateTime.Now,
+                            OrderPaymentMethods = "Credit Card",
+                            OrderStatusPayment = "Paid",
+                            OrderStatus = 1,
+                            OrderQuantity = 3,
+                            OrderAmount = 300,
+                            OrderNote = "Please deliver between 9 AM and 12 PM"
+                        }, 
+                        new Domain.Entities.Order
+                        {
+                            UserId = 3,
+                            OrderFullName = "Maria Johnson",
+                            OrderAddress = "456 High St, Hanoi",
+                            OrderPhoneNumber = "0909876543",
+                            OrderEmail = "maria.johnson@example.com",
+                            OrderDate = DateTime.Now,
+                            OrderPaymentMethods = "PayPal",
+                            OrderStatusPayment = "Pending",
+                            OrderStatus = 0,
+                            OrderQuantity = 1,
+                            OrderAmount = 120,
+                            OrderNote = "Leave the package at the front door"
+                        },
+                        new Domain.Entities.Order
+                        {
+                            UserId = 4,
+                            OrderFullName = "Alex Smith",
+                            OrderAddress = "789 Maple Ave, Hanoi",
+                            OrderPhoneNumber = "0907654321",
+                            OrderEmail = "alex.smith@example.com",
+                            OrderDate = DateTime.Now,
+                            OrderPaymentMethods = "Cash on Delivery",
+                            OrderStatusPayment = "Unpaid",
+                            OrderStatus = 0,
+                            OrderQuantity = 2,
+                            OrderAmount = 220,
+                            OrderNote = "Call before delivery"
+                        },
+                        new Domain.Entities.Order
+                        {
+                            UserId = 5,
+                            OrderFullName = "Sophia Brown",
+                            OrderAddress = "321 Oak Ln, Hanoi",
+                            OrderPhoneNumber = "0901122334",
+                            OrderEmail = "sophia.brown@example.com",
+                            OrderDate = DateTime.Now,
+                            OrderPaymentMethods = "Credit Card",
+                            OrderStatusPayment = "Paid",
+                            OrderStatus = 1,
+                            OrderQuantity = 5,
+                            OrderAmount = 500,
+                            OrderNote = "Delivery in the evening only"
+                        },
+                        new Domain.Entities.Order
+                        {
+                            UserId = 6,
+                            OrderFullName = "Michael Taylor",
+                            OrderAddress = "654 Pine Rd, Hanoi",
+                            OrderPhoneNumber = "0905566778",
+                            OrderEmail = "michael.taylor@example.com",
+                            OrderDate = DateTime.Now,
+                            OrderPaymentMethods = "Bank Transfer",
+                            OrderStatusPayment = "Paid",
+                            OrderStatus = 1,
+                            OrderQuantity = 4,
+                            OrderAmount = 450,
+                            OrderNote = "Include a receipt in the package"
+                        },
+                         new Domain.Entities.Order
+                         {
+                             UserId = 6,
+                             OrderFullName = "Min",
+                             OrderAddress = "654 Pine Rd, Hanoi",
+                             OrderPhoneNumber = "0905566778",
+                             OrderEmail = "min.cute@example.com",
+                             OrderDate = DateTime.Now,
+                             OrderPaymentMethods = "Bank Transfer",
+                             OrderStatusPayment = "Paid",
+                             OrderStatus = 1,
+                             OrderQuantity = 4,
+                             OrderAmount = 450,
+                             OrderNote = "Include a receipt in the package"
+                         }
+                    );
+
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    appContext.SaveChanges();
+                }
+
+                // Khởi tạo dữ liệu cho bảng OrderDetails
+                if (!appContext.OrderDetails.Any())
+                {
+                    appContext.OrderDetails.AddRange(
+                     // Đơn hàng chỉ có Product (OrderId = 1)
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 1,
+                         Quantity = 2,
+                         TotalMoney = 200,
+                         ProductId = 1,
+                         ComboId = null,
+                         OrderDetailType = "Product"
+                     },
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 1,
+                         Quantity = 1,
+                         TotalMoney = 100,
+                         ProductId = 2,
+                         ComboId = null,
+                         OrderDetailType = "Product"
+                     },
+
+                     // Đơn hàng chỉ có Combo (OrderId = 2)
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 2,
+                         Quantity = 1,
+                         TotalMoney = 300,
+                         ProductId = null,
+                         ComboId = 1,
+                         OrderDetailType = "Combo"
+                     },
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 2,
+                         Quantity = 2,
+                         TotalMoney = 600,
+                         ProductId = null,
+                         ComboId = 2,
+                         OrderDetailType = "Combo"
+                     },
+
+                     // Đơn hàng có cả Product và Combo (OrderId = 3)
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 3,
+                         Quantity = 1,
+                         TotalMoney = 150,
+                         ProductId = 3,
+                         ComboId = null,
+                         OrderDetailType = "Product"
+                     },
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 3,
+                         Quantity = 1,
+                         TotalMoney = 500,
+                         ProductId = null,
+                         ComboId = 3,
+                         OrderDetailType = "Combo"
+                     },
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 3,
+                         Quantity = 3,
+                         TotalMoney = 450,
+                         ProductId = 4,
+                         ComboId = null,
+                         OrderDetailType = "Product"
+                     },
+
+                     // Đơn hàng chỉ có Product (OrderId = 4)
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 4,
+                         Quantity = 4,
+                         TotalMoney = 800,
+                         ProductId = 5,
+                         ComboId = null,
+                         OrderDetailType = "Product"
+                     },
+
+                     // Đơn hàng chỉ có Combo (OrderId = 5)
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 5,
+                         Quantity = 1,
+                         TotalMoney = 400,
+                         ProductId = null,
+                         ComboId = 4,
+                         OrderDetailType = "Combo"
+                     },
+
+                     // Đơn hàng có cả Product và Combo (OrderId = 6)
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 6,
+                         Quantity = 1,
+                         TotalMoney = 200,
+                         ProductId = 6,
+                         ComboId = null,
+                         OrderDetailType = "Product"
+                     },
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 6,
+                         Quantity = 1,
+                         TotalMoney = 500,
+                         ProductId = null,
+                         ComboId = 5,
+                         OrderDetailType = "Combo"
+                     },
+                     new Domain.Entities.OrderDetail
+                     {
+                         OrderId = 6,
+                         Quantity = 2,
+                         TotalMoney = 400,
+                         ProductId = 7,
+                         ComboId = null,
+                         OrderDetailType = "Product"
+                     }
+                 );
+
 
                     // Lưu các thay đổi vào cơ sở dữ liệu
                     appContext.SaveChanges();
