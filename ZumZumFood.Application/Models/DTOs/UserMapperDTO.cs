@@ -10,7 +10,7 @@
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public int? Gender { get; set; } = 0; // 0 Chưa xác định, 1 Nam , 2 Nữ
-        public DateTime? DateOfBirth { get; set; }           // Ngày sinh
+        public string? DateOfBirth { get; set; }           // Ngày sinh
         public string? PlaceOfBirth { get; set; }            // Nơi sinh
         public string? Nationality { get; set; } 
     }

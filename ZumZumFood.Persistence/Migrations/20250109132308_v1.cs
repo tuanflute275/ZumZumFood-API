@@ -623,17 +623,17 @@ namespace ZumZumFood.Persistence.Migrations
                     TotalMoney = table.Column<double>(type: "float", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: true),
-                    ComboId = table.Column<int>(type: "int", nullable: true),
+                    ComboProductId = table.Column<int>(type: "int", nullable: true),
                     OrderDetailType = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderDetails", x => x.OrderDetailId);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Combos_ComboId",
-                        column: x => x.ComboId,
-                        principalTable: "Combos",
-                        principalColumn: "ComboId");
+                        name: "FK_OrderDetails_ComboProducts_ComboProductId",
+                        column: x => x.ComboProductId,
+                        principalTable: "ComboProducts",
+                        principalColumn: "ComboProductId");
                     table.ForeignKey(
                         name: "FK_OrderDetails_Orders_OrderId",
                         column: x => x.OrderId,
@@ -683,9 +683,9 @@ namespace ZumZumFood.Persistence.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_ComboId",
+                name: "IX_OrderDetails_ComboProductId",
                 table: "OrderDetails",
-                column: "ComboId");
+                column: "ComboProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_OrderId",
@@ -773,9 +773,6 @@ namespace ZumZumFood.Persistence.Migrations
                 name: "Carts");
 
             migrationBuilder.DropTable(
-                name: "ComboProducts");
-
-            migrationBuilder.DropTable(
                 name: "couponConditions");
 
             migrationBuilder.DropTable(
@@ -810,6 +807,9 @@ namespace ZumZumFood.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Coupons");
+
+            migrationBuilder.DropTable(
+                name: "ComboProducts");
 
             migrationBuilder.DropTable(
                 name: "Orders");

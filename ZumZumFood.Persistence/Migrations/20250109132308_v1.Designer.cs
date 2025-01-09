@@ -12,7 +12,7 @@ using ZumZumFood.Persistence.Data;
 namespace ZumZumFood.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250109120006_v1")]
+    [Migration("20250109132308_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -535,9 +535,9 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
 
-                    b.Property<int?>("ComboId")
+                    b.Property<int?>("ComboProductId")
                         .HasColumnType("int")
-                        .HasColumnName("ComboId");
+                        .HasColumnName("ComboProductId");
 
                     b.Property<string>("OrderDetailType")
                         .HasColumnType("nvarchar(max)");
@@ -560,7 +560,7 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.HasKey("OrderDetailId");
 
-                    b.HasIndex("ComboId");
+                    b.HasIndex("ComboProductId");
 
                     b.HasIndex("OrderId");
 
@@ -1287,9 +1287,9 @@ namespace ZumZumFood.Persistence.Migrations
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.OrderDetail", b =>
                 {
-                    b.HasOne("ZumZumFood.Domain.Entities.Combo", "Combo")
+                    b.HasOne("ZumZumFood.Domain.Entities.ComboProduct", "ComboProduct")
                         .WithMany()
-                        .HasForeignKey("ComboId");
+                        .HasForeignKey("ComboProductId");
 
                     b.HasOne("ZumZumFood.Domain.Entities.Order", "Order")
                         .WithMany("OrderDetails")
@@ -1301,7 +1301,7 @@ namespace ZumZumFood.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ProductId");
 
-                    b.Navigation("Combo");
+                    b.Navigation("ComboProduct");
 
                     b.Navigation("Order");
 

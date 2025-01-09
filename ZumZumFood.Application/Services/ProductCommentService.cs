@@ -47,7 +47,7 @@
                         PhoneNumber = comment.User.PhoneNumber,
                         Address = comment.User.Address,
                         PlaceOfBirth = comment.User.PlaceOfBirth,
-                        DateOfBirth = comment.User.DateOfBirth,
+                        DateOfBirth = comment.User.DateOfBirth.HasValue ? comment.User.DateOfBirth.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                         Nationality = comment.User.Nationality,
                     }
                 };

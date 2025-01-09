@@ -69,13 +69,13 @@
                             query = query.OrderByDescending(x => x.Name);
                             break;
                         case "Price-ASC":
-                            query = query.OrderBy(x => x.Name);
+                            query = query.OrderBy(x => x.Price);
                             break;
                         case "Price-DESC":
                             query = query.OrderByDescending(x => x.Price);
                             break;
                         default:
-                            query = query.OrderByDescending(x => x.Price);
+                            query = query.OrderByDescending(x => x.ProductId);
                             break;
                     }
                 }
@@ -179,7 +179,7 @@
                             Gender = c.User.Gender,
                             Address = c.User.Address,
                             PlaceOfBirth = c.User.PlaceOfBirth,
-                            DateOfBirth = c.User.DateOfBirth,
+                            DateOfBirth = c.User.DateOfBirth.HasValue ? c.User.DateOfBirth.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                             Nationality = c.User.Nationality,
                             PhoneNumber = c.User.PhoneNumber
                         }

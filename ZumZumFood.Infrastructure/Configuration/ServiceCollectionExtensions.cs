@@ -41,6 +41,7 @@
             services.AddTransient<ICouponService, CouponService>();
             services.AddTransient<ICouponConditionService, CouponConditionService>();
             services.AddTransient<IComboService, ComboService>();
+            services.AddTransient<IOrderService, OrderService>();
         }
 
         // Add singleton

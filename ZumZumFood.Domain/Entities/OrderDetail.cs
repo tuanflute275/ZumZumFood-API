@@ -28,11 +28,11 @@
         [JsonIgnore]
         public virtual Product Product { get; set; }
 
-        [Column("ComboId")]
-        public int? ComboId { get; set; }
-        [ForeignKey("ComboId")]
+        [Column("ComboProductId")]
+        public int? ComboProductId { get; set; }
+        [ForeignKey("ComboProductId")]
         [JsonIgnore]
-        public virtual Combo Combo { get; set; }
+        public virtual ComboProduct ComboProduct { get; set; }
 
         public string? OrderDetailType { get; set; } // Combo, Product
     }

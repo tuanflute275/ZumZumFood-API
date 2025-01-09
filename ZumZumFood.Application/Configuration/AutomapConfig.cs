@@ -147,6 +147,8 @@
                   !string.IsNullOrEmpty(src.UpdateDate) ? DateTime.Parse(src.UpdateDate) : (DateTime?)null))
               .ForMember(dest => dest.DeleteDate, opt => opt.MapFrom(src =>
                   !string.IsNullOrEmpty(src.DeleteDate) ? DateTime.Parse(src.DeleteDate) : (DateTime?)null));
+
+            CreateMap<Domain.Entities.Order, OrderDTO>().ReverseMap();
         }
     }
 }

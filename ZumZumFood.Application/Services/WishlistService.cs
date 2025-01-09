@@ -50,7 +50,7 @@
                        Gender = wishlist.User.Gender,
                        PlaceOfBirth = wishlist.User.PlaceOfBirth,
                        PhoneNumber = wishlist.User.PhoneNumber,
-                       DateOfBirth = wishlist.User.DateOfBirth,
+                       DateOfBirth = wishlist.User.DateOfBirth.HasValue ? wishlist.User.DateOfBirth.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                        Nationality = wishlist.User.Nationality,
                    },
                     Products = data.Select(p => new ProductDTO

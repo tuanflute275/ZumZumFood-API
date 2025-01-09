@@ -50,7 +50,7 @@
                         Gender = cart.User.Gender,
                         PlaceOfBirth = cart.User.PlaceOfBirth,
                         PhoneNumber = cart.User.PhoneNumber,
-                        DateOfBirth = cart.User.DateOfBirth,
+                        DateOfBirth = cart.User.DateOfBirth.HasValue ? cart.User.DateOfBirth.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                         Nationality = cart.User.Nationality,
                     },
                     Products = data.Select(p => new ProductDTO

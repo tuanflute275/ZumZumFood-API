@@ -544,13 +544,32 @@ namespace ZumZumFood.Infrastructure.Configuration
                 if (!appContext.ComboProducts.Any())
                 {
                     appContext.ComboProducts.AddRange(
-                        new ComboProduct
-                        { 
-                            ComboId = 1,
-                            ProductId = 1,
-                        }
-                    );
+                     // Combo 1
+                     new ComboProduct { ComboId = 1, ProductId = 1 },
+                     new ComboProduct { ComboId = 1, ProductId = 2 },
+                     new ComboProduct { ComboId = 1, ProductId = 3 },
 
+                     // Combo 2
+                     new ComboProduct { ComboId = 2, ProductId = 4 },
+                     new ComboProduct { ComboId = 2, ProductId = 5 },
+                     new ComboProduct { ComboId = 2, ProductId = 6 },
+
+                     // Combo 3
+                     new ComboProduct { ComboId = 3, ProductId = 7 },
+                     new ComboProduct { ComboId = 3, ProductId = 8 },
+
+                     // Combo 4
+                     new ComboProduct { ComboId = 4, ProductId = 1 },
+                     new ComboProduct { ComboId = 4, ProductId = 9 },
+
+                     // Combo 5
+                     new ComboProduct { ComboId = 5, ProductId = 2 },
+                     new ComboProduct { ComboId = 5, ProductId = 10 },
+
+                     // Combo 6
+                     new ComboProduct { ComboId = 6, ProductId = 3 },
+                     new ComboProduct { ComboId = 6, ProductId = 4 }
+                 );
                     // Lưu các thay đổi vào cơ sở dữ liệu
                     appContext.SaveChanges();
                 }
@@ -659,126 +678,126 @@ namespace ZumZumFood.Infrastructure.Configuration
                 if (!appContext.OrderDetails.Any())
                 {
                     appContext.OrderDetails.AddRange(
-                     // Đơn hàng chỉ có Product (OrderId = 1)
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 1,
-                         Quantity = 2,
-                         TotalMoney = 200,
-                         ProductId = 1,
-                         ComboId = null,
-                         OrderDetailType = "Product"
-                     },
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 1,
-                         Quantity = 1,
-                         TotalMoney = 100,
-                         ProductId = 2,
-                         ComboId = null,
-                         OrderDetailType = "Product"
-                     },
+                         // Đơn hàng chỉ có Product (OrderId = 1)
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 1,
+                             Quantity = 2,
+                             TotalMoney = 200,
+                             ProductId = 1,
+                             ComboProductId = null,
+                             OrderDetailType = "Product"
+                         },
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 1,
+                             Quantity = 1,
+                             TotalMoney = 100,
+                             ProductId = 2,
+                             ComboProductId = null,
+                             OrderDetailType = "Product"
+                         },
 
-                     // Đơn hàng chỉ có Combo (OrderId = 2)
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 2,
-                         Quantity = 1,
-                         TotalMoney = 300,
-                         ProductId = null,
-                         ComboId = 1,
-                         OrderDetailType = "Combo"
-                     },
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 2,
-                         Quantity = 2,
-                         TotalMoney = 600,
-                         ProductId = null,
-                         ComboId = 2,
-                         OrderDetailType = "Combo"
-                     },
+                         // Đơn hàng chỉ có Combo (OrderId = 2)
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 2,
+                             Quantity = 1,
+                             TotalMoney = 300,
+                             ProductId = null,
+                             ComboProductId = 1,
+                             OrderDetailType = "Combo"
+                         },
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 2,
+                             Quantity = 2,
+                             TotalMoney = 600,
+                             ProductId = null,
+                             ComboProductId = 2,
+                             OrderDetailType = "Combo"
+                         },
 
-                     // Đơn hàng có cả Product và Combo (OrderId = 3)
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 3,
-                         Quantity = 1,
-                         TotalMoney = 150,
-                         ProductId = 3,
-                         ComboId = null,
-                         OrderDetailType = "Product"
-                     },
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 3,
-                         Quantity = 1,
-                         TotalMoney = 500,
-                         ProductId = null,
-                         ComboId = 3,
-                         OrderDetailType = "Combo"
-                     },
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 3,
-                         Quantity = 3,
-                         TotalMoney = 450,
-                         ProductId = 4,
-                         ComboId = null,
-                         OrderDetailType = "Product"
-                     },
+                         // Đơn hàng có cả Product và Combo (OrderId = 3)
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 3,
+                             Quantity = 1,
+                             TotalMoney = 150,
+                             ProductId = 3,
+                             ComboProductId = null,
+                             OrderDetailType = "Product"
+                         },
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 3,
+                             Quantity = 1,
+                             TotalMoney = 500,
+                             ProductId = null,
+                             ComboProductId = 3,
+                             OrderDetailType = "Combo"
+                         },
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 3,
+                             Quantity = 3,
+                             TotalMoney = 450,
+                             ProductId = 4,
+                             ComboProductId = null,
+                             OrderDetailType = "Product"
+                         },
 
-                     // Đơn hàng chỉ có Product (OrderId = 4)
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 4,
-                         Quantity = 4,
-                         TotalMoney = 800,
-                         ProductId = 5,
-                         ComboId = null,
-                         OrderDetailType = "Product"
-                     },
+                         // Đơn hàng chỉ có Product (OrderId = 4)
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 4,
+                             Quantity = 4,
+                             TotalMoney = 800,
+                             ProductId = 5,
+                             ComboProductId = null,
+                             OrderDetailType = "Product"
+                         },
 
-                     // Đơn hàng chỉ có Combo (OrderId = 5)
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 5,
-                         Quantity = 1,
-                         TotalMoney = 400,
-                         ProductId = null,
-                         ComboId = 4,
-                         OrderDetailType = "Combo"
-                     },
+                         // Đơn hàng chỉ có Combo (OrderId = 5)
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 5,
+                             Quantity = 1,
+                             TotalMoney = 400,
+                             ProductId = null,
+                             ComboProductId = 4,
+                             OrderDetailType = "Combo"
+                         },
 
-                     // Đơn hàng có cả Product và Combo (OrderId = 6)
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 6,
-                         Quantity = 1,
-                         TotalMoney = 200,
-                         ProductId = 6,
-                         ComboId = null,
-                         OrderDetailType = "Product"
-                     },
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 6,
-                         Quantity = 1,
-                         TotalMoney = 500,
-                         ProductId = null,
-                         ComboId = 5,
-                         OrderDetailType = "Combo"
-                     },
-                     new Domain.Entities.OrderDetail
-                     {
-                         OrderId = 6,
-                         Quantity = 2,
-                         TotalMoney = 400,
-                         ProductId = 7,
-                         ComboId = null,
-                         OrderDetailType = "Product"
-                     }
-                 );
+                         // Đơn hàng có cả Product và Combo (OrderId = 6)
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 6,
+                             Quantity = 1,
+                             TotalMoney = 200,
+                             ProductId = 6,
+                             ComboProductId = null,
+                             OrderDetailType = "Product"
+                         },
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 6,
+                             Quantity = 1,
+                             TotalMoney = 500,
+                             ProductId = null,
+                             ComboProductId = 5,
+                             OrderDetailType = "Combo"
+                         },
+                         new Domain.Entities.OrderDetail
+                         {
+                             OrderId = 6,
+                             Quantity = 2,
+                             TotalMoney = 400,
+                             ProductId = 7,
+                             ComboProductId = null,
+                             OrderDetailType = "Product"
+                         }
+                    );
 
 
                     // Lưu các thay đổi vào cơ sở dữ liệu
