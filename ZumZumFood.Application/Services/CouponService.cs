@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RazorEngine.Compilation.ImpromptuInterface;
-
 namespace ZumZumFood.Application.Services
 {
     public class CouponService : ICouponService
@@ -109,7 +107,6 @@ namespace ZumZumFood.Application.Services
                 {
                     CouponId = coupon.CouponId,
                     Code = coupon.Code,
-                    Percent = coupon.Percent,
                     Description = coupon.Description,
                     IsActive = coupon.IsActive,
                     CreateBy = coupon.CreateBy,
@@ -160,9 +157,10 @@ namespace ZumZumFood.Application.Services
                 // mapper data
                 var coupon = new Coupon();
                 coupon.Code = model.Code;
-                coupon.Percent = model.Percent;
                 coupon.Description = model.Description;
                 coupon.IsActive = model.IsActive;
+                coupon.Scope = model.Scope;
+                coupon.ScopeId = model.ScopeId;
                 coupon.CreateBy = Constant.SYSADMIN;
                 coupon.CreateDate = DateTime.Now;
                 await _unitOfWork.CouponRepository.SaveOrUpdateAsync(coupon);
@@ -200,9 +198,10 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(400, $"Coupon not found with id {id}", null);
                 }
                 coupon.Code = model.Code;
-                coupon.Percent = model.Percent;
                 coupon.Description = model.Description;
                 coupon.IsActive = model.IsActive;
+                coupon.Scope = model.Scope;
+                coupon.ScopeId = model.ScopeId;
                 coupon.UpdateBy = Constant.SYSADMIN;
                 coupon.UpdateDate = DateTime.Now;
                 await _unitOfWork.CouponRepository.SaveOrUpdateAsync(coupon);
@@ -246,56 +245,117 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> CalculateCouponValueAsync(string couponCode, double totalAmount)
+        public async Task<ResponseObject> CalculateCouponValueAsync(string couponCode, double? totalAmount, 
+            string? currentCategory, int? currentQuantity, string? currentUserType, 
+            string? currentPaymentMethod, string? currentBrand, int? currentOrderCount)
         {
-            if (!couponCode.Contains("minimum_amount") && !couponCode.Contains("applicable_date"))
-            {
-                return new ResponseObject(400, "Coupon code must contain 'minimum_amount' or 'applicable_date'.");
-            }
-
             var dataQuery = await _unitOfWork.CouponRepository.GetAllAsync(x => x.Code.Contains(couponCode));
             var coupon = dataQuery.FirstOrDefault();
+            if (coupon == null)
+            {
+                return new ResponseObject(400, "Coupon not found", totalAmount);
+            }
+
             if (!coupon.IsActive)
             {
-                return new ResponseObject(400, "Coupon is not active");
+                return new ResponseObject(400, "Coupon is not active", totalAmount);
             }
-            double discount = await CalculateDiscountAsync(coupon, totalAmount);
-            double finalAmount = totalAmount - discount;
+            double discount = await CalculateDiscountAsync(coupon, (double)totalAmount, currentCategory, (int)currentQuantity,
+                currentUserType, currentPaymentMethod, currentBrand, (int)currentOrderCount);
+            double finalAmount = (double)totalAmount - discount;
             return new ResponseObject(200, "Caculate successfully", finalAmount);
         }
 
-        private async Task<double> CalculateDiscountAsync(Coupon coupon, double totalAmount)
+        private async Task<double> CalculateDiscountAsync(Coupon coupon, double totalAmount, 
+            string currentCategory, int currentQuantity, string currentUserType, 
+            string currentPaymentMethod, string currentBrand, int currentOrderCount)
         {
             var conditions = await _unitOfWork.CouponConditionRepository.GetAllAsync(x => x.CouponId == coupon.CouponId);
             double discount = 0.0;
+            double updatedTotalAmount = totalAmount;
             foreach (var condition in conditions)
             {
+                // EAV (Entity - Attribute - Value)
                 string attribute = condition.Attribute;
-                string operator_ = condition.Operator;
+                string _operator = condition.Operator;
                 string value = condition.Value;
-
                 double percentDiscount = Convert.ToDouble(condition.DiscountAmount);
 
                 // Điều kiện "minimum_amount"
-                if (attribute == "minimum_amount")
+                if (totalAmount > 0 && attribute.Equals("minimum_amount", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (operator_ == ">" && totalAmount > Convert.ToDouble(value))
+                    if (_operator.Equals(">") && updatedTotalAmount > Convert.ToDouble(value))
                     {
-                        discount += totalAmount * percentDiscount / 100;
+                        discount += updatedTotalAmount * percentDiscount / 100;
                     }
-                }
-
+                } 
                 // Điều kiện "applicable_date"
-                else if (attribute == "applicable_date")
+                else if (attribute.Equals("applicable_date", StringComparison.OrdinalIgnoreCase))
                 {
-                    DateTime applicableDate = DateTime.Parse(value);
-                    DateTime currentDate = DateTime.Now;
-                    if (operator_.Equals("BETWEEN", StringComparison.OrdinalIgnoreCase) && currentDate.Date == applicableDate.Date)
+                    if (_operator.Equals("BETWEEN", StringComparison.OrdinalIgnoreCase))
                     {
-                        discount += totalAmount * percentDiscount / 100;
+                        var dateRange = value.Split('|');
+                        DateTime startDate = DateTime.Parse(dateRange[0]);
+                        DateTime endDate = DateTime.Parse(dateRange[1]);
+                        DateTime currentDate = DateTime.Now;
+
+                        if (currentDate >= startDate && currentDate <= endDate)
+                        {
+                            discount += updatedTotalAmount * percentDiscount / 100;
+                        }
                     }
                 }
+                // Điều kiện "category"
+                else if (currentCategory != null && attribute.Equals("category", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (_operator.Equals("=") && currentCategory.Equals(value, StringComparison.OrdinalIgnoreCase))
+                    {
+                        discount += updatedTotalAmount * percentDiscount / 100;
+                    }
+                }
+                // Điều kiện "quantity"
+                else if (currentQuantity > 0 && attribute.Equals("quantity", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (_operator.Equals(">=") && currentQuantity >= Convert.ToInt32(value))
+                    {
+                        discount += updatedTotalAmount * percentDiscount / 100;
+                    }
+                }
+                // Điều kiện "user_type"
+                else if (currentUserType != null && attribute.Equals("user_type", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (_operator.Equals("=") && currentUserType.Equals(value, StringComparison.OrdinalIgnoreCase))
+                    {
+                        discount += updatedTotalAmount * percentDiscount / 100;
+                    }
+                }
+                // Điều kiện "payment_method"
+                else if (currentPaymentMethod != null && attribute.Equals("payment_method", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (_operator.Equals("=") && currentPaymentMethod.Equals(value, StringComparison.OrdinalIgnoreCase))
+                    {
+                        discount += updatedTotalAmount * percentDiscount / 100;
+                    }
+                }
+                // Điều kiện "brand"
+                else if (currentBrand != null && attribute.Equals("brand", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (_operator.Equals("=") && currentBrand.Equals(value, StringComparison.OrdinalIgnoreCase))
+                    {
+                        discount += updatedTotalAmount * percentDiscount / 100;
+                    }
+                }
+                // Điều kiện "order_count"
+                else if (currentOrderCount > 0 && attribute.Equals("order_count", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (_operator.Equals("=") && currentOrderCount == Convert.ToInt32(value))
+                    {
+                        discount += updatedTotalAmount * percentDiscount / 100;
+                    }
+                }
+                
                 // Các điều kiện khác có thể bổ sung tại đây
+                updatedTotalAmount = updatedTotalAmount - discount;
             }
 
             return discount;

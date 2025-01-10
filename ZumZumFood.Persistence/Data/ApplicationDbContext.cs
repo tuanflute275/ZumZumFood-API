@@ -25,8 +25,6 @@
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<CouponCondition> CouponConditions { get; set; }
-        public DbSet<CouponOrder> CouponOrder { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

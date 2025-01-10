@@ -803,6 +803,236 @@ namespace ZumZumFood.Infrastructure.Configuration
                     // Lưu các thay đổi vào cơ sở dữ liệu
                     appContext.SaveChanges();
                 }
+
+                // Khởi tạo dữ liệu cho bảng Coupon
+                if (!appContext.Coupons.Any())
+                {
+                    appContext.Coupons.AddRange(
+                         new Coupon
+                         {
+                             Code = "VIETNAMVODICH",
+                             IsActive = true,
+                             Scope = "System",
+                             ScopeId = null,
+                             Description = "Việt Nam vô địch"
+                         },
+                         new Coupon
+                         {
+                             Code = "WOMAN",
+                             IsActive = true,
+                             Scope = "System",
+                             ScopeId = null,
+                             Description = "8-3 Woman day"
+                         }
+                    );
+
+
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    appContext.SaveChanges();
+                }
+
+                // Khởi tạo dữ liệu cho bảng CouponConditions
+                if (!appContext.CouponConditions.Any())
+                {
+                    appContext.CouponConditions.AddRange(
+                         // 1. Giảm giá dựa trên số tiền tối thiểu (minimum_amount)
+                         new CouponCondition
+                         {
+                             CouponId = 1,
+                             Attribute = "minimum_amount",
+                             Operator = ">",
+                             Value = "100",
+                             DiscountAmount = 10  // Giảm 10% nếu đơn hàng trên 100
+                         },
+
+                          // 2. Giảm giá theo ngày áp dụng (applicable_date)
+                          new CouponCondition
+                          {
+                              CouponId = 2,
+                              Attribute = "applicable_date",
+                              Operator = "=",
+                              Value = "2024-12-25", // Giáng sinh
+                              DiscountAmount = 15 // Giảm 15%
+                          },
+                          new CouponCondition
+                          {
+                              CouponId = 1,
+                              Attribute = "applicable_date",
+                              Operator = "BETWEEN",
+                              Value = "2024-12-20|2024-12-31", // Từ 20/12 đến 31/12
+                              DiscountAmount = 20
+                          },
+
+                          // 3. Giảm giá theo danh mục sản phẩm (category)
+                          new CouponCondition
+                          {
+                              CouponId = 2,
+                              Attribute = "category",
+                              Operator = "=",
+                              Value = "Pizza", // Áp dụng cho danh mục 'food'
+                              DiscountAmount = 5 // Giảm 5%
+                          },
+
+                          //4.Giảm giá theo số lượng sản phẩm(quantity)
+                          new CouponCondition
+                          {
+                              CouponId = 1,
+                              Attribute = "quantity",
+                              Operator = ">=",
+                              Value = "3", // Mua từ 3 sản phẩm trở lên
+                              DiscountAmount = 10 // Giảm 10%
+                          },
+
+
+                          // 5. Giảm giá theo người dùng (user_type)
+                          new CouponCondition
+                          {
+                              CouponId = 1,
+                              Attribute = "user_type",
+                              Operator = "=",
+                              Value = "new_user", // Áp dụng cho khách hàng mới
+                              DiscountAmount = 20 // Giảm 20%
+                          },
+
+                          // 6. Giảm giá theo phương thức thanh toán (payment_method)
+                          new CouponCondition
+                          {
+                              CouponId = 2,
+                              Attribute = "payment_method",
+                              Operator = "=",
+                              Value = "credit_card", // Áp dụng khi thanh toán qua thẻ tín dụng
+                              DiscountAmount = 5 // Giảm 5%
+                          },
+
+
+                          // 7. Giảm giá theo thương hiệu sản phẩm (brand)
+                          new CouponCondition
+                          {
+                              CouponId = 1,
+                              Attribute = "brand",
+                              Operator = "=",
+                              Value = "Apple", // Áp dụng cho thương hiệu Apple
+                              DiscountAmount = 15 // Giảm 15%
+                          },
+
+                          // 8. Giảm giá theo lần mua hàng (order_count)
+                          new CouponCondition
+                          {
+                              CouponId = 2,
+                              Attribute = "order_count",
+                              Operator = "=",
+                              Value = "1", // Áp dụng cho đơn hàng đầu tiên
+                              DiscountAmount = 30 // Giảm 30%
+                          },
+
+                          // 9. Giảm giá theo tổng giá trị giỏ hàng trước khi giảm giá (total_amount)
+                          new CouponCondition
+                          {
+                              CouponId = 2,
+                              Attribute = "total_amount",
+                              Operator = ">",
+                              Value = "1000", // Áp dụng khi tổng đơn hàng trên 1000
+                              DiscountAmount = 50 // Giảm 50%
+                          }
+                    );
+
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    appContext.SaveChanges();
+                }
+
+                // Khởi tạo dữ liệu cho bảng Cart
+                if (!appContext.Carts.Any())
+                {
+                    appContext.Carts.AddRange(
+                       new Cart
+                       {
+                           UserId = 2,
+                           ProductId = 1, 
+                           ComboProductId = null,
+                           Quantity = 2, 
+                           TotalAmount = 40
+                       },
+                       new Cart
+                       {
+                           UserId = 2,
+                           ProductId = null,
+                           ComboProductId = 1,
+                           Quantity = 1,
+                           TotalAmount = 90041
+                       },
+                        new Cart
+                        {
+                            UserId = 3,
+                            ProductId = null,
+                            ComboProductId = 1,
+                            Quantity = 1,
+                            TotalAmount = 90041
+                        },
+                        new Cart
+                        {
+                            UserId = 4,
+                            ProductId = 1,
+                            ComboProductId = null,
+                            Quantity = 1,
+                            TotalAmount = 90041
+                        }
+                    );
+
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    appContext.SaveChanges();
+                }
+
+                // Khởi tạo dữ liệu cho bảng Wishlists
+                if (!appContext.Wishlists.Any())
+                {
+                    appContext.Wishlists.AddRange(
+                       new Wishlist
+                       {
+                           UserId = 2,
+                           ProductId = 1,
+                           ComboProductId = null
+                       },
+                        new Wishlist
+                        {
+                            UserId = 2,
+                            ProductId = null,
+                            ComboProductId = 1
+                        },
+                        new Wishlist
+                        {
+                            UserId = 3,
+                            ProductId = 2,
+                            ComboProductId = null
+                        },
+                        new Wishlist
+                        {
+                            UserId = 4,
+                            ProductId = 3,
+                            ComboProductId = null
+                        },
+                        new Wishlist
+                        {
+                            UserId = 5,
+                            ProductId = 8,
+                            ComboProductId = null
+                        },
+                        new Wishlist
+                        {
+                            UserId = 5,
+                            ProductId = 2,
+                            ComboProductId = null
+                        },
+                        new Wishlist
+                        {
+                            UserId = 5,
+                            ProductId = 6,
+                            ComboProductId = null
+                        }
+                    );
+
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    appContext.SaveChanges();
+                }
             }
         }
     }

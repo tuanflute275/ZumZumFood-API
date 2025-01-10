@@ -1,4 +1,4 @@
-﻿namespace ZumZumFood.Domain.Entities
+﻿ namespace ZumZumFood.Domain.Entities
 {
     [Table("Coupons")]
     public class Coupon : BaseEntity
@@ -11,15 +11,19 @@
         [Required]
         public string Code { get; set; }
 
-        [Range(0, 100)]
-        public int Percent { get; set; } = 0;
-
         [Column(TypeName = "ntext")]
         public string? Description { get; set; }
 
         [Column]
         public bool IsActive { get; set; } = true;  // Trạng thái kích hoạt 
-        public virtual ICollection<CouponOrder> CouponOrders { get; set; } = new List<CouponOrder>();
+
+        [Column(TypeName = "nvarchar(50)")]
+        [Required]
+        public string Scope { get; set; } = "System"; // Brand || Store // Giá trị mặc định là toàn hệ thống
+
+        [Column]
+        public int? ScopeId { get; set; } // ID của thương hiệu (brandId) nếu không phải toàn hệ thống
+
         public virtual ICollection<CouponCondition> CouponConditions { get; set; } = new List<CouponCondition>();
     }
 }

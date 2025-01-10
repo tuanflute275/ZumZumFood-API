@@ -7,6 +7,8 @@
         Task<ResponseObject> SaveAsync(CouponModel model);
         Task<ResponseObject> UpdateAsync(int id, CouponModel model);
         Task<ResponseObject> DeleteAsync(int id);
-        Task<ResponseObject> CalculateCouponValueAsync(string couponCode, double totalAmount);
+        Task<ResponseObject> CalculateCouponValueAsync(string couponCode, double? totalAmount,
+            string? currentCategory, int? currentQuantity, string? currentUserType,
+            string? currentPaymentMethod, string? currentBrand, int? currentOrderCount);
     }
 }

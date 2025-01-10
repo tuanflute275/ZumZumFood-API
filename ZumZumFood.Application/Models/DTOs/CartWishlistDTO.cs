@@ -5,5 +5,6 @@
         public int WishlistId { get; set; }
         public UserMapperDTO Users { get; set; }
         public List<ProductDTO> Products { get; set; } = new List<ProductDTO>();
+        public List<ComboDTO> Combos { get; set; } = new List<ComboDTO>();
     }
 }

@@ -149,7 +149,11 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ComboProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("ComboProductId");
+
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("ProductId");
 
@@ -166,6 +170,8 @@ namespace ZumZumFood.Persistence.Migrations
                         .HasColumnName("UserId");
 
                     b.HasKey("CartId");
+
+                    b.HasIndex("ComboProductId");
 
                     b.HasIndex("ProductId");
 
@@ -340,7 +346,11 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Percent")
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("ScopeId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdateBy")
@@ -387,29 +397,6 @@ namespace ZumZumFood.Persistence.Migrations
                     b.HasIndex("CouponId");
 
                     b.ToTable("couponConditions");
-                });
-
-            modelBuilder.Entity("ZumZumFood.Domain.Entities.CouponOrder", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CouponId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CouponId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("CouponOrders");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Log", b =>
@@ -1162,6 +1149,10 @@ namespace ZumZumFood.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WishlistId"));
 
+                    b.Property<int?>("ComboProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("ComboProductId");
+
                     b.Property<string>("CreateBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -1179,7 +1170,7 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<bool?>("DeleteFlag")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("ProductId");
 
@@ -1196,6 +1187,8 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.HasKey("WishlistId");
 
+                    b.HasIndex("ComboProductId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
@@ -1205,17 +1198,21 @@ namespace ZumZumFood.Persistence.Migrations
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Cart", b =>
                 {
+                    b.HasOne("ZumZumFood.Domain.Entities.ComboProduct", "ComboProduct")
+                        .WithMany()
+                        .HasForeignKey("ComboProductId");
+
                     b.HasOne("ZumZumFood.Domain.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("ZumZumFood.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("ComboProduct");
 
                     b.Navigation("Product");
 
@@ -1250,25 +1247,6 @@ namespace ZumZumFood.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Coupon");
-                });
-
-            modelBuilder.Entity("ZumZumFood.Domain.Entities.CouponOrder", b =>
-                {
-                    b.HasOne("ZumZumFood.Domain.Entities.Coupon", "Coupon")
-                        .WithMany("CouponOrders")
-                        .HasForeignKey("CouponId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ZumZumFood.Domain.Entities.Order", "Order")
-                        .WithMany("CouponOrders")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Coupon");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Order", b =>
@@ -1401,17 +1379,21 @@ namespace ZumZumFood.Persistence.Migrations
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Wishlist", b =>
                 {
+                    b.HasOne("ZumZumFood.Domain.Entities.ComboProduct", "ComboProduct")
+                        .WithMany()
+                        .HasForeignKey("ComboProductId");
+
                     b.HasOne("ZumZumFood.Domain.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("ZumZumFood.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("ComboProduct");
 
                     b.Navigation("Product");
 
@@ -1436,14 +1418,10 @@ namespace ZumZumFood.Persistence.Migrations
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Coupon", b =>
                 {
                     b.Navigation("CouponConditions");
-
-                    b.Navigation("CouponOrders");
                 });
 
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Order", b =>
                 {
-                    b.Navigation("CouponOrders");
-
                     b.Navigation("OrderDetails");
                 });
 

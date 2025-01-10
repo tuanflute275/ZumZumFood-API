@@ -237,17 +237,147 @@
 
         public async Task<ResponseObject> SaveAsync(OrderModel model)
         {
-            return null;
+            try
+            {
+                // Validate data annotations
+                var validationResults = new List<ValidationResult>();
+                var validationContext = new ValidationContext(model, null, null);
+
+                if (!Validator.TryValidateObject(model, validationContext, validationResults, true))
+                {
+                    var errorMessages = string.Join("; ", validationResults.Select(vr => vr.ErrorMessage));
+                    return new ResponseObject(400, "Validation error", errorMessages);
+                }
+                // end validate
+
+                // save order
+                var order = new Domain.Entities.Order();
+                order.UserId = model.UserId;
+                order.OrderFullName = model.OrderFullName;
+                order.OrderPhoneNumber = model.OrderPhoneNumber;
+                order.OrderAddress = model.OrderAddress;
+                order.OrderEmail = model.OrderEmail;
+                order.OrderQuantity = model.OrderQuantity;
+                order.OrderAmount = model.OrderAmount;
+                order.OrderNote = model.OrderNote;
+                order.OrderPaymentMethods = model.OrderPaymentMethods;
+                order.OrderStatusPayment = model.OrderStatusPayment;
+                order.OrderStatus = Constant.DEFAULT_STATUS_ORDER;
+                await _unitOfWork.OrderRepository.SaveOrUpdateAsync(order);
+
+                // save order detail
+                var orderId = order.OrderId;
+                order.OrderAmount = 1;
+                order.OrderQuantity = 1;
+                var carts = await _unitOfWork.CartRepository.GetAllAsync(x => x.UserId == model.UserId);
+                foreach (var item in carts)
+                {
+                    OrderDetail detail = new OrderDetail();
+                    detail.OrderId = orderId;
+                    detail.Quantity = item.Quantity;
+                    if(item.ProductId != null)
+                    {
+                        detail.ProductId = item.ProductId;
+                        var proCheck = await _unitOfWork.ProductRepository.GetByIdAsync((int)item.ProductId);
+                        detail.TotalMoney = Convert.ToDouble(item.Quantity * (proCheck.Discount > 0 ? proCheck.Discount : proCheck.Price));
+                    }
+                    if (item.ComboProductId != null) 
+                    {
+                        detail.ComboProductId = item.ComboProductId;
+                        var dataQuery = await _unitOfWork.ComboProductRepository.GetAllAsync(
+                            expression: x => x.ComboId == item.ComboProductId,
+                           include: query => query.Include(x => x.Combo)
+                           );
+                        var comboCheck = dataQuery.FirstOrDefault();
+                        detail.TotalMoney = item.Quantity * comboCheck.Combo.Price;
+                    }
+                    await _unitOfWork.OrderDetailRepository.SaveOrUpdateAsync(detail);
+                }
+
+                await _unitOfWork.SaveChangeAsync();
+                LogHelper.LogInformation(_logger, "POST", "/api/order", model, order);
+                return new ResponseObject(200, "Create data successfully", null);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError(_logger, ex, "POST", $"/api/order", model);
+                return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
+            }
         }
 
         public async Task<ResponseObject> UpdateAsync(int id, OrderUpdateModel model)
         {
-            return null;
+            try
+            {
+                // Validate data annotations
+                var validationResults = new List<ValidationResult>();
+                var validationContext = new ValidationContext(model, null, null);
+
+                if (!Validator.TryValidateObject(model, validationContext, validationResults, true))
+                {
+                    var errorMessages = string.Join("; ", validationResults.Select(vr => vr.ErrorMessage));
+                    return new ResponseObject(400, "Validation error", errorMessages);
+                }
+                // end validate
+
+                // mapper data
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(id);
+                if (order == null)
+                {
+                    LogHelper.LogWarning(_logger, "PUT", $"/api/order", null, $"Order not found with id {id}");
+                    return new ResponseObject(400, $"Order not found with id {id}", null);
+                }
+
+                order.OrderStatus = model.Status;
+                await _unitOfWork.OrderRepository.SaveOrUpdateAsync(order);
+                await _unitOfWork.SaveChangeAsync();
+                LogHelper.LogInformation(_logger, "PUT", "/api/order", model, order);
+                return new ResponseObject(200, "Update data successfully", null);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError(_logger, ex, "PUT", $"/api/order", model);
+                return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
+            }
         }
 
         public async Task<ResponseObject> DeleteAsync(int id)
         {
-            return null;
+            try
+            {
+                // validate invalid special characters
+                var validationResult = InputValidator.IsValidNumber(id);
+                if (!validationResult)
+                {
+                    LogHelper.LogWarning(_logger, "GET", $"/api/order/{id}", null, "Invalid ID. ID must be greater than 0.");
+                    return new ResponseObject(400, "Input invalid", "Invalid ID. ID must be greater than 0 and less than or equal to the maximum value of int!.");
+                }
+
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(id);
+                // Bắt đầu: Xóa các phụ thuộc khóa ngoại
+                var orderDetail = await _unitOfWork.OrderDetailRepository.GetAllAsync(x => x.OrderId == id);
+                if (orderDetail != null && orderDetail.Any())
+                {
+                    await _unitOfWork.OrderDetailRepository.DeleteRangeAsync(orderDetail.ToList());
+                    await _unitOfWork.SaveChangeAsync();
+                    // Kết thúc: Xóa các phụ thuộc khóa ngoại
+                }
+
+                if (order == null)
+                {
+                    LogHelper.LogWarning(_logger, "DELETE", $"/api/order/{id}", id, "Order not found.");
+                    return new ResponseObject(404, "Order not found.", null);
+                }
+                await _unitOfWork.OrderRepository.DeleteAsync(order);
+                await _unitOfWork.SaveChangeAsync();
+                LogHelper.LogInformation(_logger, "DELETE", $"/api/order/{id}", id, "Deleted successfully");
+                return new ResponseObject(200, "Delete data successfully", null);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError(_logger, ex, "DELETE", $"/api/order/{id}", id);
+                return new ResponseObject(500, "Internal server error. Please try again later.", ex.Message);
+            }
         }
     }
 }

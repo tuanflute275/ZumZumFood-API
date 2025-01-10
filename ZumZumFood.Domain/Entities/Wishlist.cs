@@ -8,9 +8,14 @@
         public int WishlistId { get; set; }
 
         [Column("ProductId")]
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
+
+        [Column("ComboProductId")]
+        public int? ComboProductId { get; set; }
+        [ForeignKey("ComboProductId")]
+        public virtual ComboProduct ComboProduct { get; set; }
 
         [Column("UserId")]
         public int UserId { get; set; }

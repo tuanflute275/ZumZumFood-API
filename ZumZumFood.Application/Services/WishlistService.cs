@@ -28,6 +28,14 @@
                                            .ThenInclude(p => p.Category)
                                            .Include(x => x.Product)
                                            .ThenInclude(p => p.Brand)
+                                           .Include(d => d.ComboProduct)
+                                           .ThenInclude(co => co.Combo)
+                                           .Include(d => d.ComboProduct)
+                                           .ThenInclude(co => co.Product)
+                                           .ThenInclude(p => p.Category)
+                                           .Include(d => d.ComboProduct)
+                                           .ThenInclude(co => co.Product)
+                                           .ThenInclude(p => p.Brand)
                 );
                 var data = dataQuery;
                 var wishlist = dataQuery.FirstOrDefault();
@@ -53,9 +61,10 @@
                        DateOfBirth = wishlist.User.DateOfBirth.HasValue ? wishlist.User.DateOfBirth.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                        Nationality = wishlist.User.Nationality,
                    },
-                    Products = data.Select(p => new ProductDTO
+                    Products = data.Where(x => x.ProductId != null) // Only filter for items with a non-null ProductId
+                    .Select(p => new ProductDTO
                     {
-                        ProductId = p.ProductId,
+                        ProductId = (int)p.ProductId,
                         Name = p.Product.Name,
                         Slug = p.Product.Slug,
                         Image = p.Product.Image,
@@ -71,6 +80,48 @@
                         DeleteBy = p.Product.DeleteBy,
                         DeleteDate = p.Product.DeleteDate.HasValue ? p.Product.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
                         DeleteFlag = p.Product.DeleteFlag,
+                    }).ToList(),
+                    Combos = data.Where(x => x.ComboProductId != null) // Only filter for items with a non-null ProductId
+                    .Select(c => new ComboDTO
+                    {
+                        ComboId = c.ComboProduct.Combo.ComboId,
+                        Name = c.ComboProduct.Combo.Name,
+                        Image = c.ComboProduct.Combo.Image,
+                        Price = c.ComboProduct.Combo.Price,
+                        IsActive = c.ComboProduct.Combo.IsActive,
+                        Description = c.ComboProduct.Combo.Description,
+                        CreateBy = c.ComboProduct.Combo.CreateBy,
+                        CreateDate = c.ComboProduct.Combo.CreateDate.HasValue ? c.ComboProduct.Combo.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        UpdateBy = c.ComboProduct.Combo.UpdateBy,
+                        UpdateDate = c.ComboProduct.Combo.UpdateDate.HasValue ? c.ComboProduct.Combo.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        DeleteBy = c.ComboProduct.Combo.DeleteBy,
+                        DeleteDate = c.ComboProduct.Combo.DeleteDate.HasValue ? c.ComboProduct.Combo.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                        DeleteFlag = c.ComboProduct.Combo.DeleteFlag,
+                        Products = data
+                        .Where(d => d.ComboProduct?.Product != null)
+                        .Where(d => d.ComboProduct.ProductId == c.ComboProduct.ProductId)
+                        .Select(d => new ProductDTO
+                        {
+                            ProductId = d.ComboProduct.Product.ProductId,
+                            Name = d.ComboProduct.Product.Name,
+                            Slug = d.ComboProduct.Product.Slug,
+                            Image = d.ComboProduct.Product.Image,
+                            Price = d.ComboProduct.Product.Price,
+                            Discount = d.ComboProduct.Product.Discount,
+                            IsActive = d.ComboProduct.Product.IsActive,
+                            Description = d.ComboProduct.Product.Description,
+                            BrandId = d.ComboProduct.Product.BrandId,
+                            BrandName = d.ComboProduct.Product.Brand.Name,
+                            CategoryId = d.ComboProduct.Product.CategoryId,
+                            CategoryName = d.ComboProduct.Product.Category.Name,
+                            CreateBy = d.ComboProduct.Product.CreateBy,
+                            CreateDate = d.ComboProduct.Product.CreateDate.HasValue ? d.ComboProduct.Product.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                            UpdateBy = d.ComboProduct.Product.UpdateBy,
+                            UpdateDate = d.ComboProduct.Product.UpdateDate.HasValue ? d.ComboProduct.Product.UpdateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                            DeleteBy = d.ComboProduct.Product.DeleteBy,
+                            DeleteDate = d.ComboProduct.Product.DeleteDate.HasValue ? d.ComboProduct.Product.DeleteDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null,
+                            DeleteFlag = d.ComboProduct.Product.DeleteFlag,
+                        }).ToList()
                     }).ToList()
                 };
                 if (result == null)
@@ -103,18 +154,18 @@
                 }
                 // end validate
 
+                // check item wishlist
+                var checkWishlist = await _unitOfWork.WishlistRepository.GetAllAsync(
+                    x => x.UserId == model.UserId && (x.ProductId == model.ProductId || x.ComboProductId == model.ComboId));
+                if(checkWishlist.Count() > 0)
+                {
+                    LogHelper.LogWarning(_logger, "POST", "/api/wishlist", null, null);
+                    return new ResponseObject(404, "Product or combo already exists in favorites.", null);
+                }
+
+
                 // mapper data
                 var wishlist = new Wishlist();
-                var proCheck = await _unitOfWork.ProductRepository.GetByIdAsync(model.ProductId);
-                if (proCheck != null)
-                {
-                    wishlist.ProductId = model.ProductId;
-                }
-                else
-                {
-                    LogHelper.LogWarning(_logger, "POST", "/api/product-comment", null, null);
-                    return new ResponseObject(404, "Product not found.", null);
-                }
                 var userCheck = await _unitOfWork.UserRepository.GetByIdAsync(model.UserId);
                 if (userCheck != null)
                 {
@@ -122,8 +173,35 @@
                 }
                 else
                 {
-                    LogHelper.LogWarning(_logger, "POST", "/api/product-comment", null, null);
+                    LogHelper.LogWarning(_logger, "POST", "/api/wishlist", null, null);
                     return new ResponseObject(404, "User not found.", null);
+                }
+
+                if (model.ProductId != null) 
+                {
+                    var proCheck = await _unitOfWork.ProductRepository.GetByIdAsync((int)model.ProductId);
+                    if (proCheck != null)
+                    {
+                        wishlist.ProductId = model.ProductId;
+                    }
+                    else
+                    {
+                        LogHelper.LogWarning(_logger, "POST", "/api/wishlist", null, null);
+                        return new ResponseObject(404, "Product not found.", null);
+                    }
+                }
+                if (model.ComboId != null) 
+                {
+                    var comboCheck = await _unitOfWork.ComboProductRepository.GetByIdAsync((int)model.ComboId);
+                    if (comboCheck != null)
+                    {
+                        wishlist.ComboProductId = model.ComboId;
+                    }
+                    else
+                    {
+                        LogHelper.LogWarning(_logger, "POST", "/api/wishlist", null, null);
+                        return new ResponseObject(404, "Product not found.", null);
+                    }
                 }
                 wishlist.CreateBy = Constant.SYSADMIN;
                 wishlist.CreateDate = DateTime.Now;

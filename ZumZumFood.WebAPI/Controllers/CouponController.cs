@@ -23,9 +23,22 @@
         }
 
         [HttpGet("caculate-coupon")]
-        public async Task<ResponseObject> CaculateCoupon(string couponCode, double totalAmount)
+        public async Task<ResponseObject> CaculateCoupon(string couponCode, double? totalAmount, 
+            string? currentCategory, int? currentQuantity, string? currentUserType, 
+            string? currentPaymentMethod, string? currentBrand, int? currentOrderCount)
         {
-            return await _couponService.CalculateCouponValueAsync(couponCode, totalAmount);
+            totalAmount = totalAmount ?? 0;
+            currentCategory = currentCategory ?? string.Empty;
+            currentUserType = currentUserType ?? string.Empty;
+            currentPaymentMethod = currentPaymentMethod ?? string.Empty;
+            currentBrand = currentBrand ?? string.Empty;
+            int quantity = currentQuantity ?? 0;
+            int orderCount = currentOrderCount ?? 0;
+
+            return await _couponService.CalculateCouponValueAsync(
+                couponCode, totalAmount, currentCategory, quantity,
+                currentUserType, currentPaymentMethod, currentBrand, orderCount
+                );
         }
 
         [HttpPost]

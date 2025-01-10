@@ -2,5 +2,6 @@
 {
     public class OrderUpdateModel
     {
+        public int Status { get; set; }
     }
 }

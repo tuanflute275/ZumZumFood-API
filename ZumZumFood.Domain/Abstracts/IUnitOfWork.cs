@@ -23,7 +23,6 @@
         IOrderDetailRepository OrderDetailRepository { get; }
         ICouponRepository CouponRepository { get; }
         ICouponConditionRepository CouponConditionRepository { get; }
-        ICouponOrderRepository CouponOrderRepository { get; }
 
         // other repository
 

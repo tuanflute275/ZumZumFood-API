@@ -27,7 +27,6 @@
         IOrderDetailRepository _orderDetailRepository;
         ICouponRepository _couponRepository;
         ICouponConditionRepository _couponConditionRepository;
-        ICouponOrderRepository _couponOrderRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -57,8 +56,6 @@
         public IOrderDetailRepository OrderDetailRepository => _orderDetailRepository ??= new OrderDetailRepository(_context);
         public ICouponRepository CouponRepository => _couponRepository ??= new CouponRepository(_context);
         public ICouponConditionRepository CouponConditionRepository => _couponConditionRepository ??= new CouponConditionRepository(_context);
-        public ICouponOrderRepository CouponOrderRepository => _couponOrderRepository ??= new CouponOrderRepository(_context);
-      
 
         public async Task BeginTransaction()
         {
