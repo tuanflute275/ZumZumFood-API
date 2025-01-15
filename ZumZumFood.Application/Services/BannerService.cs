@@ -146,7 +146,7 @@ namespace ZumZumFood.Application.Services
                 var banner = new Banner();
                 banner.Title = model.Title;
                 banner.IsActive = model.IsActive;
-                banner.CreateBy = Constant.SYSADMIN;
+                banner.CreateBy = model.CreateBy;
                 banner.CreateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -191,7 +191,7 @@ namespace ZumZumFood.Application.Services
                 }
                 banner.Title = model.Title;
                 banner.IsActive = model.IsActive;
-                banner.UpdateBy = Constant.SYSADMIN;
+                banner.UpdateBy = model.UpdateBy;
                 banner.UpdateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -211,7 +211,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> DeleteFlagAsync(int id)
+        public async Task<ResponseObject> DeleteFlagAsync(int id, string deleteBy)
         {
             try
             {
@@ -229,7 +229,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(404, "Banner not found.", null);
                 }
                 banner.DeleteFlag = true;
-                banner.DeleteBy = Constant.SYSADMIN;
+                banner.DeleteBy = deleteBy;
                 banner.DeleteDate = DateTime.Now;
                 await _unitOfWork.BannerRepository.SaveOrUpdateAsync(banner);
                 await _unitOfWork.SaveChangeAsync();

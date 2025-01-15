@@ -163,7 +163,7 @@ namespace ZumZumFood.Application.Services
                 coupon.IsActive = model.IsActive;
                 coupon.Scope = model.Scope;
                 coupon.ScopeId = model.ScopeId;
-                coupon.CreateBy = Constant.SYSADMIN;
+                coupon.CreateBy = model.CreateBy;
                 coupon.CreateDate = DateTime.Now;
                 await _unitOfWork.CouponRepository.SaveOrUpdateAsync(coupon);
                 await _unitOfWork.SaveChangeAsync();
@@ -204,7 +204,7 @@ namespace ZumZumFood.Application.Services
                 coupon.IsActive = model.IsActive;
                 coupon.Scope = model.Scope;
                 coupon.ScopeId = model.ScopeId;
-                coupon.UpdateBy = Constant.SYSADMIN;
+                coupon.UpdateBy = model.UpdateBy;
                 coupon.UpdateDate = DateTime.Now;
                 await _unitOfWork.CouponRepository.SaveOrUpdateAsync(coupon);
                 await _unitOfWork.SaveChangeAsync();

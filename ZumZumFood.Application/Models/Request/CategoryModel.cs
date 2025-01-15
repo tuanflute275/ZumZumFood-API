@@ -10,5 +10,7 @@
         public string Name { get; set; }
         public bool? IsActive { get; set; } = true;
         public string? Description { get; set; } = "";
+        public string? CreateBy { get; set; }
+        public string? UpdateBy { get; set; }
     }
 }

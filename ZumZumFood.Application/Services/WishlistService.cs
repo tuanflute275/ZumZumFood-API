@@ -206,7 +206,7 @@ namespace ZumZumFood.Application.Services
                         return new ResponseObject(404, "Product not found.", null);
                     }
                 }
-                wishlist.CreateBy = Constant.SYSADMIN;
+                wishlist.CreateBy = model.CreateBy;
                 wishlist.CreateDate = DateTime.Now;
                 await _unitOfWork.WishlistRepository.SaveOrUpdateAsync(wishlist);
                 await _unitOfWork.SaveChangeAsync();

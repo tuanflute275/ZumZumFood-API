@@ -8,5 +8,7 @@
         public IFormFile? ImageFile { get; set; }
         public string? OldImage { get; set; }
         public bool? IsActive { get; set; } = true;
+        public string? CreateBy { get; set; }
+        public string? UpdateBy { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.WebAPI.Controllers
+﻿using ZumZumFood.Application.Utils.Helpers.Token;
+
+namespace ZumZumFood.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/v1/wishlist")]
@@ -19,6 +21,8 @@
         [HttpPost]
         public async Task<ResponseObject> Save([FromBody] WishlistModel model)
         {
+            var user = HttpContext.User;
+            model.CreateBy = TokenHelper.GetCurrentUsername(user);
             return await _wishlistService.SaveAsync(model);
         }
 

@@ -177,7 +177,7 @@ namespace ZumZumFood.Application.Services
                 category.Name = model.Name;
                 category.Slug = Helpers.GenerateSlug(model.Name);
                 category.Description = model.Description;
-                category.CreateBy = Constant.SYSADMIN;
+                category.CreateBy = model.CreateBy;
                 category.CreateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -223,7 +223,7 @@ namespace ZumZumFood.Application.Services
                 category.Name = model.Name;
                 category.Slug = Helpers.GenerateSlug(model.Name);
                 category.Description = model.Description;
-                category.UpdateBy = Constant.SYSADMIN;
+                category.UpdateBy = model.UpdateBy;
                 category.UpdateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -243,7 +243,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> DeleteFlagAsync(int id)
+        public async Task<ResponseObject> DeleteFlagAsync(int id, string deleteBy)
         {
             try
             {
@@ -261,7 +261,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(404, "Category not found.", null);
                 }
                 category.DeleteFlag = true;
-                category.DeleteBy = Constant.SYSADMIN;
+                category.DeleteBy = deleteBy;
                 category.DeleteDate = DateTime.Now;
                 await _unitOfWork.CategoryRepository.SaveOrUpdateAsync(category);
                 await _unitOfWork.SaveChangeAsync();

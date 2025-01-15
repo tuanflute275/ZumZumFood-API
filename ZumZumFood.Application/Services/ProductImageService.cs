@@ -84,7 +84,7 @@ namespace ZumZumFood.Application.Services
                 {
                     var proImage = new ProductImage();
                     proImage.ProductId = model.ProductId;
-                    proImage.CreateBy = Constant.SYSADMIN;
+                    proImage.CreateBy = model.CreateBy;
                     proImage.CreateDate = DateTime.Now;
                     var image = await FileUploadHelper.UploadImageAsync(item, null, request.Scheme, request.Host.Value, "productImages");
                     proImage.Path = image;
@@ -126,7 +126,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(400, $"Product image not found with id {id}", null);
                 }
 
-                proImage.UpdateBy = Constant.SYSADMIN;
+                proImage.UpdateBy = model.UpdateBy;
                 proImage.UpdateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {

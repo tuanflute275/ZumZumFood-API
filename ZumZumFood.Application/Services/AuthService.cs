@@ -1,5 +1,6 @@
 ﻿using ZumZumFood.Application.Utils.Common;
 using ZumZumFood.Application.Utils.Helpers;
+using ZumZumFood.Application.Utils.Helpers.Token;
 
 namespace ZumZumFood.Application.Services
 {
@@ -90,7 +91,7 @@ namespace ZumZumFood.Application.Services
                 }
 
                 // generate token and refresh token
-                var accessToken = TokenHelper.GenerateJwtToken(user.UserId, user.Email, roles.Select(r => r.Role.RoleName), _configuration);
+                var accessToken = TokenHelper.GenerateJwtToken(user.UserId, user.UserName, user.FullName, user.Email, roles.Select(r => r.Role.RoleName), _configuration);
                 var refreshToken = TokenHelper.GenerateRefreshToken();
 
                 //save token vào database
@@ -245,6 +246,8 @@ namespace ZumZumFood.Application.Services
 
                 var newAccessToken = TokenHelper.GenerateJwtToken(
                       user.UserId,
+                      user.UserName,
+                      user.FullName,
                       user.Email,
                       roles.Select(r => r.Role.RoleName),
                       _configuration

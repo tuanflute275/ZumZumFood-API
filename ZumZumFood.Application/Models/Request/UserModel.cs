@@ -45,6 +45,7 @@
         public string? Nationality { get; set; } // Quốc tịch của người dùng.
         public string? UserBio { get; set; } // Mô tả ngắn về người dùng.
         public string? SocialLinks { get; set; } // Liên kết đến các tài khoản mạng xã hội
+        public string? CreateBy { get; set; }
+        public string? UpdateBy { get; set; }
     }
-
 }

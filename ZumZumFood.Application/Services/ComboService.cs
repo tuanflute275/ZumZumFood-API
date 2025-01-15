@@ -196,7 +196,7 @@ namespace ZumZumFood.Application.Services
                     var image = await FileUploadHelper.UploadImageAsync(model.ImageFile, model.OldImage, request.Scheme, request.Host.Value, "combos");
                     combo.Image = image;
                 }
-                combo.CreateBy = Constant.SYSADMIN;
+                combo.CreateBy = model.CreateBy;
                 combo.CreateDate = DateTime.Now;
                 await _unitOfWork.ComboRepository.SaveOrUpdateAsync(combo);
                 await _unitOfWork.SaveChangeAsync();
@@ -253,7 +253,7 @@ namespace ZumZumFood.Application.Services
                 combo.Price = model.Price;
                 combo.IsActive = model.IsActive;
                 combo.Description = model.Description;
-                combo.UpdateBy = Constant.SYSADMIN;
+                combo.UpdateBy = model.UpdateBy;
                 combo.UpdateDate = DateTime.Now;
                 await _unitOfWork.ComboRepository.SaveOrUpdateAsync(combo);
                 await _unitOfWork.SaveChangeAsync();
@@ -267,7 +267,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> DeleteFlagAsync(int id)
+        public async Task<ResponseObject> DeleteFlagAsync(int id, string deleteBy)
         {
             try
             {
@@ -285,7 +285,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(404, "Combo not found.", null);
                 }
                 combo.DeleteFlag = true;
-                combo.DeleteBy = Constant.SYSADMIN;
+                combo.DeleteBy = deleteBy;
                 combo.DeleteDate = DateTime.Now;
                 await _unitOfWork.ComboRepository.SaveOrUpdateAsync(combo);
                 await _unitOfWork.SaveChangeAsync();

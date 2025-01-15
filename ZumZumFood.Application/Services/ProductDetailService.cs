@@ -1,5 +1,6 @@
 ﻿using ZumZumFood.Application.Utils.Common;
 using ZumZumFood.Application.Utils.Helpers;
+using ZumZumFood.Application.Utils.Helpers.Token;
 
 namespace ZumZumFood.Application.Services
 {
@@ -80,7 +81,7 @@ namespace ZumZumFood.Application.Services
                 }
                 // mapper data (các tên giống nhau sẽ tự map vào nhau)
                 model.CopyProperties(detail);
-                detail.CreateBy = Constant.SYSADMIN;
+                detail.CreateBy = model.CreateBy;
                 detail.CreateDate = DateTime.Now;
                 await _unitOfWork.ProductDetailRepository.SaveOrUpdateAsync(detail);
                 await _unitOfWork.SaveChangeAsync();
@@ -108,7 +109,6 @@ namespace ZumZumFood.Application.Services
 
                 // mapper data (các tên giống nhau sẽ tự map vào nhau)
                 model.CopyProperties(detail);
-                detail.UpdateBy = Constant.SYSADMIN;
                 detail.UpdateDate = DateTime.Now;
                 await _unitOfWork.ProductDetailRepository.SaveOrUpdateAsync(detail);
                 await _unitOfWork.SaveChangeAsync();

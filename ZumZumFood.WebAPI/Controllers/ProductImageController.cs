@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.WebAPI.Controllers
+﻿using ZumZumFood.Application.Utils.Helpers.Token;
+
+namespace ZumZumFood.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/v1/product-image")]
@@ -19,12 +21,16 @@
         [HttpPost]
         public async Task<ResponseObject> Save([FromForm] ProductImageModel model)
         {
+            var user = HttpContext.User;
+            model.CreateBy = TokenHelper.GetCurrentUsername(user);
             return await _productImageService.SaveAsync(model);
         }
 
         [HttpPut("{id}")]
         public async Task<ResponseObject> Update(int id, [FromForm] ProductImageUpdateModel model)
         {
+            var user = HttpContext.User;
+            model.UpdateBy = TokenHelper.GetCurrentUsername(user);
             return await _productImageService.UpdateAsync(id, model);
         }
 

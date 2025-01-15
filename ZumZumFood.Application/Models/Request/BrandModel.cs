@@ -22,5 +22,7 @@
         public bool? IsActive { get; set; }
         public string? OpenTime { get; set; } = "00:00";
         public string? CloseTime { get; set; } = "23:00";
+        public string? CreateBy { get; set; }
+        public string? UpdateBy { get; set; }
     }
 }

@@ -258,7 +258,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(404, "Category not found.", null);
                 }
                 product.Description = model.Description;
-                product.CreateBy = Constant.SYSADMIN;
+                product.CreateBy = model.CreateBy;
                 product.CreateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -328,7 +328,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(404, "Category not found.", null);
                 }
                 product.Description = model.Description;
-                product.UpdateBy = Constant.SYSADMIN;
+                product.UpdateBy = model.UpdateBy;
                 product.UpdateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -349,7 +349,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> DeleteFlagAsync(int id)
+        public async Task<ResponseObject> DeleteFlagAsync(int id, string deleteBy)
         {
             try
             {
@@ -367,7 +367,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(404, "Product not found.", null);
                 }
                 product.DeleteFlag = true;
-                product.DeleteBy = Constant.SYSADMIN;
+                product.DeleteBy = deleteBy;
                 product.DeleteDate = DateTime.Now;
                 await _unitOfWork.ProductRepository.SaveOrUpdateAsync(product);
                 await _unitOfWork.SaveChangeAsync();

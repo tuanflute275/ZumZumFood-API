@@ -16,5 +16,7 @@
         [Required(ErrorMessage = "At least one product must be selected.")]
         [MinLength(1, ErrorMessage = "At least one product must be selected.")]
         public List<int> listProduct { get; set; } = new List<int>();
+        public string? CreateBy { get; set; }
+        public string? UpdateBy { get; set; }
     }
 }

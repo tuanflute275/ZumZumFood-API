@@ -22,5 +22,7 @@
 
         [Required(ErrorMessage = "Category ID is required.")]
         public int CategoryId { get; set; }
+        public string? CreateBy { get; set; }
+        public string? UpdateBy { get; set; }
     }
 }

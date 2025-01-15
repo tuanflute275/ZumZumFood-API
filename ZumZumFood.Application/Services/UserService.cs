@@ -148,7 +148,7 @@ namespace ZumZumFood.Application.Services
                 var user = new User();
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password, 12);
                 user = _mapper.Map<User>(model);
-                user.CreateBy = Constant.SYSADMIN;
+                user.CreateBy = model.CreateBy;
                 user.CreateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -203,7 +203,7 @@ namespace ZumZumFood.Application.Services
                 }
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password, 12);
                 user = _mapper.Map<User>(model);
-                user.UpdateBy = Constant.SYSADMIN;
+                user.UpdateBy = model.UpdateBy;
                 user.UpdateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -234,7 +234,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> DeleteFlagAsync(int id)
+        public async Task<ResponseObject> DeleteFlagAsync(int id, string deleteBy)
         {
             try
             {
@@ -252,7 +252,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(404, "User not found.", null);
                 }
                 user.DeleteFlag = true;
-                user.DeleteBy = Constant.SYSADMIN;
+                user.DeleteBy = deleteBy;
                 user.DeleteDate = DateTime.Now;
                 await _unitOfWork.UserRepository.SaveOrUpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();

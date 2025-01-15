@@ -191,7 +191,7 @@ namespace ZumZumFood.Application.Services
                 brand.OpenTime = model.OpenTime != null ? TimeSpan.Parse(model.OpenTime) : null;
                 brand.CloseTime = model.CloseTime != null ? TimeSpan.Parse(model.CloseTime) : null;
                 brand.Description = model.Description;
-                brand.CreateBy = Constant.SYSADMIN;
+                brand.CreateBy = model.CreateBy;
                 brand.CreateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -240,7 +240,7 @@ namespace ZumZumFood.Application.Services
                 brand.Email = model.Email;
                 brand.IsActive = model.IsActive;
                 brand.Description = model.Description;
-                brand.UpdateBy = Constant.SYSADMIN;
+                brand.UpdateBy = model.UpdateBy;
                 brand.UpdateDate = DateTime.Now;
                 if (model.ImageFile != null)
                 {
@@ -259,7 +259,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> DeleteFlagAsync(int id)
+        public async Task<ResponseObject> DeleteFlagAsync(int id, string deleteBy)
         {
             try
             {
@@ -277,7 +277,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(404, "Brand not found.", null);
                 }
                 brand.DeleteFlag = true;
-                brand.DeleteBy = Constant.SYSADMIN;
+                brand.DeleteBy = deleteBy;
                 brand.DeleteDate = DateTime.Now;
                 await _unitOfWork.BrandRepository.SaveOrUpdateAsync(brand);
                 await _unitOfWork.SaveChangeAsync();

@@ -3,5 +3,6 @@
     public class ProductImageUpdateModel
     {
         public IFormFile ImageFile { get; set; }
+        public string? UpdateBy { get; set; }
     }
 }

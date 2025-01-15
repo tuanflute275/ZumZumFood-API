@@ -131,7 +131,7 @@ namespace ZumZumFood.Application.Services
                 // mapper data
                 var parameter = new Parameter();
                 parameter = _mapper.Map<Parameter>(model);
-                parameter.CreateBy = Constant.SYSADMIN;
+                parameter.CreateBy = model.CreateBy;
                 parameter.CreateDate = DateTime.Now;
                 await _unitOfWork.ParameterRepository.SaveOrUpdateAsync(parameter);
                 await _unitOfWork.SaveChangeAsync();
@@ -175,7 +175,7 @@ namespace ZumZumFood.Application.Services
                 parameter.ParaLobValue = model.ParaLobValue;
                 parameter.AdminAccessibleFlag = model.AdminAccessibleFlag;
                 parameter.UserAccessibleFlag = model.UserAccessibleFlag;
-                parameter.UpdateBy = Constant.SYSADMIN;
+                parameter.UpdateBy = model.UpdateBy;
                 parameter.UpdateDate = DateTime.Now;
                 await _unitOfWork.ParameterRepository.SaveOrUpdateAsync(parameter);
                 await _unitOfWork.SaveChangeAsync();
@@ -189,7 +189,7 @@ namespace ZumZumFood.Application.Services
             }
         }
 
-        public async Task<ResponseObject> DeleteFlagAsync(int id)
+        public async Task<ResponseObject> DeleteFlagAsync(int id, string deleteBy)
         {
             try
             {
@@ -207,7 +207,7 @@ namespace ZumZumFood.Application.Services
                     return new ResponseObject(404, "Parameter not found.", null);
                 }
                 parameter.DeleteFlag = true;
-                parameter.DeleteBy = Constant.SYSADMIN;
+                parameter.DeleteBy = deleteBy;
                 parameter.DeleteDate = DateTime.Now;
                 await _unitOfWork.ParameterRepository.SaveOrUpdateAsync(parameter);
                 await _unitOfWork.SaveChangeAsync();

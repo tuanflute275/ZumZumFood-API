@@ -9,5 +9,6 @@
         public int? ProductId { get; set; }
 
         public int? ComboId { get; set; }
+        public string? CreateBy { get; set; }
     }
 }

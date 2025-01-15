@@ -7,7 +7,7 @@
         Task<ResponseObject> SaveAsync(ParameterModel model);
         Task<ResponseObject> UpdateAsync(int id, ParameterModel model);
         Task<ResponseObject> DeleteAsync(int id);
-        Task<ResponseObject> DeleteFlagAsync(int id);
+        Task<ResponseObject> DeleteFlagAsync(int id, string deleteBy);
         Task<ResponseObject> GetDeletedListAsync();
         Task<ResponseObject> RestoreAsync(int id);
     }

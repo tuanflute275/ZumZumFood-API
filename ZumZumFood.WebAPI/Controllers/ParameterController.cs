@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.WebAPI.Controllers
+﻿using ZumZumFood.Application.Utils.Helpers.Token;
+
+namespace ZumZumFood.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/v1/parameter")]
@@ -25,6 +27,8 @@
         [HttpPost]
         public async Task<ResponseObject> Save([FromBody] ParameterModel model)
         {
+            var user = HttpContext.User;
+            model.CreateBy = TokenHelper.GetCurrentUsername(user);
             return await _parameterService.SaveAsync(model);
         }
 
@@ -32,13 +36,17 @@
         [HttpPut("{id}")]
         public async Task<ResponseObject> Update(int id, [FromBody] ParameterModel model)
         {
+            var user = HttpContext.User;
+            model.UpdateBy = TokenHelper.GetCurrentUsername(user);
             return await _parameterService.UpdateAsync(id, model);
         }
 
         [HttpPost("soft-delete/{id}")]
         public async Task<ResponseObject> SoftDelete(int id)
         {
-            return await _parameterService.DeleteFlagAsync(id);
+            var user = HttpContext.User;
+            string deleteBy = TokenHelper.GetCurrentUsername(user);
+            return await _parameterService.DeleteFlagAsync(id, deleteBy);
         }
 
         [HttpGet("deleted-data")]
