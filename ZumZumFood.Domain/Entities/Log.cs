@@ -8,28 +8,34 @@
         [Column("logId")]
         public int LogId { get; set; }
 
-        [Column("userName", TypeName = "nvarchar(255)")]
+        [Column(TypeName = "nvarchar(255)")]
         public string? UserName { get; set; }
 
-        [Column("workTation", TypeName = "nvarchar(255)")]
+        [Column(TypeName = "nvarchar(255)")]
         public string? WorkTation { get; set; }
 
-        [Column("request", TypeName = "nvarchar(255)")]
+        [Column(TypeName = "nvarchar(255)")]
         public string? Request { get; set; }
 
-        [Column("response", TypeName = "ntext")]
+        [Column(TypeName = "ntext")]
         public string? Response { get; set; }
 
-        [Column("ipAdress", TypeName = "nvarchar(255)")]
+        [Column(TypeName = "nvarchar(255)")]
         public string? IpAdress { get; set; }
 
-        [Column("timeLogin")]
+        [Column(TypeName = "nvarchar(255)")]
+        public string? KeyApi { get; set; }
+
+        [Column(TypeName = "nvarchar(255)")]
+        public string? Url { get; set; }
+
+        [Column]
         public DateTime? TimeLogin { get; set; }
 
-        [Column("timeLogout")]
+        [Column]
         public DateTime? TimeLogout { get; set; }
 
-        [Column("timeActionRequest")]
+        [Column]
         public DateTime? TimeActionRequest { get; set; }
     }
 }

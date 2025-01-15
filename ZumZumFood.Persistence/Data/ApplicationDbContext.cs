@@ -10,6 +10,9 @@
         public DbSet<Token> Tokens { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
         public DbSet<Log> Logs { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Code> Codes { get; set; }
+        public DbSet<CodeValues> CodeValues { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Brand> Brands { get; set; }
@@ -34,6 +37,9 @@
 
             foreach (var fk in cascadeFKs)
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
+
+            modelBuilder.Entity<CodeValues>()
+                .HasKey(c => new { c.CodeId, c.CodeValue });
 
             base.OnModelCreating(modelBuilder);
         }

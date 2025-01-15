@@ -8,5 +8,7 @@
         public string? Response { get; set; }
         public string? IpAdress { get; set; }
         public bool IsLogin { get; set; } = false;
+        public string? KeyApi { get; set; }
+        public string? Url { get; set; }
     }
 }

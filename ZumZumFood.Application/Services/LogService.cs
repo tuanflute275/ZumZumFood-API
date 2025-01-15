@@ -207,6 +207,8 @@ namespace ZumZumFood.Application.Services
                 log.Request = model.Request;
                 log.Response = model.Response;
                 log.IpAdress = model.IpAdress;
+                log.Url = model.Url;
+                log.KeyApi = model.KeyApi;
                 if (model.IsLogin)
                     log.TimeLogin = DateTime.Now;
                 else

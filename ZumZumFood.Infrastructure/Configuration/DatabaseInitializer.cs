@@ -251,7 +251,8 @@ namespace ZumZumFood.Infrastructure.Configuration
                          {
                              UserName = "User",
                              WorkTation = "DESKTOP-123",
-                             Request = "/login",
+                             Url = "/login",
+                             Request = "{username: 'admin', password: '12345678'}",
                              Response = "login successfully",
                              IpAdress = "192.168.10.242",
                              TimeLogin = DateTime.Now,
@@ -261,7 +262,8 @@ namespace ZumZumFood.Infrastructure.Configuration
                         {
                             UserName = "User",
                             WorkTation = "DESKTOP-123",
-                            Request = "/home",
+                            Url = "/home",
+                            Request = "{keyword: ''}",
                             Response = "data demo",
                             IpAdress = "192.168.10.242",
                             TimeActionRequest = DateTime.Now
@@ -1028,6 +1030,94 @@ namespace ZumZumFood.Infrastructure.Configuration
                             ProductId = 6,
                             ComboProductId = null
                         }
+                    );
+
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    appContext.SaveChanges();
+                }
+
+
+                // Khởi tạo dữ liệu cho bảng Codes
+                if (!appContext.Codes.Any())
+                {
+                    appContext.Codes.AddRange(
+                       new Code
+                       {
+                           CodeId = "SOCIAL_NETWORK_VALUE",
+                           CodeDes = "Mạng xã hội",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "Connectdatabase",
+                           CodeDes = "Kết nối cơ sở dữ liệu",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "COUNTRY_EXCEL",
+                           CodeDes = "Danh mục quốc tịch (Sheet quoc_tich_hien_tai)",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "CURRENCY_UNIT",
+                           CodeDes = "Danh sách mã tiền",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "DM_TINHTHANH",
+                           CodeDes = "Danh mục tỉnh thành",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "DM_QUANHUYEN",
+                           CodeDes = "Danh mục quận huyện",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "DM_XAPHUONG",
+                           CodeDes = "Danh mục xã phường",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "FASTLANE_AIRLINES",
+                           CodeDes = "Hãng hàng không",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "FASTLANE_LIST_AIRPORT",
+                           CodeDes = "Danh sách sân bay",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "LIST_CURRENCY",
+                           CodeDes = "Loại tiền tệ",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       },
+                       new Code
+                       {
+                           CodeId = "PARAMETERS_SHARED",
+                           CodeDes = "Tham số cấu hình dùng chung",
+                           CreateBy = "Admin",
+                           CreateDate = DateTime.Now
+                       }
                     );
 
                     // Lưu các thay đổi vào cơ sở dữ liệu
