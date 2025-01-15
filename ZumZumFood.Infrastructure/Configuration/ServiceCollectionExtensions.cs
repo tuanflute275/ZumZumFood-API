@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Infrastructure.Configuration
+﻿using ZumZumFood.Application.Utils.Common;
+
+namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class ServiceCollectionExtensions
     {
@@ -36,6 +38,7 @@
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IProductCommentService, ProductCommentService>();
             services.AddTransient<IProductImageService, ProductImageService>();
+            services.AddTransient<IProductDetailService, ProductDetailService>();
             services.AddTransient<IWishlistService, WishlistService>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<ICouponService, CouponService>();

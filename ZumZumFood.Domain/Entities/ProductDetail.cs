@@ -12,7 +12,7 @@
         public string Name { get; set; } // Tên sản phẩm, topping, combo
 
         [Column(TypeName = "nvarchar(20)")]
-        public string Type { get; set; } // Loại sản phẩm: "Main" (món chính), "Topping", "Combo", "Size"
+        public string Type { get; set; } // Loại sản phẩm: "Topping"
 
         [Column(TypeName = "nvarchar(20)")]
         public string? Size { get; set; } // Kích thước món (nếu có), VD: "Nhỏ", "Vừa", "Lớn"

@@ -1,4 +1,4 @@
-﻿namespace ZumZumFood.Application.Utils
+﻿namespace ZumZumFood.Application.Utils.Helpers
 {
     public static class FileUploadHelper
     {

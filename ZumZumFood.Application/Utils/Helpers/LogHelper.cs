@@ -1,17 +1,17 @@
-﻿namespace ZumZumFood.Application.Utils
+﻿namespace ZumZumFood.Application.Utils.Helpers
 {
     public static class LogHelper
     {
-       /* private static IElasticClient _elasticClient;
+        /* private static IElasticClient _elasticClient;
 
-        public static void Configure(IElasticClient elasticClient)
-        {
-            _elasticClient = elasticClient ?? throw new ArgumentNullException(nameof(elasticClient));
-        }*/
+         public static void Configure(IElasticClient elasticClient)
+         {
+             _elasticClient = elasticClient ?? throw new ArgumentNullException(nameof(elasticClient));
+         }*/
 
 
         // Log thông tin thành công của phương thức
-        public static async Task LogInformation(Microsoft.Extensions.Logging.ILogger logger, string method, string endpoint, object requestData = null, object responseData = null)
+        public static async Task LogInformation(ILogger logger, string method, string endpoint, object requestData = null, object responseData = null)
         {
             // Kiểm tra null cho requestData và responseData
             var requestLogData = requestData ?? "No request data provided";
@@ -27,8 +27,8 @@
             {
                 timestamp = DateTime.UtcNow,
                 level = "INFO",
-                method = method,
-                endpoint = endpoint,
+                method,
+                endpoint,
                 requestData = requestLogData,
                 responseData = responseLogData
             };
@@ -38,7 +38,7 @@
         }
 
         // Log lỗi khi có ngoại lệ
-        public static async Task LogError(Microsoft.Extensions.Logging.ILogger logger, Exception ex, string method, string endpoint, object requestData = null)
+        public static async Task LogError(ILogger logger, Exception ex, string method, string endpoint, object requestData = null)
         {
             if (ex == null) throw new ArgumentNullException(nameof(ex));
 
@@ -55,8 +55,8 @@
             {
                 timestamp = DateTime.UtcNow,
                 level = "ERROR",
-                method = method,
-                endpoint = endpoint,
+                method,
+                endpoint,
                 requestData = requestLogData,
                 exception = ex.Message,
                 stackTrace = ex.StackTrace
@@ -67,7 +67,7 @@
         }
 
         // Log lỗi khi cảnh báo
-        public static async Task LogWarning(Microsoft.Extensions.Logging.ILogger logger, string method, string endpoint, object requestData = null, object responseData = null)
+        public static async Task LogWarning(ILogger logger, string method, string endpoint, object requestData = null, object responseData = null)
         {
             // Kiểm tra null cho requestData và responseData
             var requestLogData = requestData ?? "No request data provided";
@@ -83,8 +83,8 @@
             {
                 timestamp = DateTime.UtcNow,
                 level = "Warning",
-                method = method,
-                endpoint = endpoint,
+                method,
+                endpoint,
                 requestData = requestLogData,
                 responseData = responseLogData
             };

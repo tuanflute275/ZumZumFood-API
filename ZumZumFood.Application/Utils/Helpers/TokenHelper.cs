@@ -1,11 +1,11 @@
-﻿namespace ZumZumFood.Application.Utils
+﻿namespace ZumZumFood.Application.Utils.Helpers
 {
     public static class TokenHelper
     {
         public static string GenerateJwtToken(int userId, string userEmail, IEnumerable<string> roles, IConfiguration configuration)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = System.Text.Encoding.ASCII.GetBytes(configuration["Jwt:key"]);
+            var key = Encoding.ASCII.GetBytes(configuration["Jwt:key"]);
 
             var claims = new List<Claim>
             {

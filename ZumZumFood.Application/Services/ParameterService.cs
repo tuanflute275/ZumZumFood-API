@@ -1,4 +1,7 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Utils.Common;
+using ZumZumFood.Application.Utils.Helpers;
+
+namespace ZumZumFood.Application.Services
 {
     public class ParameterService : IParameterService
     {

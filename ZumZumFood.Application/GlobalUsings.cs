@@ -48,5 +48,5 @@ global using ZumZumFood.Application.Utils;
 global using ZumZumFood.Domain.Abstracts;
 global using ZumZumFood.Domain.Entities;
 global using ZumZumFood.Infrastructure.Abstracts;
-global using static ZumZumFood.Application.Utils.Helpers;
+global using static ZumZumFood.Application.Utils.Helpers.Helpers;
 global using ZumZumFood.Infrastructure.Services;

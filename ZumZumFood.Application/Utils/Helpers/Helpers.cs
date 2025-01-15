@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Utils
+﻿using System.Reflection;
+
+namespace ZumZumFood.Application.Utils.Helpers
 {
     public class Helpers
     {
@@ -51,15 +53,15 @@
             int allowedCharCount = _allowedChars.Length;
             for (int i = 0; i < PasswordLength; i++)
             {
-                chars[i] = _allowedChars[(int)((_allowedChars.Length) * randNum.NextDouble())];
+                chars[i] = _allowedChars[(int)(_allowedChars.Length * randNum.NextDouble())];
             }
             return new string(chars);
         }
         public static string GenerateSlug(string value)
         {
             string slug = RemoveVietnameseAccents(value.ToLowerInvariant());
-            slug = System.Text.RegularExpressions.Regex.Replace(slug, @"[^a-z0-9\s-]", "");
-            slug = System.Text.RegularExpressions.Regex.Replace(slug, @"\s+", "-").Trim('-');
+            slug = Regex.Replace(slug, @"[^a-z0-9\s-]", "");
+            slug = Regex.Replace(slug, @"\s+", "-").Trim('-');
             return slug;
         }
 
@@ -193,6 +195,7 @@
                 return null; // Tất cả đều hợp lệ.
             }
         }
+
 
     }
 }

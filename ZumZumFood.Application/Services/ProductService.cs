@@ -1,4 +1,7 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Utils.Common;
+using ZumZumFood.Application.Utils.Helpers;
+
+namespace ZumZumFood.Application.Services
 {
     public class ProductService : IProductService
     {
@@ -186,7 +189,14 @@
                     }).ToList(),
                     ProductDetails = product.ProductDetails.Select(d => new ProductDetailDTO
                     {
+                        ProductDetailId = d.ProductDetailId,
+                        Name = d.Name,
+                        Price = d.Price,
+                        Type = d.Type,
                         Size = d.Size,
+                        Quantity = d.Quantity,
+                        Description = d.Description,
+                        IsAvailable = d.IsAvailable,
                     }).ToList()
                 };
                 if (result == null)

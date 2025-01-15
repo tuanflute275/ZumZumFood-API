@@ -1,4 +1,4 @@
-﻿namespace ZumZumFood.Application.Utils
+﻿namespace ZumZumFood.Application.Utils.Common
 {
     public static class Constant
     {

@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Utils.Common;
+
+namespace ZumZumFood.Application.Services
 {
     public class RedisCacheService : IDisposable, IRedisCacheService
     {
