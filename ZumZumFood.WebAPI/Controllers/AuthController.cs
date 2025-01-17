@@ -15,7 +15,15 @@
         {
             
             var redirectUrl = Url.Action("GoogleCallback", "Auth");
+            var check = Url.Action("google-callback");
             return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, GoogleDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet("google-callback-2")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<ResponseObject> GoogleCallback2()
+        {
+            return await _authService.GoogleCallbackAsync(HttpContext);
         }
 
         [HttpGet("google-callback")]

@@ -201,7 +201,7 @@ namespace ZumZumFood.Infrastructure.Configuration
             {
                 options.ClientId = configuration["Authentication:Google:ClientId"];
                 options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-                options.CallbackPath = "/api/v1/auth/google-callback";
+                options.CallbackPath = "/api/v1/auth/google-callback-2";
                 options.SaveTokens = true;
                 options.Scope.Add("email");
                 options.Scope.Add("profile");
