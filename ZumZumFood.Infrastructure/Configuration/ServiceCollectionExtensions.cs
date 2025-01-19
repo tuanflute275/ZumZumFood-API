@@ -1,6 +1,4 @@
-﻿using ZumZumFood.Application.Utils.Common;
-
-namespace ZumZumFood.Infrastructure.Configuration
+﻿namespace ZumZumFood.Infrastructure.Configuration
 {
     public static class ServiceCollectionExtensions
     {

@@ -46,3 +46,5 @@ global using ZumZumFood.Persistence.Data;
 global using ZumZumFood.Persistence.Dapper;
 global using ZumZumFood.Persistence.Repositories;
 global using ZumZumFood.Application.Services.RabbitMQ;
+global using ZumZumFood.Application.Utils.Helpers;
+global using ZumZumFood.Application.Utils.Common;

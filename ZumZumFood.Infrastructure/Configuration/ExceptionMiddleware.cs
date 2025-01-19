@@ -1,6 +1,4 @@
-﻿using ZumZumFood.Application.Utils.Helpers;
-
-namespace ZumZumFood.Infrastructure.Configuration
+﻿namespace ZumZumFood.Infrastructure.Configuration
 {
     // Middleware này sẽ bắt tất cả các ngoại lệ không xử lý trong ứng dụng và trả về phản hồi phù hợp.
     public class ExceptionMiddleware

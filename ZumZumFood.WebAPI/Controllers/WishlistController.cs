@@ -1,6 +1,4 @@
-﻿using ZumZumFood.Application.Utils.Helpers.Token;
-
-namespace ZumZumFood.WebAPI.Controllers
+﻿namespace ZumZumFood.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/v1/wishlist")]

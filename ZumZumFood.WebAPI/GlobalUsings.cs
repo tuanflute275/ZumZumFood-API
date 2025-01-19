@@ -12,6 +12,7 @@ global using ZumZumFood.Application.Models.Request;
 global using ZumZumFood.Application.Models.Response;
 global using ZumZumFood.Application.Models.RequestModel;
 global using ZumZumFood.Infrastructure.Configuration;
+global using ZumZumFood.Application.Utils.Helpers.Token;
 
 // 3. Thư viện khác
 global using System.Text.Json;

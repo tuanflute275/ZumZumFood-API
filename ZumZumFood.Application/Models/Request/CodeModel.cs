@@ -2,6 +2,7 @@
 {
     public class CodeModel
     {
+        [Required(ErrorMessage = "CodeId is required.")]
         public string CodeId { get; set; }
         public string? CodeDes { get; set; }
         public string? CreateBy { get; set; }
