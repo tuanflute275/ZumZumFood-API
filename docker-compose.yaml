@@ -1,0 +1,117 @@
+version: "3.8"
+
+services:
+  elasticSearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    container_name: elasticsearch-container
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.11.0
+    container_name: kibana-container
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticSearch
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.95.0
+    container_name: otel-collector-container
+    command: ["--config=/etc/otel-collector-config.yml"]
+    volumes:
+      - ./config/otel-collector-config.yml:/etc/otel-collector-config.yml
+    ports:
+      - "8888:8888"
+      - "8889:8889"
+      - "13133:13133"
+      - "4317:4317" # Cổng cho gRPC
+      - "4318:4318" # Cổng cho HTTP
+    networks:
+      - shopapp-asp-network
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus-container
+    ports:
+      - 9090:9090
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+    networks:
+      - shopapp-asp-network
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana-container
+    ports:
+      - "3030:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - shopapp-asp-network
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.5.0
+    container_name: node_exporter
+    command: "--path.rootfs=/host"
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    networks:
+      - shopapp-asp-network
+
+volumes:
+  elasticsearch-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+
+networks:
+  shopapp-asp-network:
+    name: shopapp-asp-network
+    driver: bridge
+    external: true
+#otel-collector: Thu thập dữ liệu từ các ứng dụng và gửi đến Prometheus.
+#Prometheus: Lưu trữ và xử lý dữ liệu giám sát.
+#Grafana: Hiển thị dữ liệu từ Prometheus dưới dạng dashboard.
+#node_exporter: Thu thập các số liệu từ hệ thống máy chủ.
+
+# docker-compose -f ./docker-compose.yaml down
+# docker-compose -f ./docker-compose.yaml up -d
+
+# tạo image elasticSearch
+# docker-compose -f ./docker-compose.yaml rm -s -f elasticSearch
+# docker-compose -f ./docker-compose.yaml up -d elasticSearch
+
+# tạo image kibana
+# docker-compose -f ./docker-compose.yaml rm -s -f kibana
+# docker-compose -f ./docker-compose.yaml up -d kibana
+
+# tạo image otel-collector
+# docker-compose -f ./docker-compose.yaml rm -s -f otel-collector
+# docker-compose -f ./docker-compose.yaml up -d otel-collector
+
+# tạo image prometheus
+# docker-compose -f ./docker-compose.yaml rm -s -f prometheus
+# docker-compose -f ./docker-compose.yaml up -d prometheus
+
+# tạo image grafana
+# docker-compose -f ./docker-compose.yaml rm -s -f grafana
+# docker-compose -f ./docker-compose.yaml up -d grafana

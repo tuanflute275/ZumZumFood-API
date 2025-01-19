@@ -29,6 +29,7 @@ global using Serilog;
 global using ILogger = Serilog.ILogger;
 global using RabbitMQ.Client;
 global using System.Text;
+global using Nest;
 
 
 // 6. Thư viện ứng dụng (ZumZumFood)

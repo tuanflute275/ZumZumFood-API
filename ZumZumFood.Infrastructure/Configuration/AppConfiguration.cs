@@ -18,7 +18,11 @@
 
             // Ghi log các request vào Serilog
             app.UseSerilogRequestLogging(); // Ghi log các request HTTP
-           
+
+            // Cấu hình Elasticsearch client cho LogHelper
+            var elasticClient = app.ApplicationServices.GetRequiredService<IElasticClient>();
+            LogHelper.Configure(elasticClient);
+
             app.UseWebSockets(new WebSocketOptions
             {
                 KeepAliveInterval = TimeSpan.FromSeconds(120)  // Thời gian giữ kết nối sống

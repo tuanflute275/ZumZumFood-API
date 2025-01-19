@@ -72,7 +72,7 @@
                     pageNumber = pagedData.PageNumber,     // Current page number
                     pageSize = pagedData.PageSize          // Page size
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/brand", null, pagedData.Count());
+                LogHelper.LogInformation(_logger, "GET", "/api/brand", $"{{'Keyword: {keyword}, sort: {sort}, pageNo: {pageNo}'}}", pagedData.Count());
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)
@@ -101,7 +101,7 @@
                 var brand = dataQuery.FirstOrDefault();
                 if (brand == null)
                 {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/brand/{id}", null, brand);
+                    LogHelper.LogWarning(_logger, "GET", $"/api/brand/{id}", "Brand not found.", null);
                     return new ResponseObject(404, "Brand not found.", brand);
                 }
                 var result = new BrandMapperDTO

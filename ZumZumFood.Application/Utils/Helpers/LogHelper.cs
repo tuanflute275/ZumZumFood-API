@@ -2,12 +2,12 @@
 {
     public static class LogHelper
     {
-        /* private static IElasticClient _elasticClient;
+        private static IElasticClient _elasticClient;
 
-         public static void Configure(IElasticClient elasticClient)
-         {
-             _elasticClient = elasticClient ?? throw new ArgumentNullException(nameof(elasticClient));
-         }*/
+        public static void Configure(IElasticClient elasticClient)
+        {
+            _elasticClient = elasticClient ?? throw new ArgumentNullException(nameof(elasticClient));
+        }
 
 
         // Log thông tin thành công của phương thức
@@ -34,7 +34,7 @@
             };
 
             // Gửi log vào Elasticsearch
-            //await _elasticClient.IndexDocumentAsync(logDocument);
+            await _elasticClient.IndexDocumentAsync(logDocument);
         }
 
         // Log lỗi khi có ngoại lệ
@@ -63,7 +63,7 @@
             };
 
             // Gửi log vào Elasticsearch
-            //await _elasticClient.IndexDocumentAsync(logDocument);
+            await _elasticClient.IndexDocumentAsync(logDocument);
         }
 
         // Log lỗi khi cảnh báo
@@ -90,7 +90,7 @@
             };
 
             // Gửi log vào Elasticsearch
-            //await _elasticClient.IndexDocumentAsync(logDocument);
+            await _elasticClient.IndexDocumentAsync(logDocument);
         }
     }
 }

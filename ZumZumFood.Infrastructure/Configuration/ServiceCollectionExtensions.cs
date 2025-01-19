@@ -14,7 +14,8 @@
                .AddJwtConfiguration(configuration)
                .AddCacheConfiguration(configuration)
                .AddOauth2Configuration(configuration)
-               //.AddRabbitMQConfiguration(configuration)
+               .AddRabbitMQConfiguration(configuration)
+               .AddElasticSearchConfiguration(configuration)
                .AddTransientServices();
             return services;
         }
@@ -332,6 +333,22 @@
             //services.AddSingleton<RabbitMqConsumer>();
             //services.AddHostedService<RabbitMqBackgroundService>();
 
+            return services;
+        }
+
+
+        // Cấu hình dịch vụ elasticSearch
+        public static IServiceCollection AddElasticSearchConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            var uri = configuration["Elasticsearch:Uri"];
+            var index = configuration["Elasticsearch:Index"];
+
+            var settings = new ConnectionSettings(new Uri(uri))
+                           .DefaultIndex(index);
+
+            var client = new ElasticClient(settings);
+
+            services.AddSingleton<IElasticClient>(client);
             return services;
         }
 

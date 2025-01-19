@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Configuration
+﻿using Profile = AutoMapper.Profile;
+
+namespace ZumZumFood.Application.Configuration
 {
     public class AutomapConfig : Profile
     {

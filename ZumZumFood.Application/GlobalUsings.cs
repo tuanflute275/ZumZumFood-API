@@ -38,6 +38,7 @@ global using RabbitMQ.Client;
 global using System.Text;
 global using RabbitMQ.Client.Events;
 global using Microsoft.Extensions.Hosting;
+global using Nest;
 
 // 7. Thư viện của ứng dụng riêng (ZumZumFood)
 global using ZumZumFood.Application.Abstracts;
