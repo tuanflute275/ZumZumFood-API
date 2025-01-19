@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-namespace ZumZumFood.Application.Services.RabbitMQ
+﻿namespace ZumZumFood.Application.Services.RabbitMQ
 {
     public class RabbitMqBackgroundService : BackgroundService
     {

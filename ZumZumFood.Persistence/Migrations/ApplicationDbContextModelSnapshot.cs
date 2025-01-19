@@ -237,7 +237,7 @@ namespace ZumZumFood.Persistence.Migrations
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Code", b =>
                 {
                     b.Property<string>("CodeId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CodeDes")
                         .HasColumnType("nvarchar(255)");
@@ -274,12 +274,11 @@ namespace ZumZumFood.Persistence.Migrations
             modelBuilder.Entity("ZumZumFood.Domain.Entities.CodeValues", b =>
                 {
                     b.Property<string>("CodeId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(1);
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CodeValue")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(2);
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CodeValueDes")
                         .HasColumnType("nvarchar(500)");
@@ -317,7 +316,10 @@ namespace ZumZumFood.Persistence.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("CodeId", "CodeValue");
+                    b.HasKey("CodeId");
+
+                    b.HasIndex("CodeValue")
+                        .IsUnique();
 
                     b.ToTable("CodeValues");
                 });
@@ -523,6 +525,9 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.Property<string>("NameZH")
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");

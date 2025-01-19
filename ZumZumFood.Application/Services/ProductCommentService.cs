@@ -1,6 +1,4 @@
-﻿using ZumZumFood.Application.Utils.Helpers;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class ProductCommentService : IProductCommentService
     {

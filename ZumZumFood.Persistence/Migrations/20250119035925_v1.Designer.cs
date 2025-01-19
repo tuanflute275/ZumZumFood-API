@@ -12,8 +12,8 @@ using ZumZumFood.Persistence.Data;
 namespace ZumZumFood.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250115170338_v2")]
-    partial class v2
+    [Migration("20250119035925_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -237,94 +237,6 @@ namespace ZumZumFood.Persistence.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("ZumZumFood.Domain.Entities.Code", b =>
-                {
-                    b.Property<string>("CodeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CodeDes")
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("CreateBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeleteBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("DeleteFlag")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UpdateBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("CodeId");
-
-                    b.ToTable("Codes");
-                });
-
-            modelBuilder.Entity("ZumZumFood.Domain.Entities.CodeValues", b =>
-                {
-                    b.Property<string>("CodeId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(1);
-
-                    b.Property<string>("CodeValue")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(2);
-
-                    b.Property<string>("CodeValueDes")
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("CodeValueDes1")
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("CodeValueDes2")
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("CodeValueDes3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreateBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeleteBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("DeleteFlag")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UpdateBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("CodeId", "CodeValue");
-
-                    b.ToTable("CodeValues");
-                });
-
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Combo", b =>
                 {
                     b.Property<int>("ComboId")
@@ -526,6 +438,9 @@ namespace ZumZumFood.Persistence.Migrations
 
                     b.Property<string>("NameZH")
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");

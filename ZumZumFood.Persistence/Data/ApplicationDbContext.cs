@@ -38,8 +38,12 @@
             foreach (var fk in cascadeFKs)
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
 
+            //modelBuilder.Entity<CodeValues>()
+            //    .HasKey(c => new { c.CodeId, c.CodeValue });
+
             modelBuilder.Entity<CodeValues>()
-                .HasKey(c => new { c.CodeId, c.CodeValue });
+                .HasIndex(e => e.CodeValue)
+                .IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }

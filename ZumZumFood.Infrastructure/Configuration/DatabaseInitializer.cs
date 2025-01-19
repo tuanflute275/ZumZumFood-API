@@ -1037,7 +1037,7 @@ namespace ZumZumFood.Infrastructure.Configuration
                 }
 
 
-                // Khởi tạo dữ liệu cho bảng Codes
+                //Khởi tạo dữ liệu cho bảng Codes
                 if (!appContext.Codes.Any())
                 {
                     appContext.Codes.AddRange(
@@ -1123,6 +1123,8 @@ namespace ZumZumFood.Infrastructure.Configuration
                     // Lưu các thay đổi vào cơ sở dữ liệu
                     appContext.SaveChanges();
                 }
+
+
             }
         }
     }

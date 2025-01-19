@@ -149,6 +149,16 @@
                   !string.IsNullOrEmpty(src.DeleteDate) ? DateTime.Parse(src.DeleteDate) : (DateTime?)null));
 
             CreateMap<Domain.Entities.Order, OrderDTO>().ReverseMap();
+
+            CreateMap<Code, CodeDTO>()
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src =>
+                   src.CreateDate.HasValue ? src.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null));
+
+            CreateMap<CodeValues, CodeValueDTO>()
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src =>
+                   src.CreateDate.HasValue ? src.CreateDate.Value.ToString("dd-MM-yyyy HH:mm:ss") : null));
+
+            CreateMap<Location, LocationDTO>();
         }
     }
 }

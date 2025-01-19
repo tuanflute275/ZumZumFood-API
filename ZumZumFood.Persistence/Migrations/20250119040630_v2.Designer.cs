@@ -12,8 +12,8 @@ using ZumZumFood.Persistence.Data;
 namespace ZumZumFood.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250110151807_v1")]
-    partial class v1
+    [Migration("20250119040630_v2")]
+    partial class v2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -237,6 +237,96 @@ namespace ZumZumFood.Persistence.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.Code", b =>
+                {
+                    b.Property<string>("CodeId")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CodeDes")
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("CreateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("DeleteFlag")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UpdateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CodeId");
+
+                    b.ToTable("Codes");
+                });
+
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.CodeValues", b =>
+                {
+                    b.Property<string>("CodeId")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CodeValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CodeValueDes")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("CodeValueDes1")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("CodeValueDes2")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("CodeValueDes3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("DeleteFlag")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UpdateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CodeId");
+
+                    b.HasIndex("CodeValue")
+                        .IsUnique();
+
+                    b.ToTable("CodeValues");
+                });
+
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Combo", b =>
                 {
                     b.Property<int>("ComboId")
@@ -402,6 +492,61 @@ namespace ZumZumFood.Persistence.Migrations
                     b.ToTable("couponConditions");
                 });
 
+            modelBuilder.Entity("ZumZumFood.Domain.Entities.Location", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("CreateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("DeleteFlag")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NameEN")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NameZH")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdateBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Locations");
+                });
+
             modelBuilder.Entity("ZumZumFood.Domain.Entities.Log", b =>
                 {
                     b.Property<int>("LogId")
@@ -412,36 +557,34 @@ namespace ZumZumFood.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogId"));
 
                     b.Property<string>("IpAdress")
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("ipAdress");
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("KeyApi")
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Request")
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("request");
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Response")
-                        .HasColumnType("ntext")
-                        .HasColumnName("response");
+                        .HasColumnType("ntext");
 
                     b.Property<DateTime?>("TimeActionRequest")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("timeActionRequest");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("TimeLogin")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("timeLogin");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("TimeLogout")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("timeLogout");
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("userName");
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("WorkTation")
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("workTation");
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("LogId");
 

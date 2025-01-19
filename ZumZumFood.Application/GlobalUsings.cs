@@ -37,6 +37,7 @@ global using Newtonsoft.Json;
 global using RabbitMQ.Client;
 global using System.Text;
 global using RabbitMQ.Client.Events;
+global using Microsoft.Extensions.Hosting;
 
 // 7. Thư viện của ứng dụng riêng (ZumZumFood)
 global using ZumZumFood.Application.Abstracts;
@@ -50,3 +51,6 @@ global using ZumZumFood.Domain.Entities;
 global using ZumZumFood.Infrastructure.Abstracts;
 global using static ZumZumFood.Application.Utils.Helpers.Helpers;
 global using ZumZumFood.Infrastructure.Services;
+global using ZumZumFood.Application.Utils.Common;
+global using ZumZumFood.Application.Utils.Helpers;
+global using ZumZumFood.Application.Utils.Helpers.Token;

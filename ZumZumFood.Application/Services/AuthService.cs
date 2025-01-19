@@ -1,8 +1,4 @@
-﻿using ZumZumFood.Application.Utils.Common;
-using ZumZumFood.Application.Utils.Helpers;
-using ZumZumFood.Application.Utils.Helpers.Token;
-
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class AuthService : IAuthService
     {

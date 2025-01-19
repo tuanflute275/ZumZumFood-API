@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ZumZumFood.Application.Utils.Common;
-using ZumZumFood.Application.Utils.Helpers;
-namespace ZumZumFood.Application.Services
+﻿namespace ZumZumFood.Application.Services
 {
     public class CouponService : ICouponService
     {

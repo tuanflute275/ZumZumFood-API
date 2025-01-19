@@ -4,11 +4,10 @@
     public class CodeValues : BaseEntity
     {
         [Key]
-        [Column(Order = 1, TypeName = "nvarchar(100)")]
+        [Column(TypeName = "nvarchar(100)")]
         public string CodeId { get; set; }
 
-        [Key]
-        [Column(Order = 2, TypeName = "nvarchar(100)")]
+        [Column(TypeName = "nvarchar(100)")]
         public string CodeValue { get; set; }
 
         [Column(TypeName = "nvarchar(500)")]

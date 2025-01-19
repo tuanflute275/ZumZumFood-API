@@ -45,6 +45,7 @@ namespace ZumZumFood.Infrastructure.Configuration
             services.AddTransient<ICouponConditionService, CouponConditionService>();
             services.AddTransient<IComboService, ComboService>();
             services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<ICodeService, CodeService>();
         }
 
         // Add singleton

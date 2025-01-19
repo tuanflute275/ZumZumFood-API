@@ -135,19 +135,46 @@ namespace ZumZumFood.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Locations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(10)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    NameEN = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    NameZH = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    CreateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteFlag = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Locations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Logs",
                 columns: table => new
                 {
                     logId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    userName = table.Column<string>(type: "nvarchar(255)", nullable: true),
-                    workTation = table.Column<string>(type: "nvarchar(255)", nullable: true),
-                    request = table.Column<string>(type: "nvarchar(255)", nullable: true),
-                    response = table.Column<string>(type: "ntext", nullable: true),
-                    ipAdress = table.Column<string>(type: "nvarchar(255)", nullable: true),
-                    timeLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    timeLogout = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    timeActionRequest = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UserName = table.Column<string>(type: "nvarchar(255)", nullable: true),
+                    WorkTation = table.Column<string>(type: "nvarchar(255)", nullable: true),
+                    Request = table.Column<string>(type: "nvarchar(255)", nullable: true),
+                    Response = table.Column<string>(type: "ntext", nullable: true),
+                    IpAdress = table.Column<string>(type: "nvarchar(255)", nullable: true),
+                    KeyApi = table.Column<string>(type: "nvarchar(255)", nullable: true),
+                    Url = table.Column<string>(type: "nvarchar(255)", nullable: true),
+                    TimeLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TimeLogout = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TimeActionRequest = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -759,6 +786,9 @@ namespace ZumZumFood.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "couponConditions");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "Logs");
