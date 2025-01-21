@@ -6,6 +6,10 @@
 	step 1: remove file .git
 	step2 : refactor appSetting.json
 	step 3: build
+	
+# Grafana
+
+	Dashboard => new Dashboard => create visual => header (view) // body (queries) => gọi tới job hoặc api để thống kê => run queries
 
 # AppSetting.json
 

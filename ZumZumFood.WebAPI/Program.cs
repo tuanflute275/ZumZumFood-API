@@ -1,4 +1,10 @@
-﻿var builder         = WebApplication.CreateBuilder(args);
+﻿using OpenTelemetry;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Prometheus;
+
+var builder         = WebApplication.CreateBuilder(args);
 var services        = builder.Services;
 var configuration   = builder.Configuration;
 
@@ -12,6 +18,33 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configure OpenTelemetry
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracerProviderBuilder =>
+    {
+        tracerProviderBuilder
+            .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                .AddService("YourServiceName")) // Replace with your service name
+            .AddAspNetCoreInstrumentation() // Trace incoming HTTP requests
+            .AddHttpClientInstrumentation() // Trace outgoing HTTP requests
+            .AddOtlpExporter(options =>
+            {
+                options.Endpoint = new Uri("http://otel-collector:4317"); // OpenTelemetry Collector endpoint
+            });
+    })
+    .WithMetrics(metricsProviderBuilder =>
+    {
+        metricsProviderBuilder
+            .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                .AddService("YourServiceName")) // Replace with your service name
+            .AddAspNetCoreInstrumentation() // Collect ASP.NET Core metrics
+            .AddRuntimeInstrumentation() // Collect .NET runtime metrics
+            .AddOtlpExporter(options =>
+            {
+                options.Endpoint = new Uri("http://otel-collector:4317"); // OpenTelemetry Collector endpoint
+            });
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.MapMetrics();
 await app.AutoMigration();
 app.UseRouting();
 app.ConfigureMiddleware();
@@ -45,4 +78,5 @@ app.MapHealthChecks("/health", new HealthCheckOptions()
         await context.Response.WriteAsJsonAsync(result);
     }
 });
+
 app.Run();

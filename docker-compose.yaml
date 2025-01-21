@@ -25,6 +25,20 @@ services:
     depends_on:
       - elasticSearch
 
+  api:
+    image: ./Dockerfile
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"  # HTTP
+      - "5001:5001"  # HTTPS
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317  # OpenTelemetry Collector Endpoint
+    networks:
+      - shopapp-asp-network
+
   otel-collector:
     image: otel/opentelemetry-collector:0.95.0
     container_name: otel-collector-container
