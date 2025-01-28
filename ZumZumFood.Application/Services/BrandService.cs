@@ -14,65 +14,61 @@
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(BrandQuery brandQuery)
         {
+            var limit = brandQuery.PageSize > 0 ? brandQuery.PageSize : int.MaxValue;
+            var start = brandQuery.PageNo > 0 ? (brandQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/brand", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
                 var dataQuery = _unitOfWork.BrandRepository.GetAllAsync(
-                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) || s.Name.Contains(keyword)
+                    expression: x => x.DeleteFlag != true &&
+                                     (string.IsNullOrEmpty(brandQuery.Name) || x.Name.Contains(brandQuery.Name))
                 );
                 var query = await dataQuery;
-               
-                // Apply dynamic sorting based on the `sort` parameter
-                if (!string.IsNullOrEmpty(sort))
+
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(brandQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = brandQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            query = query.OrderBy(x => x.BrandId);
-                            break;
-                        case "Id-DESC":
-                            query = query.OrderByDescending(x => x.BrandId);
-                            break;
-                        case "Name-ASC":
-                            query = query.OrderBy(x => x.Name);
-                            break;
-                        case "Name-DESC":
-                            query = query.OrderByDescending(x => x.Name);
-                            break;
-                        default:
-                            query = query.OrderByDescending(x => x.BrandId);
-                            break;
-                    }
+                        "Name" when brandQuery.SortAscending => query.OrderBy(x => x.Name),
+                        "Name" when !brandQuery.SortAscending => query.OrderByDescending(x => x.Name),
+                        "Id" when brandQuery.SortAscending => query.OrderBy(x => x.BrandId),
+                        "Id" when !brandQuery.SortAscending => query.OrderByDescending(x => x.BrandId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderByDescending(x => x.BrandId);
                 }
 
-                // Map data to dataDTO
-                var dataList = query.ToList();
-                var data = _mapper.Map<List<BrandDTO>>(dataList);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Apply pagination if SelectAll is false
+                var pagedQuery = brandQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Map to DTOs
+                var data = _mapper.Map<List<BrandDTO>>(pagedQuery);
+
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / brandQuery.PageSize),
+                    pageNumber = brandQuery.PageNo,
+                    pageSize = brandQuery.PageSize
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/brand", $"{{'Keyword: {keyword}, sort: {sort}, pageNo: {pageNo}'}}", pagedData.Count());
+
+                LogHelper.LogInformation(_logger, "GET", "/api/brand", $"Query: {JsonConvert.SerializeObject(brandQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

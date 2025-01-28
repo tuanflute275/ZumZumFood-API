@@ -1,4 +1,5 @@
-﻿using ZumZumFood.Application.Utils.Helpers.Token;
+﻿using ZumZumFood.Application.Models.Queries.Components;
+using ZumZumFood.Application.Utils.Helpers.Token;
 
 namespace ZumZumFood.WebAPI.Controllers
 {
@@ -12,10 +13,10 @@ namespace ZumZumFood.WebAPI.Controllers
             _bannerService = bannerService;
         }
 
-        [HttpGet]
-        public async Task<ResponseObject> FindAll(string? keyword, string? sort, int page = 1)
+        [HttpPost("search")]
+        public async Task<ResponseObject> FindAll(BannerQuery bannerQuery)
         {
-            return await _bannerService.GetAllPaginationAsync(keyword, sort, page);
+            return await _bannerService.GetAllPaginationAsync(bannerQuery);
         }
 
         [HttpGet("{id:int}")]

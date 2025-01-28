@@ -2,7 +2,7 @@
 {
     public interface IBannerService
     {
-        Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
+        Task<ResponseObject> GetAllPaginationAsync(BannerQuery bannerQuery);
         Task<ResponseObject> GetByIdAsync(int id);
         Task<ResponseObject> SaveAsync(BannerModel model);
         Task<ResponseObject> UpdateAsync(int id, BannerModel model);

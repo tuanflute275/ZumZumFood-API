@@ -7,14 +7,14 @@
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
-        private readonly IRabbitService _rabbitService;
+        //private readonly IRabbitService _rabbitService;
         public AuthService(
             IUnitOfWork unitOfWork, 
             ILogger<AuthService> logger,
             IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor,
-            IEmailService emailService,
-            IRabbitService rabbitService
+            IEmailService emailService
+            //IRabbitService rabbitService
             )
         {
             _logger = logger;
@@ -22,7 +22,7 @@
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
-            _rabbitService = rabbitService;
+            //_rabbitService = rabbitService;
         }
 
         public async Task<ResponseObject> LoginAsync(LoginModel model, bool? oauth2 = false)
@@ -87,7 +87,7 @@
                 }
 
                 // generate token and refresh token
-                var accessToken = TokenHelper.GenerateJwtToken(user.UserId, user.UserName, user.FullName, user.Email, roles.Select(r => r.Role.RoleName), _configuration);
+                var accessToken = TokenHelper.GenerateJwtToken(user.UserId, user.UserName, user.FullName, user.Email, user.Avatar, roles.Select(r => r.Role.RoleName), _configuration);
                 var refreshToken = TokenHelper.GenerateRefreshToken();
 
                 //save token vào database
@@ -245,6 +245,7 @@
                       user.UserName,
                       user.FullName,
                       user.Email,
+                      user.Avatar,
                       roles.Select(r => r.Role.RoleName),
                       _configuration
                   );
@@ -390,12 +391,12 @@
 
 
                 // Send the reset password request to RabbitMQ (Producer)
-                var isPublished = await _rabbitService.PublishHNX(model.Email);
-                if (!isPublished)
-                {
-                    LogHelper.LogWarning(_logger, "Failed to publish password reset request to RabbitMQ", model.Email);
-                    return new ResponseObject(500, "Failed to process your request, please try again later.");
-                }
+                //var isPublished = await _rabbitService.PublishHNX(model.Email);
+                //if (!isPublished)
+                //{
+                //    LogHelper.LogWarning(_logger, "Failed to publish password reset request to RabbitMQ", model.Email);
+                //    return new ResponseObject(500, "Failed to process your request, please try again later.");
+                //}
 
                 // Log the event of sending request to RabbitMQ
                 LogHelper.LogInformation(_logger, "Password reset request sent to RabbitMQ", model.Email);

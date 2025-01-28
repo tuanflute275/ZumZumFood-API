@@ -1,8 +1,10 @@
-﻿namespace ZumZumFood.Application.Abstracts
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Abstracts
 {
     public interface IBrandService
     {
-        Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
+        Task<ResponseObject> GetAllPaginationAsync(BrandQuery brandQuery);
         Task<ResponseObject> GetByIdAsync(int id);
         Task<ResponseObject> SaveAsync(BrandModel model);
         Task<ResponseObject> UpdateAsync(int id, BrandModel model);

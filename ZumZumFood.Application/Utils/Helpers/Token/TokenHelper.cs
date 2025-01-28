@@ -2,7 +2,7 @@
 {
     public static class TokenHelper
     {
-        public static string GenerateJwtToken(int userId, string username, string fullName, string userEmail, IEnumerable<string> roles, IConfiguration configuration)
+        public static string GenerateJwtToken(int userId, string username, string fullName, string userEmail, string avatar, IEnumerable<string> roles, IConfiguration configuration)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(configuration["Jwt:key"]);
@@ -13,6 +13,7 @@
                 new Claim(ClaimTypes.Email, userEmail),
                 new Claim(ClaimTypes.Name, username),
                 new Claim(ClaimTypes.GivenName, fullName),
+                new Claim(ClaimTypes.Thumbprint, avatar),
             };
 
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));

@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class BannerService : IBannerService
     {
@@ -14,65 +16,61 @@
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(BannerQuery bannerQuery)
         {
+            var limit = bannerQuery.PageSize > 0 ? bannerQuery.PageSize : int.MaxValue;
+            var start = bannerQuery.PageNo > 0 ? (bannerQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/banner", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
                 var dataQuery = _unitOfWork.BannerRepository.GetAllAsync(
-                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) || s.Title.Contains(keyword)
+                expression: x => x.DeleteFlag != true &&
+                                     (string.IsNullOrEmpty(bannerQuery.Name) || x.Title.Contains(bannerQuery.Name))
                 );
                 var query = await dataQuery;
-               
-                // Apply dynamic sorting based on the `sort` parameter
-                if (!string.IsNullOrEmpty(sort))
+
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(bannerQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = bannerQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            query = query.OrderBy(x => x.BannerId);
-                            break;
-                        case "Id-DESC":
-                            query = query.OrderByDescending(x => x.BannerId);
-                            break;
-                        case "Name-ASC":
-                            query = query.OrderBy(x => x.Title);
-                            break;
-                        case "Name-DESC":
-                            query = query.OrderByDescending(x => x.Title);
-                            break;
-                        default:
-                            query = query.OrderByDescending(x => x.BannerId);
-                            break;
-                    }
+                        "Name" when bannerQuery.SortAscending => query.OrderBy(x => x.Title),
+                        "Name" when !bannerQuery.SortAscending => query.OrderByDescending(x => x.Title),
+                        "Id" when bannerQuery.SortAscending => query.OrderBy(x => x.BannerId),
+                        "Id" when !bannerQuery.SortAscending => query.OrderByDescending(x => x.BannerId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderByDescending(x => x.BannerId);
                 }
 
-                // Map data to dataDTO
-                var dataList = query.ToList();
-                var data = _mapper.Map<List<BannerDTO>>(dataList);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Apply pagination if SelectAll is false
+                var pagedQuery = bannerQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Map to DTOs
+                var data = _mapper.Map<List<BannerDTO>>(pagedQuery);
+
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / bannerQuery.PageSize),
+                    pageNumber = bannerQuery.PageNo,
+                    pageSize = bannerQuery.PageSize
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/banner", null, pagedData.Count());
+
+                LogHelper.LogInformation(_logger, "GET", "/api/brand", $"Query: {JsonConvert.SerializeObject(bannerQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

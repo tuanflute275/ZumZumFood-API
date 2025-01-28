@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.WebAPI.Controllers
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/v1/brand")]
@@ -10,10 +12,10 @@
             _brandService = brandService;
         }
 
-        [HttpGet]
-        public async Task<ResponseObject> FindAll(string? keyword, string? sort, int page = 1)
+        [HttpPost("search")]
+        public async Task<ResponseObject> FindAll(BrandQuery brandQuery)
         {
-            return await _brandService.GetAllPaginationAsync(keyword, sort, page);
+            return await _brandService.GetAllPaginationAsync(brandQuery);
         }
 
         [HttpGet("{id:int}")]
