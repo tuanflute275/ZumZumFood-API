@@ -70,7 +70,7 @@ namespace ZumZumFood.Application.Services
                     pageSize = bannerQuery.PageSize
                 };
 
-                LogHelper.LogInformation(_logger, "GET", "/api/brand", $"Query: {JsonConvert.SerializeObject(bannerQuery)}", data.Count);
+                LogHelper.LogInformation(_logger, "GET", "/api/banner", $"Query: {JsonConvert.SerializeObject(bannerQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

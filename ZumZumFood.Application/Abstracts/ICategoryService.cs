@@ -2,7 +2,7 @@
 {
     public interface ICategoryService
     {
-        Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
+        Task<ResponseObject> GetAllPaginationAsync(CategoryQuery categoryQuery);
         Task<ResponseObject> GetByIdAsync(int id);
         Task<ResponseObject> SaveAsync(CategoryModel model);
         Task<ResponseObject> UpdateAsync(int id, CategoryModel model);
