@@ -2,7 +2,7 @@
 {
     public interface ICodeService
     {
-        Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
+        Task<ResponseObject> GetAllPaginationAsync(CodeQuery codeQuery);
         Task<ResponseObject> GetByCodeIdAsync(string codeId);
         Task<ResponseObject> SaveCodeAsync(CodeModel model);
         Task<ResponseObject> UpdateCodeAsync(string codeId, CodeUpdateModel model);

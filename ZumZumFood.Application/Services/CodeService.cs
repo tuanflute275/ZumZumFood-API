@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class CodeService : ICodeService
     {
@@ -12,65 +14,60 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(CodeQuery codeQuery)
         {
+            var limit = codeQuery.PageSize > 0 ? codeQuery.PageSize : int.MaxValue;
+            var start = codeQuery.PageNo > 0 ? (codeQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/code", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
                 var dataQuery = _unitOfWork.CodeRepository.GetAllAsync(
-                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) || s.CodeDes.Contains(keyword)
-                );
+                    expression: x => x.DeleteFlag != true &&
+                    (string.IsNullOrEmpty(codeQuery.Keyword) || x.CodeDes.Contains(codeQuery.Keyword))
+               );
                 var query = await dataQuery;
-               
-                // Apply dynamic sorting based on the `sort` parameter
-                if (!string.IsNullOrEmpty(sort))
+
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(codeQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = codeQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            query = query.OrderBy(x => x.CodeId);
-                            break;
-                        case "Id-DESC":
-                            query = query.OrderByDescending(x => x.CodeId);
-                            break;
-                        case "Name-ASC":
-                            query = query.OrderBy(x => x.CodeDes);
-                            break;
-                        case "Name-DESC":
-                            query = query.OrderByDescending(x => x.CodeDes);
-                            break;
-                        default:
-                            query = query.OrderByDescending(x => x.CodeId);
-                            break;
-                    }
+                        "Name" when codeQuery.SortAscending => query.OrderBy(x => x.CodeDes),
+                        "Name" when !codeQuery.SortAscending => query.OrderByDescending(x => x.CodeDes),
+                        "Id" when codeQuery.SortAscending => query.OrderBy(x => x.CodeId),
+                        "Id" when !codeQuery.SortAscending => query.OrderByDescending(x => x.CodeId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderByDescending(x => x.CodeId);
                 }
 
-                // Map data to dataDTO
-                var dataList = query.ToList();
-                var data = _mapper.Map<List<CodeDTO>>(dataList);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Apply pagination if SelectAll is false
+                var pagedQuery = codeQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Map to DTOs
+                var data = _mapper.Map<List<CodeDTO>>(pagedQuery);
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / codeQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / codeQuery.PageSize) : 0,
+                    pageNumber = codeQuery.PageNo,
+                    pageSize = codeQuery.PageSize
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/code", null, pagedData.Count());
+
+                LogHelper.LogInformation(_logger, "GET", "/api/code", $"Query: {JsonConvert.SerializeObject(codeQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

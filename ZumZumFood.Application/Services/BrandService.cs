@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class BrandService : IBrandService
     {
@@ -63,7 +65,7 @@
                 {
                     items = data,
                     totalCount = totalCount,
-                    totalPages = (int)Math.Ceiling((double)totalCount / brandQuery.PageSize),
+                    totalPages = (int)Math.Ceiling((double)totalCount / brandQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / brandQuery.PageSize) : 0,
                     pageNumber = brandQuery.PageNo,
                     pageSize = brandQuery.PageSize
                 };

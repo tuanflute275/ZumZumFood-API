@@ -65,7 +65,7 @@ namespace ZumZumFood.Application.Services
                 {
                     items = data,
                     totalCount = totalCount,
-                    totalPages = (int)Math.Ceiling((double)totalCount / categoryQuery.PageSize),
+                    totalPages = (int)Math.Ceiling((double)totalCount / categoryQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / categoryQuery.PageSize) : 0,
                     pageNumber = categoryQuery.PageNo,
                     pageSize = categoryQuery.PageSize
                 };
