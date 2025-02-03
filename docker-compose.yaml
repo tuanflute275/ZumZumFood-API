@@ -126,6 +126,10 @@ networks:
 # docker-compose -f ./docker-compose.yaml rm -s -f prometheus
 # docker-compose -f ./docker-compose.yaml up -d prometheus
 
+# tạo image node_exporter
+# docker-compose -f ./docker-compose.yaml rm -s -f node_exporter
+# docker-compose -f ./docker-compose.yaml up -d node_exporter
+
 # tạo image grafana
 # docker-compose -f ./docker-compose.yaml rm -s -f grafana
 # docker-compose -f ./docker-compose.yaml up -d grafana

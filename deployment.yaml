@@ -74,6 +74,10 @@ networks:
 # docker network inspect zumzum-food-network
 # docker network create zumzum-food-network
 
+# tạo image sqlserver
+# docker-compose -f ./deployment.yaml rm -s -f sqlserver-container
+# docker-compose -f ./deployment.yaml up -d sqlserver-container
+
 # tạo image redis
 # docker-compose -f ./deployment.yaml rm -s -f redis-container
 # docker-compose -f ./deployment.yaml up -d redis-container
