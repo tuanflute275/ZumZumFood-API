@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class LogService : ILogService
     {
@@ -12,64 +14,65 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(LogQuery logQuery)
         {
+            var limit = logQuery.PageSize > 0 ? logQuery.PageSize : int.MaxValue;
+            var start = logQuery.PageNo > 0 ? (logQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/log", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
                 var dataQuery = _unitOfWork.LogRepository.GetAllAsync(
                     expression: x => x.TimeActionRequest != null 
                                         && x.TimeLogin == null
-                                        && string.IsNullOrEmpty(keyword) 
-                                        || x.UserName.Contains(keyword) 
-                                        || x.WorkTation.Contains(keyword) 
-                                        || x.IpAdress.Contains(keyword)
+                                        && string.IsNullOrEmpty(logQuery.Keyword) 
+                                        || x.UserName.Contains(logQuery.Keyword) 
+                                        || x.WorkTation.Contains(logQuery.Keyword) 
+                                        || x.IpAdress.Contains(logQuery.Keyword)
                 );
                 var query = await dataQuery;
-               
-                // Apply dynamic sorting based on the `sort` 
-                if (!string.IsNullOrEmpty(sort))
+
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(logQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = logQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            query = query.OrderBy(x => x.LogId);
-                            break;
-                        case "Id-DESC":
-                            query = query.OrderByDescending(x => x.LogId);
-                            break;
-                        default:
-                            query = query.OrderByDescending(x => x.LogId);
-                            break;
-                    }
+                        "Name" when logQuery.SortAscending => query.OrderBy(x => x.UserName),
+                        "Name" when !logQuery.SortAscending => query.OrderByDescending(x => x.UserName),
+                        "Id" when logQuery.SortAscending => query.OrderBy(x => x.LogId),
+                        "Id" when !logQuery.SortAscending => query.OrderByDescending(x => x.LogId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderByDescending(x => x.LogId);
                 }
 
-                // Map data to dataDTO
-                var dataList = query.ToList();
-                var data = _mapper.Map<List<LogDTO>>(dataList);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Apply pagination if SelectAll is false
+                var pagedQuery = logQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Map to DTOs
+                var data = _mapper.Map<List<LogDTO>>(pagedQuery);
+
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / logQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / logQuery.PageSize) : 0,
+                    pageNumber = logQuery.PageNo,
+                    pageSize = logQuery.PageSize
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/log", null, pagedData.Count());
+
+                LogHelper.LogInformation(_logger, "GET", "/api/log", $"Query: {JsonConvert.SerializeObject(logQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

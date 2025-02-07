@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class ComboService : IComboService
     {
@@ -14,66 +16,61 @@
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(ComboQuery comboQuery)
         {
+            var limit = comboQuery.PageSize > 0 ? comboQuery.PageSize : int.MaxValue;
+            var start = comboQuery.PageNo > 0 ? (comboQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/combo", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
                 var dataQuery = _unitOfWork.ComboRepository.GetAllAsync(
-                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) 
-                    || s.Name.Contains(keyword) 
-                );
+                   expression: x => x.DeleteFlag != true &&
+                                    (string.IsNullOrEmpty(comboQuery.Name) || x.Name.Contains(comboQuery.Name))
+               );
                 var query = await dataQuery;
-               
-                // Apply dynamic sorting based on the `sort`
-                if (!string.IsNullOrEmpty(sort))
+
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(comboQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = comboQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            query = query.OrderBy(x => x.ComboId);
-                            break;
-                        case "Id-DESC":
-                            query = query.OrderByDescending(x => x.ComboId);
-                            break;
-                        case "Name-ASC":
-                            query = query.OrderBy(x => x.Name);
-                            break;
-                        case "Name-DESC":
-                            query = query.OrderByDescending(x => x.Name);
-                            break;
-                        default:
-                            query = query.OrderByDescending(x => x.ComboId);
-                            break;
-                    }
+                        "Name" when comboQuery.SortAscending => query.OrderBy(x => x.Name),
+                        "Name" when !comboQuery.SortAscending => query.OrderByDescending(x => x.Name),
+                        "Id" when comboQuery.SortAscending => query.OrderBy(x => x.ComboId),
+                        "Id" when !comboQuery.SortAscending => query.OrderByDescending(x => x.ComboId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderByDescending(x => x.ComboId);
                 }
 
-                // Map data to dataDTO
-                var dataList = query.ToList();
-                var data = _mapper.Map<List<ComboDTO>>(dataList);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Apply pagination if SelectAll is false
+                var pagedQuery = comboQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Map to DTOs
+                var data = _mapper.Map<List<ComboDTO>>(pagedQuery);
+
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / comboQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / comboQuery.PageSize) : 0,
+                    pageNumber = comboQuery.PageNo,
+                    pageSize = comboQuery.PageSize
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/combo", null, pagedData.Count());
+
+                LogHelper.LogInformation(_logger, "GET", "/api/combo", $"Query: {JsonConvert.SerializeObject(comboQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

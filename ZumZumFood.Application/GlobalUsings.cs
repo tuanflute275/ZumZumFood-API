@@ -56,3 +56,4 @@ global using ZumZumFood.Application.Utils.Common;
 global using ZumZumFood.Application.Utils.Helpers;
 global using ZumZumFood.Application.Utils.Helpers.Token;
 global using ZumZumFood.Application.Models.Queries.Components;
+global using ZumZumFood.Application.Models.Queries.Base;

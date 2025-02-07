@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class CouponService : ICouponService
     {
@@ -12,66 +14,61 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(CouponQuery couponQuery)
         {
+            var limit = couponQuery.PageSize > 0 ? couponQuery.PageSize : int.MaxValue;
+            var start = couponQuery.PageNo > 0 ? (couponQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/coupon", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
                 var dataQuery = _unitOfWork.CouponRepository.GetAllAsync(
-                    expression: x => x.DeleteFlag != true && string.IsNullOrEmpty(keyword) 
-                    || x.Code.Contains(keyword)
-                );
+                expression: x => x.DeleteFlag != true &&
+                (string.IsNullOrEmpty(couponQuery.Code) || x.Code.Contains(couponQuery.Code))
+               );
                 var query = await dataQuery;
-               
-                // Apply dynamic sorting based on the `sort` parameter
-                if (!string.IsNullOrEmpty(sort))
+
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(couponQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = couponQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            query = query.OrderBy(x => x.CouponId);
-                            break;
-                        case "Id-DESC":
-                            query = query.OrderByDescending(x => x.CouponId);
-                            break;
-                        case "Name-ASC":
-                            query = query.OrderBy(x => x.Code);
-                            break;
-                        case "Name-DESC":
-                            query = query.OrderByDescending(x => x.Code);
-                            break;
-                        default:
-                            query = query.OrderByDescending(x => x.CouponId);
-                            break;
-                    }
+                        "Name" when couponQuery.SortAscending => query.OrderBy(x => x.Code),
+                        "Name" when !couponQuery.SortAscending => query.OrderByDescending(x => x.Code),
+                        "Id" when couponQuery.SortAscending => query.OrderBy(x => x.CouponId),
+                        "Id" when !couponQuery.SortAscending => query.OrderByDescending(x => x.CouponId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderByDescending(x => x.CouponId);
                 }
 
-                // Map data to dataDTO
-                var dataList = query.ToList();
-                var data = _mapper.Map<List<CouponDTO>>(dataList);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Apply pagination if SelectAll is false
+                var pagedQuery = couponQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Map to DTOs
+                var data = _mapper.Map<List<CouponDTO>>(pagedQuery);
+
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / couponQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / couponQuery.PageSize) : 0,
+                    pageNumber = couponQuery.PageNo,
+                    pageSize = couponQuery.PageSize
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/coupon", null, pagedData.Count());
+
+                LogHelper.LogInformation(_logger, "GET", "/api/coupon", $"Query: {JsonConvert.SerializeObject(couponQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

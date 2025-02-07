@@ -10,10 +10,10 @@
             _userService = userService;
         }
 
-        [HttpGet]
-        public async Task<ResponseObject> FindAll(string? keyword, string? sort, int page = 1)
+        [HttpPost("search")]
+        public async Task<ResponseObject> FindAll(UserQuery userQuery)
         {
-            return await _userService.GetAllPaginationAsync(keyword, sort, page);
+            return await _userService.GetAllPaginationAsync(userQuery);
         }
 
         [HttpGet("{id:int}")]

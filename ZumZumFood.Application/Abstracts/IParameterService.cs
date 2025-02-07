@@ -2,7 +2,7 @@
 {
     public interface IParameterService
     {
-        Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
+        Task<ResponseObject> GetAllPaginationAsync(ParameterQuery parameterQuery);
         Task<ResponseObject> GetByIdAsync(int id);
         Task<ResponseObject> SaveAsync(ParameterModel model);
         Task<ResponseObject> UpdateAsync(int id, ParameterModel model);

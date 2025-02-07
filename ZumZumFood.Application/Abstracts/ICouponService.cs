@@ -2,7 +2,7 @@
 {
     public interface ICouponService
     {
-        Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
+        Task<ResponseObject> GetAllPaginationAsync(CouponQuery couponQuery);
         Task<ResponseObject> GetByIdAsync(int id);
         Task<ResponseObject> SaveAsync(CouponModel model);
         Task<ResponseObject> UpdateAsync(int id, CouponModel model);

@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class ParameterService : IParameterService
     {
@@ -12,60 +14,62 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(ParameterQuery parameterQuery)
         {
+            var limit = parameterQuery.PageSize > 0 ? parameterQuery.PageSize : int.MaxValue;
+            var start = parameterQuery.PageNo > 0 ? (parameterQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/parameter", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
                 var dataQuery = _unitOfWork.ParameterRepository.GetAllAsync(
-                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) 
-                    || s.ParaScope.Contains(keyword) || s.ParaName.Contains(keyword) || s.ParaType.Contains(keyword)
+                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(parameterQuery.Keyword) 
+                    || s.ParaScope.Contains(parameterQuery.Keyword) || s.ParaName.Contains(parameterQuery.Keyword) 
+                    || s.ParaType.Contains(parameterQuery.Keyword)
                 );
                 var query = await dataQuery;
-               
-                // Apply dynamic sorting based on the `sort` parameter
-                if (!string.IsNullOrEmpty(sort))
+
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(parameterQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = parameterQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            query = query.OrderBy(x => x.ParameterId);
-                            break;
-                        case "Id-DESC":
-                            query = query.OrderByDescending(x => x.ParameterId);
-                            break;
-                        default:
-                            query = query.OrderByDescending(x => x.ParameterId);
-                            break;
-                    }
+                        "Name" when parameterQuery.SortAscending => query.OrderBy(x => x.ParaName),
+                        "Name" when !parameterQuery.SortAscending => query.OrderByDescending(x => x.ParaName),
+                        "Id" when parameterQuery.SortAscending => query.OrderBy(x => x.ParameterId),
+                        "Id" when !parameterQuery.SortAscending => query.OrderByDescending(x => x.ParameterId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderByDescending(x => x.ParameterId);
                 }
 
-                // Map data to dataDTO
-                var dataList = query.ToList();
-                var data = _mapper.Map<List<ParameterDTO>>(dataList);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Apply pagination if SelectAll is false
+                var pagedQuery = parameterQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Map to DTOs
+                var data = _mapper.Map<List<ParameterDTO>>(pagedQuery);
+
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / parameterQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / parameterQuery.PageSize) : 0,
+                    pageNumber = parameterQuery.PageNo,
+                    pageSize = parameterQuery.PageSize
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/parameter", null, pagedData.Count());
+
+                LogHelper.LogInformation(_logger, "GET", "/api/parameter", $"Query: {JsonConvert.SerializeObject(parameterQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

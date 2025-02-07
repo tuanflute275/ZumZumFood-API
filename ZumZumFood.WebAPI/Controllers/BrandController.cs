@@ -1,6 +1,4 @@
-﻿using ZumZumFood.Application.Models.Queries.Components;
-
-namespace ZumZumFood.WebAPI.Controllers
+﻿namespace ZumZumFood.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/v1/brand")]

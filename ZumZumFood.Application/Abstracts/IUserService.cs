@@ -2,7 +2,7 @@
 {
     public interface IUserService
     {
-        Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
+        Task<ResponseObject> GetAllPaginationAsync(UserQuery userQuery);
         Task<ResponseObject> GetByIdAsync(int id);
         Task<ResponseObject> SaveAsync(UserModel model);
         Task<ResponseObject> UpdateAsync(int id, UserModel model);

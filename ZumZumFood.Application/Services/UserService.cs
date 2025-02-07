@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class UserService : IUserService
     {
@@ -14,78 +16,68 @@
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(UserQuery userQuery)
         {
+            var limit = userQuery.PageSize > 0 ? userQuery.PageSize : int.MaxValue;
+            var start = userQuery.PageNo > 0 ? (userQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/user", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
-                var userQuery = _unitOfWork.UserRepository.GetAllAsync(
-                expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) || s.UserName.Contains(keyword)
-                || s.FullName.Contains(keyword),
+                var userQueryData = _unitOfWork.UserRepository.GetAllAsync(
+                expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(userQuery.Keyword) || s.UserName.Contains(userQuery.Keyword)
+                || s.FullName.Contains(userQuery.Keyword),
                 include: query => query.Include(x => x.UserRoles).ThenInclude(u => u.Role)
             );
-                var users = await userQuery;
+                var query = await userQueryData;
                 var specialUsernames = new[] { "admin", "restaurantOwner", "restaurantStaff", "deliveryDriver", "user" };
-                users = users.OrderBy(s => Array.IndexOf(specialUsernames, s.UserName) >= 0 ? Array.IndexOf(specialUsernames, s.UserName) : int.MaxValue)
+                query = query.OrderBy(s => Array.IndexOf(specialUsernames, s.UserName) >= 0 ? Array.IndexOf(specialUsernames, s.UserName) : int.MaxValue)
                     .ThenBy(s => s.UserName); // Default sorting for others
 
-                // Apply dynamic sorting based on the `sort` parameter
-                if (!string.IsNullOrEmpty(sort))
+
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(userQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = userQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            users = users.OrderBy(x => x.UserId);
-                            break;
-                        case "Id-DESC":
-                            users = users.OrderByDescending(x => x.UserId);
-                            break;
-                        case "Name-ASC":
-                            users = users.OrderBy(x => x.UserName);
-                            break;
-                        case "Name-DESC":
-                            users = users.OrderByDescending(x => x.UserName);
-                            break;
-                        case "Email-ASC":
-                            users = users.OrderBy(x => x.Email);
-                            break;
-                        case "Email-DESC":
-                            users = users.OrderByDescending(x => x.Email);
-                            break;
-                        default:
-                            // In case the sort string does not match any of the above, use default sorting
-                            users = users.OrderBy(s => Array.IndexOf(specialUsernames, s.UserName) >= 0 ? Array.IndexOf(specialUsernames, s.UserName) : int.MaxValue)
+                        "Name" when userQuery.SortAscending => query.OrderBy(x => x.UserName),
+                        "Name" when !userQuery.SortAscending => query.OrderByDescending(x => x.UserName),   
+                        "Email" when userQuery.SortAscending => query.OrderBy(x => x.Email),
+                        "Email" when !userQuery.SortAscending => query.OrderByDescending(x => x.Email),
+                        "Id" when userQuery.SortAscending => query.OrderBy(x => x.UserId),
+                        "Id" when !userQuery.SortAscending => query.OrderByDescending(x => x.UserId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderBy(s => Array.IndexOf(specialUsernames, s.UserName) >= 0 ? Array.IndexOf(specialUsernames, s.UserName) : int.MaxValue)
                                          .ThenBy(s => s.UserName);
-                            break;
-                    }
                 }
 
-                // Map users to UserDTO
-                var userList = users.ToList();
-                var data = _mapper.Map<List<UserDTO>>(userList);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Apply pagination if SelectAll is false
+                var pagedQuery = userQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Map to DTOs
+                var data = _mapper.Map<List<UserDTO>>(pagedQuery);
+
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / userQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / userQuery.PageSize) : 0,
+                    pageNumber = userQuery.PageNo,
+                    pageSize = userQuery.PageSize
                 };
-                LogHelper.LogInformation(_logger, "GET", "/api/user", null, pagedData.Count());
+                LogHelper.LogInformation(_logger, "GET", "/api/user", $"Query: {JsonConvert.SerializeObject(userQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

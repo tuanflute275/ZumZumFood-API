@@ -2,7 +2,7 @@
 {
     public interface IOrderService
     {
-        Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
+        Task<ResponseObject> GetAllPaginationAsync(OrderQuery orderQuery);
         Task<ResponseObject> GetByIdAsync(int id);
         Task<ResponseObject> SaveAsync(OrderModel model);
         Task<ResponseObject> UpdateAsync(int id, OrderUpdateModel model);

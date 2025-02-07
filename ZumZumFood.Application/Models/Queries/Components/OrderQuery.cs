@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Queries.Components
 {
-    public class CodeQuery : BaseQuery<Code>
+    public class OrderQuery : BaseQuery<Domain.Entities.Order>
     {
         public string Keyword { get; set; }
     }

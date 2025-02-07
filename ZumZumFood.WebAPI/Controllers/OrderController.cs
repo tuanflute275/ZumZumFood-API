@@ -10,10 +10,10 @@
             _orderService = orderService;
         }
 
-        [HttpGet]
-        public async Task<ResponseObject> FindAll(string? keyword, string? sort, int page = 1)
+        [HttpPost("search")]
+        public async Task<ResponseObject> FindAll(OrderQuery orderQuery)
         {
-            return await _orderService.GetAllPaginationAsync(keyword, sort, page);
+            return await _orderService.GetAllPaginationAsync(orderQuery);
         }
 
         [HttpGet("{id:int}")]

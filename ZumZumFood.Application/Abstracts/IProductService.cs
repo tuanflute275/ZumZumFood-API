@@ -2,7 +2,7 @@
 {
     public interface IProductService
     {
-        Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1);
+        Task<ResponseObject> GetAllPaginationAsync(ProductQuery productQuery);
         Task<ResponseObject> GetByIdAsync(int id);
         Task<ResponseObject> SaveAsync(ProductModel model);
         Task<ResponseObject> UpdateAsync(int id, ProductModel model);

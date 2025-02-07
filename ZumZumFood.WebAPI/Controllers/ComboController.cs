@@ -10,10 +10,10 @@
             _comboService = comboService;
         }
 
-        [HttpGet]
-        public async Task<ResponseObject> FindAll(string? keyword, string? sort, int page = 1)
+        [HttpPost("search")]
+        public async Task<ResponseObject> FindAll(ComboQuery comboQuery)
         {
-            return await _comboService.GetAllPaginationAsync(keyword, sort, page);
+            return await _comboService.GetAllPaginationAsync(comboQuery);
         }
 
         [HttpGet("{id:int}")]

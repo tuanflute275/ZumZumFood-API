@@ -1,6 +1,6 @@
 ﻿namespace ZumZumFood.Application.Models.Queries.Components
 {
-    public class BannerQuery : BaseQuery<Banner>
+    public class ProductQuery : BaseQuery<Product>
     {
         public string Name { get; set; }
     }

@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class OrderService : IOrderService
     {
@@ -12,68 +14,62 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(OrderQuery orderQuery)
         {
+            var limit = orderQuery.PageSize > 0 ? orderQuery.PageSize : int.MaxValue;
+            var start = orderQuery.PageNo > 0 ? (orderQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/order", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
-
                 var dataQuery = _unitOfWork.OrderRepository.GetAllAsync(
-                    expression: x => string.IsNullOrEmpty(keyword) || x.OrderFullName.Contains(keyword)
-                    || x.OrderAddress.Contains(keyword) || x.OrderPhoneNumber.Contains(keyword)
+                    expression: x => string.IsNullOrEmpty(orderQuery.Keyword) || x.OrderFullName.Contains(orderQuery.Keyword)
+                    || x.OrderAddress.Contains(orderQuery.Keyword) || x.OrderPhoneNumber.Contains(orderQuery.Keyword)
                 );
                 var query = await dataQuery;
 
-                // Apply dynamic sorting based on the `sort` parameter
-                if (!string.IsNullOrEmpty(sort))
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(orderQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = orderQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            query = query.OrderBy(x => x.OrderId);
-                            break;
-                        case "Id-DESC":
-                            query = query.OrderByDescending(x => x.OrderId);
-                            break;
-                        case "Name-ASC":
-                            query = query.OrderBy(x => x.OrderFullName);
-                            break;
-                        case "Name-DESC":
-                            query = query.OrderByDescending(x => x.OrderFullName);
-                            break;
-                        default:
-                            query = query.OrderByDescending(x => x.OrderId);
-                            break;
-                    }
+                        "Name" when orderQuery.SortAscending => query.OrderBy(x => x.OrderFullName),
+                        "Name" when !orderQuery.SortAscending => query.OrderByDescending(x => x.OrderFullName),
+                        "Id" when orderQuery.SortAscending => query.OrderBy(x => x.OrderId),
+                        "Id" when !orderQuery.SortAscending => query.OrderByDescending(x => x.OrderId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderByDescending(x => x.OrderId);
                 }
 
-                // Map data to dataDTO
-                var dataList = query.ToList();
-                var data = _mapper.Map<List<OrderDTO>>(dataList);
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Apply pagination if SelectAll is false
+                var pagedQuery = orderQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
+
+                // Map to DTOs
+                var data = _mapper.Map<List<OrderDTO>>(pagedQuery);
+
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / orderQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / orderQuery.PageSize) : 0,
+                    pageNumber = orderQuery.PageNo,
+                    pageSize = orderQuery.PageSize
                 };
 
-                LogHelper.LogInformation(_logger, "GET", "/api/order", null, pagedData.Count());
+                LogHelper.LogInformation(_logger, "GET", "/api/order", $"Query: {JsonConvert.SerializeObject(orderQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

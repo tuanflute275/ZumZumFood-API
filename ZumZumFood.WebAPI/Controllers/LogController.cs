@@ -10,10 +10,10 @@
             _logService = logService;
         }
 
-        [HttpGet]
-        public async Task<ResponseObject> FindAll(string? keyword, string? sort, int page = 1)
+        [HttpPost("search")]
+        public async Task<ResponseObject> FindAll(LogQuery logQuery)
         {
-            return await _logService.GetAllPaginationAsync(keyword, sort, page);
+            return await _logService.GetAllPaginationAsync(logQuery);
         }
 
         [HttpGet("{id:int}")]

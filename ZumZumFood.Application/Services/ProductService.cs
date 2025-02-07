@@ -1,4 +1,6 @@
-﻿namespace ZumZumFood.Application.Services
+﻿using ZumZumFood.Application.Models.Queries.Components;
+
+namespace ZumZumFood.Application.Services
 {
     public class ProductService : IProductService
     {
@@ -23,20 +25,14 @@
             _redisCacheService = redisCacheService;
         }
 
-        public async Task<ResponseObject> GetAllPaginationAsync(string? keyword, string? sort, int pageNo = 1)
+        public async Task<ResponseObject> GetAllPaginationAsync(ProductQuery productQuery)
         {
+            var limit = productQuery.PageSize > 0 ? productQuery.PageSize : int.MaxValue;
+            var start = productQuery.PageNo > 0 ? (productQuery.PageNo - 1) * limit : 0;
             try
             {
-                // validate invalid special characters
-                var validationResult = InputValidator.ValidateInput(keyword, sort, pageNo);
-                if (!string.IsNullOrEmpty(validationResult))
-                {
-                    LogHelper.LogWarning(_logger, "GET", $"/api/product", null, "Input contains invalid special characters");
-                    return new ResponseObject(400, "Input contains invalid special characters", validationResult);
-                }
-
                 // start cache
-                var cacheKey = $"{_cacheKeyPrefix}{keyword ?? "all"}_{sort ?? "default"}_page_{pageNo}";
+                var cacheKey = $"{_cacheKeyPrefix}{productQuery.Name ?? "all"}_{productQuery.SortColumn ?? "default"}_page_{productQuery.PageNo}";
                 var cachedData = await _redisCacheService.GetCacheAsync(cacheKey);
                 if (cachedData != null)
                 {
@@ -47,62 +43,58 @@
                 //end cache
 
                 var dataQuery = _unitOfWork.ProductRepository.GetAllAsync(
-                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(keyword) || s.Name.Contains(keyword)
+                    expression: s => s.DeleteFlag != true && string.IsNullOrEmpty(productQuery.Name) || s.Name.Contains(productQuery.Name)
                 );
                 var query = await dataQuery;
 
-                // Apply dynamic sorting based on the `sort` parameter
-                if (!string.IsNullOrEmpty(sort))
+                // Áp dụng sắp xếp
+                if (!string.IsNullOrEmpty(productQuery.SortColumn))
                 {
-                    switch (sort)
+                    query = productQuery.SortColumn switch
                     {
-                        case "Id-ASC":
-                            query = query.OrderBy(x => x.ProductId);
-                            break;
-                        case "Id-DESC":
-                            query = query.OrderByDescending(x => x.ProductId);
-                            break;
-                        case "Name-ASC":
-                            query = query.OrderBy(x => x.Name);
-                            break;
-                        case "Name-DESC":
-                            query = query.OrderByDescending(x => x.Name);
-                            break;
-                        case "Price-ASC":
-                            query = query.OrderBy(x => x.Price);
-                            break;
-                        case "Price-DESC":
-                            query = query.OrderByDescending(x => x.Price);
-                            break;
-                        default:
-                            query = query.OrderByDescending(x => x.ProductId);
-                            break;
-                    }
+                        "Name" when productQuery.SortAscending => query.OrderBy(x => x.Name),
+                        "Name" when !productQuery.SortAscending => query.OrderByDescending(x => x.Name),
+                        "Price" when productQuery.SortAscending => query.OrderBy(x => x.Price),
+                        "Price" when !productQuery.SortAscending => query.OrderByDescending(x => x.Price),
+                        "Id" when productQuery.SortAscending => query.OrderBy(x => x.ProductId),
+                        "Id" when !productQuery.SortAscending => query.OrderByDescending(x => x.ProductId),
+                        _ => query
+                    };
+                }
+                else
+                {
+                    // Sắp xếp mặc định
+                    query = query.OrderByDescending(x => x.ProductId);
                 }
 
-                // Map data to dataDTO
-                var dataList = query.ToList();
-                var data = _mapper.Map<List<ProductDTO>>(dataList);
 
-                // Paginate the result
-                // Phân trang dữ liệu
-                var pagedData = data.ToPagedList(pageNo, Constant.DEFAULT_PAGESIZE);
+                // Get total count
+                var totalCount = query.Count();
 
-                // Return the paginated result in the response
-                // Trả về kết quả phân trang bao gồm các thông tin phân trang
-                // Create paginated response
+                // Apply pagination if SelectAll is false
+                var pagedQuery = productQuery.SelectAll
+                    ? query.ToList()
+                    : query
+                        .Skip(start)
+                        .Take(limit)
+                        .ToList();
+
+                // Map to DTOs
+                var data = _mapper.Map<List<ProductDTO>>(pagedQuery);
+
+                // Prepare response
                 var responseData = new
                 {
-                    items = pagedData,                // Paginated items
-                    totalCount = pagedData.TotalItemCount, // Total number of items
-                    totalPages = pagedData.PageCount,      // Total number of pages
-                    pageNumber = pagedData.PageNumber,     // Current page number
-                    pageSize = pagedData.PageSize          // Page size
+                    items = data,
+                    totalCount = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / productQuery.PageSize) > 0 ? (int)Math.Ceiling((double)totalCount / productQuery.PageSize) : 0,
+                    pageNumber = productQuery.PageNo,
+                    pageSize = productQuery.PageSize
                 };
 
                 // Lưu vào Redis
                 await _redisCacheService.SetCacheAsync(cacheKey, JsonConvert.SerializeObject(responseData), TimeSpan.FromHours(1));
-                LogHelper.LogInformation(_logger, "GET", "/api/product", null, pagedData.Count());
+                LogHelper.LogInformation(_logger, "GET", "/api/product", $"Query: {JsonConvert.SerializeObject(productQuery)}", data.Count);
                 return new ResponseObject(200, "Query data successfully", responseData);
             }
             catch (Exception ex)

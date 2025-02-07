@@ -10,10 +10,10 @@
             _couponService = couponService;
         }
 
-        [HttpGet]
-        public async Task<ResponseObject> FindAll(string? keyword, string? sort, int page = 1)
+        [HttpPost("search")]
+        public async Task<ResponseObject> FindAll(CouponQuery couponQuery)
         {
-            return await _couponService.GetAllPaginationAsync(keyword, sort, page);
+            return await _couponService.GetAllPaginationAsync(couponQuery);
         }
 
         [HttpGet("{id:int}")]
