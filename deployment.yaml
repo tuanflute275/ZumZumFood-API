@@ -13,6 +13,31 @@ services:
       - sqlserver-data:/var/opt/mssql
     networks:
       - zumzum-food-network
+      
+  mysql8-container:
+    container_name: mysql8-container
+    image: mysql:8.2.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Abc12345@#
+      MYSQL_DATABASE: ZumZumFood
+    ports:
+      - 3307:3306
+    networks:
+      - zumzum-food-network
+
+  phpmyadmin8-container:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin8-container
+    restart: always
+    depends_on:
+      - mysql8-container
+    ports:
+      - "8100:80"
+    environment:
+      PMA_HOST: mysql8-container
+    networks:
+      - zumzum-food-network
 
   redis-container:
     image: docker.io/redis:7.2.3
@@ -24,6 +49,15 @@ services:
       - redis-data:/data
     networks:
       - zumzum-food-network
+  
+  redis_insight:
+    image: redislabs/redisinsight:1.14.0
+    container_name: redis_insight
+    restart: always
+    ports:
+      - 8001:8001
+    volumes:
+      - redis_insight_volume_data:/db
 
   rabbitmq-container:
     image: rabbitmq:3.12-management
@@ -57,6 +91,8 @@ services:
 volumes:
   redis-data:
     driver: local
+  redis_insight:
+    driver: local
   rabbitmq-data:
     driver: local
   sqlserver-data:
@@ -78,9 +114,22 @@ networks:
 # docker-compose -f ./deployment.yaml rm -s -f sqlserver-container
 # docker-compose -f ./deployment.yaml up -d sqlserver-container
 
+# tạo mysql
+# docker-compose -f ./deployment.yaml rm -s -f mysql8-container
+# docker-compose -f ./deployment.yaml up -d mysql8-container
+
+# tạo phpmyadmin
+# docker-compose -f ./deployment.yaml rm -s -f phpmyadmin8-container
+# docker-compose -f ./deployment.yaml up -d phpmyadmin8-container
+
 # tạo image redis
 # docker-compose -f ./deployment.yaml rm -s -f redis-container
 # docker-compose -f ./deployment.yaml up -d redis-container
+
+
+# tạo image redis_insight
+# docker-compose -f ./deployment.yaml rm -s -f redis_insight
+# docker-compose -f ./deployment.yaml up -d redis_insight
 
 # tạo image rabbitmq
 # docker-compose -f ./deployment.yaml rm -s -f rabbitmq-container
